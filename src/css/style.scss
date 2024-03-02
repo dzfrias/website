@@ -1,0 +1,120 @@
+@use "reset.scss";
+@use "variables.scss";
+@use 'sass:color';
+
+::selection {
+  background: variables.$accent-fade;
+}
+
+html {
+  font-size: 18px;
+  font-family: variables.$main-font;
+}
+
+body {
+  background: variables.$bg;
+  color: variables.$fg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.75;
+}
+
+a {
+  color: variables.$accent;
+  text-decoration-thickness: 3px;
+  position: relative;
+
+  &:hover::after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    bottom: 4px;
+    left: 0px;
+    width: 100%;
+    height: 10px;
+    background: variables.$accent-fade;
+  }
+}
+
+nav {
+  font-size: 1.25rem;
+  padding-bottom: 1.5rem;
+  padding-top: 1rem;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+
+    li {
+      display: inline;
+
+      &[aria-current="page"] a {
+        color: variables.$fg;
+        &:hover::after {
+          background: color.adjust(variables.$fg, $alpha: -0.4);
+        }
+      }
+    }
+  }
+}
+
+main {
+  width: min(80%, 60ch);
+}
+
+h1 {
+  font-family: variables.$title-font;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  margin-top: 1rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    border-bottom: 2px solid variables.$accent-fade;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+h2 {
+  font-family: variables.$title-font;
+  font-size: 1.4rem;
+  position: relative;
+}
+
+b {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+.posts {
+  list-style: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &-item {
+    padding-left: 1rem;
+
+    &-time {
+      color: variables.$fg-fade;
+      font-size: 0.9em;
+    }
+  }
+}
+
+.line {
+  position: absolute;
+  height: 100%;
+  border-left: 1px solid variables.$accent-fade;
+}
