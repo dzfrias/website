@@ -2,6 +2,7 @@ const htmlmin = require("html-minifier");
 
 module.exports = (config) => {
   config.addPassthroughCopy("./src/images/");
+  config.addPassthroughCopy("./src/fonts/");
 
   config.addCollection("blog", (collection) => {
     return [...collection.getFilteredByGlob("./src/posts/*.md")].reverse();
