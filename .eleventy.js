@@ -4,10 +4,6 @@ module.exports = (config) => {
   config.addPassthroughCopy("./src/images/");
   config.addPassthroughCopy("./src/fonts/");
 
-  config.addCollection("blog", (collection) => {
-    return [...collection.getFilteredByGlob("./src/posts/*.md")].reverse();
-  });
-
   config.addTransform("htmlmin", function (content) {
     if (this.page.outputPath && this.page.outputPath.endsWith(".html")) {
       let minified = htmlmin.minify(content, {
