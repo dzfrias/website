@@ -2,12 +2,15 @@
 @use "variables.scss";
 @use "sass:color";
 
+// Default vertical space between items on the page (paragraphs, lists, etc.)
+$spacing: 2rem;
+
 ::selection {
   background: variables.$accent-fade;
 }
 
 html {
-  font-size: 17px;
+  font-size: 19px;
   font-family: variables.$main-font;
 }
 
@@ -23,17 +26,13 @@ body {
 a {
   color: variables.$accent;
   text-decoration-thickness: 2px;
-  position: relative;
 
-  &:hover::after {
-    content: "";
-    position: absolute;
-    display: inline-block;
-    bottom: 4px;
-    left: 0px;
-    width: 100%;
-    height: 0.4em;
-    background: variables.$accent-fade;
+  &:hover {
+    background-image: linear-gradient(90deg, variables.$accent-fade, variables.$accent-fade);
+    background-size: 100% 30px;
+    background-repeat: no-repeat;
+    background-position: left 0.7em;
+    padding-block: 0.1em;
   }
 }
 
@@ -51,30 +50,39 @@ nav {
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: center;
+    margin-bottom: unset;
 
     li {
       display: inline;
 
       &[aria-current="page"] a {
         color: variables.$fg;
-        &:hover::after {
-          background: color.adjust(variables.$fg, $alpha: -0.4);
+        &:hover {
+          background-image: linear-gradient(90deg, variables.$fg-fade, variables.$fg-fade);
         }
       }
     }
   }
 }
 
+ul {
+  list-style-position: inside;
+  margin-bottom: $spacing;
+}
+
 main {
-  width: min(80%, 60ch);
+  width: min(80%, 65ch);
 }
 
 h1 {
-  font-family: variables.$title-font;
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: $spacing;
   position: relative;
   margin-top: 1rem;
+  line-height: 1.3;
+  color: variables.$fg-bright;
 
   &::after {
     content: "";
@@ -82,13 +90,14 @@ h1 {
     width: 50%;
     border-bottom: 2px solid variables.$accent-fade;
     bottom: 0;
-    left: 0;
+    left: 25%;
   }
 }
 
 h2 {
-  font-family: variables.$title-font;
-  font-size: 1.4rem;
+  color: variables.$fg-bright;
+  font-size: 1.8rem;
+  font-weight: bold;
   position: relative;
 }
 
@@ -101,7 +110,7 @@ em {
 }
 
 p {
-  margin-bottom: 2rem;
+  margin-bottom: $spacing;
 }
 
 .posts {
@@ -113,6 +122,11 @@ p {
 
   &-item {
     padding-left: 1rem;
+    margin-bottom: 1rem;
+
+    &-title {
+      font-size: 1.5rem;
+    }
 
     &-time {
       color: variables.$fg-fade;
