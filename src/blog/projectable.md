@@ -3,10 +3,10 @@ title: "Projectable: A Command-Line Project Manager"
 description:
   "Projectable is a highly configurable command-line project manager: everything
   your project needs from a comfortable and smooth interface."
-tags: [projects, rust]
 date: 2023-06-22
-img: /img/projectable/projectable.webp
 ---
+
+# Projectable
 
 ![projectable](/img/projectable/projectable.webp)
 
@@ -29,7 +29,7 @@ You can learn more about the project
 I'll go over some reflections/highlights that brought me to its initial v0.1.0
 release!
 
-# Motivations
+## Motivations
 
 Back before I was as comfortable in my terminal, I was always in search of a
 universal terminal "_project manager_". There was never quite one that pulled
@@ -39,14 +39,14 @@ and of course, all the specific commands I ran exclusive to my projects.
 So, I put it on my ideas list. And a few months later, I felt good enough to try
 to implement what I had previously envisioned.
 
-## A Few Implementation Highlights
+### A Few Implementation Highlights
 
 I wrote projectable in [Rust](https://www.rust-lang.org/), using
 [tui-rs](https://github.com/fdehau/tui-rs) to handle the UI. There were a bunch
 of interesting challenges I came across writing the code, two of which I think
 are notable enough to talk about.
 
-### Blocking I/O and Event Sources
+#### Blocking I/O and Event Sources
 
 One of the earliest and most prominent challenges I stumbled upon was real-time
 filesystem updates, something I considered **essential** for true "project
@@ -68,7 +68,7 @@ style of I/O in general. All of this and more is present in
 [the `external_event` module](https://github.com/dzfrias/projectable/tree/main/src/external_event)
 of the repository.
 
-### Windows Command Execution
+#### Windows Command Execution
 
 As I wanted projectable to be Windows-compatible, many of the shell commands I
 was running (like `cat` for previews) would not work the same. Specifically,
@@ -85,7 +85,7 @@ This allowed paths to be actually escaped, so spaces would work. You can see
 [my implementation](https://github.com/dzfrias/projectable/blob/010da24e131a94bce1e7dfe14bc61244a32bc6ac/src/app/components/preview_file.rs#L119)
 in the source!
 
-# Moving Forward
+## Moving Forward
 
 I will continue to update projectable until I feel like it's good enough to
 release v1.0.0. I still have a few ideas in mind! Again, check out the

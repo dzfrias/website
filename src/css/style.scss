@@ -1,9 +1,10 @@
 @use "reset.scss";
+@use "prism-theme.scss";
 @use "variables.scss";
 @use "sass:color";
 
 // Default vertical space between items on the page (paragraphs, lists, etc.)
-$spacing: 2rem;
+$spacing: 1.5rem;
 
 ::selection {
   background: variables.$accent-fade;
@@ -28,18 +29,38 @@ a {
   text-decoration-thickness: 2px;
 
   &:hover {
-    background-image: linear-gradient(90deg, variables.$accent-fade, variables.$accent-fade);
+    background-image: linear-gradient(
+      90deg,
+      variables.$accent-fade,
+      variables.$accent-fade
+    );
     background-size: 100% 30px;
     background-repeat: no-repeat;
     background-position: left 0.7em;
     padding-block: 0.1em;
   }
+
+  // Inline code annotations within a link
+  & > code {
+    background: unset !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
 }
 
-nav {
+.name-header {
+  font-size: 2rem;
+}
+
+nav[aria-label="site-nav"] {
   font-size: 1.25rem;
   padding-bottom: 1.5rem;
   padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: variables.$bg-dark;
+  width: 100%;
 
   a {
     text-decoration-thickness: 3px;
@@ -58,7 +79,11 @@ nav {
       &[aria-current="page"] a {
         color: variables.$fg;
         &:hover {
-          background-image: linear-gradient(90deg, variables.$fg-fade, variables.$fg-fade);
+          background-image: linear-gradient(
+            90deg,
+            variables.$fg-fade,
+            variables.$fg-fade
+          );
         }
       }
     }
@@ -70,6 +95,43 @@ ul {
   margin-bottom: $spacing;
 }
 
+ol {
+  list-style-position: inside;
+  margin-bottom: $spacing;
+}
+
+li::marker {
+  font-weight: bold;
+}
+
+img {
+  border: 1px solid variables.$accent-fade;
+  border-radius: 5px;
+
+  // Taken from https://www.zachleat.com/web/fluid-images/
+  max-width: 100%;
+  // Preserve aspect ratio
+  &[width][height] {
+    height: auto;
+  }
+  // Let SVG scale without boundaries
+  &[src$=".svg"] {
+    width: 100%;
+    height: auto;
+    max-width: none;
+  }
+}
+
+pre {
+  margin-bottom: $spacing !important;
+}
+
+code:not([class^="language"]) {
+  background: #2b2b2b;
+  font-family: "Fira Mono", monospace;
+  padding: 0.1rem 0.3rem;
+}
+
 main {
   width: min(80%, 65ch);
 }
@@ -77,7 +139,6 @@ main {
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
-  text-align: center;
   margin-bottom: $spacing;
   position: relative;
   margin-top: 1rem;
@@ -90,15 +151,28 @@ h1 {
     width: 50%;
     border-bottom: 2px solid variables.$accent-fade;
     bottom: 0;
-    left: 25%;
+    left: 0;
   }
 }
 
-h2 {
-  color: variables.$fg-bright;
-  font-size: 1.8rem;
-  font-weight: bold;
-  position: relative;
+@for $i from 2 through 6 {
+  h#{$i} {
+    color: variables.$fg-bright;
+    font-size: 1.8rem - ($i - 2) * 0.3;
+    font-weight: bold;
+    position: relative;
+  }
+
+  // headers with a link to a section
+  h#{$i} > a.header-anchor {
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+      background-image: unset;
+      text-decoration: underline;
+    }
+  }
 }
 
 b {
@@ -121,7 +195,6 @@ p {
   gap: 1.5rem;
 
   &-item {
-    padding-left: 1rem;
     margin-bottom: 1rem;
 
     &-title {
@@ -139,7 +212,7 @@ p {
   }
 }
 
-.line {
+.vertical-line {
   position: absolute;
   height: 100%;
   border-left: 1px solid variables.$accent-fade;

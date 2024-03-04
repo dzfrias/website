@@ -2,7 +2,6 @@
 title: The Beginning of this Blog
 description:
   Welcome to the blog! This post contains a bit about blog and what to expect.
-tags: [blog]
 date: 2023-06-16
 ---
 

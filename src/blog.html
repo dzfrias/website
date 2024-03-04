@@ -3,11 +3,11 @@ title: Blog
 layout: base
 eleventyImport:
   collections: [posts]
+description: The posts of Diego Frias's programming blog
 ---
 
 <h1>Blog</h1>
 <ol class="posts">
-  <div class="line" aria-hidden="true"></div>
   {%- for item in collections.posts | reverse %}
   <li class="posts-item">
     <article>

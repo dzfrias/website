@@ -1,21 +1,20 @@
 ---
-title: How to Deploy Cross-Platform Rust Binaries with GitHub Actions
+title: How to Deploy Rust Binaries with GitHub Actions
 description:
   A tutorial for deploying Rust binaries to a GitHub release, cross-platform!
-tags: [rust]
-img: /img/deploy-rust-cross-platform-github-actions/assets.webp
 date: 2023-06-23
 ---
 
-# How to Deploy Cross-Platform Rust Binaries with GitHub Actions
+# How to Deploy Rust Binaries with GitHub Actions
 
-If you're ready to release the first version of your Rust project, it's likely
-that you want to upload some assets containing pre-built binaries (for macOS,
-Linux, and Windows) to your GitHub releases page. This is one of the earliest
-steps in making your project widely available, and will help greatly when
-setting up other installation methods like with [Homebrew](https://brew.sh).
-However, figuring out cross-compilation is _not_ easy, especially when doing it
-through a [GitHub Action](https://github.com/features/actions).
+If you're ready to release the first version of your
+[Rust](https://www.rust-lang.org/) project, it's likely that you want to upload
+some assets containing pre-built binaries (for macOS, Linux, and Windows) to
+your GitHub releases page. This is one of the earliest steps in making your
+project widely available, and will help greatly when setting up other
+installation methods like with [Homebrew](https://brew.sh). However, figuring
+out cross-compilation is _not_ easy, especially when doing it through a
+[GitHub Action](https://github.com/features/actions).
 
 By the end of this post, you'll have a fully working deployment pipeline that
 automatically creates releases and uploads binaries to that release for Windows,
@@ -35,7 +34,7 @@ to releases.
 
 This can be done with the following code:
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 # Just setting the name of our action
 name: Deploy
 
@@ -61,7 +60,7 @@ _steps_, and a _step_ is just anything our action does!
 Let's begin writing our job. First, we need to define the metadata before we get
 into the steps.
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 # ...
 
 jobs:
@@ -99,7 +98,7 @@ key of each matrix item.
 Okay, with that finished, we need to start adding steps. The first two are easy:
 just clone our repository and install Rust!
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 # ...
 
 build-and-upload:
@@ -130,7 +129,7 @@ what target our Rust should compile to.
 Another one of the "preparation steps" we need to take is getting the version.
 We'll use this information [later](#compressing-the-binaries)!
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 - name: Get the release version from the tag
   shell: bash
   run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -154,7 +153,7 @@ already a super simple action that allows us to use `cross`!
 
 Let's put that in our step list:
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 - name: Build
   uses: actions-rs/cargo@v1
   with:
@@ -174,7 +173,7 @@ We're almost done! Now that we have our binaries built, we need to compress them
 into a `.tar.gz` file (or `.zip`) so they're easier to download from our assets
 page. Let's do that with this step:
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 - name: Build archive
   shell: bash
   run: |
@@ -215,7 +214,7 @@ You can see our `$VERSION` environment variable coming into play here!
 With our binaries compressed, we're ready to upload upload them! This is the
 final step of our job!
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 - name: Upload the binaries
   uses: softprops/action-gh-release@v1
   with:
@@ -240,7 +239,7 @@ an issue on [GitHub](https://github.com/dzfrias/blog/issues/new).
 
 Here's the final action, just for good measure:
 
-```yaml:.github/workflows/deploy.yml
+```yaml
 name: Deploy
 
 on:

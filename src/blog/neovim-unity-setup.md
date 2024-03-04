@@ -3,7 +3,6 @@ title: The Definitive Neovim Unity Setup of 2023
 description:
   A neovim setup for Unity that actually works in 2023, with minimal
   dependencies.
-tags: [gamedev]
 img: /img/neovim-unity-setup/working.webp
 date: 2023-06-20
 ---

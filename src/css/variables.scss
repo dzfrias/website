@@ -1,6 +1,7 @@
 @use "sass:color";
 
 $bg: #1d1c1c;
+$bg-dark: darken($bg, 2%);
 $fg: #d1cdc0;
 $fg-bright: #f3efe1;
 $fg-fade: #827f76;

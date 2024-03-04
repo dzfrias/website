@@ -3,7 +3,6 @@ title: Build a Lexer with Automatic Semicolon Insertion in Rust
 description:
   A walkthrough on how to build your own lexer with automatic semicolon
   insertion!
-tags: [rust]
 date: 2023-07-22
 ---
 
@@ -266,7 +265,7 @@ pub struct Lexer<'a> {
 We want our peek buffer to be a queue, as the behavior described above is a
 first-in-first-out system. Let's add it to our constructor, too.
 
-```diff:Lexer::new()
+```diff
 let mut lexer = Self {
     input: input.chars(),
     current: '\\0',
@@ -296,7 +295,7 @@ and always get the same result back.
 Now, we must make a small modification to `read_char()`. We need to consume our
 peek buffer before we advance `Chars`!
 
-```diff:Lexer::read_char()
+```diff
 +if let Some(ch) = self.peek_buffer.pop_front() {
 +    self.current = ch;
 +    return;
@@ -324,7 +323,7 @@ fn try_peek_eq(&mut self, matched: Token, not_matched: Token) -> Token {
 
 Finally, we can put it all together into `next_token`!
 
-```diff:Lexer::next_token()
+```diff
     '\\0' => Token::EOF,
 
 +   '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
@@ -334,7 +333,7 @@ Finally, we can put it all together into `next_token`!
 We'll also need this for `<=`, `>=`, and the like, so I'll add those in really
 quick.
 
-```diff:Lexer::next_token()
+```diff
     '\\0' => Token::EOF,
 
     '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
@@ -371,7 +370,7 @@ Our lexer also has to be able read identifiers. For example, when we input
 
 Let's start by adding a case in the `next_token` method!
 
-```diff:Lexer::next_token()
+```diff
 +ch if ch == '_' || ch.is_alphabetic() => {
 +    let ident = self.read_ident();
 +    return match ident.as_str() {
@@ -427,7 +426,7 @@ fn skip_whitespace(&mut self) {
 
 Pretty simple! And we'll only need it in one place (for now)!
 
-```diff:Lexer::next_token()
+```diff
 pub fn next_token(&mut self) -> Token {
 +    self.skip_whitespace();
 
@@ -466,9 +465,10 @@ Passed!
 ## Automatic Semicolon Insertion
 
 With our current lexer setup, adding automatic semicolon insertion should be
-pretty simple! We'll be following in the footsteps of [Go](https://go.dev) and
-their [semicolon specification](https://go.dev/ref/spec#Semicolons). If you're
-not familiar with it, Go has a very simple rule in their lexer:
+pretty simple! We'll be following in the footsteps of the
+[Go language](https://go.dev) and their
+[semicolon specification](https://go.dev/ref/spec#Semicolons). If you're not
+familiar with it, Go has a very simple rule in their lexer:
 
 A semicolon is inserted if the last token in a line is an:
 
@@ -516,7 +516,7 @@ is pretty simple!
 With the `try_insert_semicolon()` method in place, we can call it where needed!
 Let's start with identifiers.
 
-```diff:Lexer::next_token()
+```diff
 ch if ch == '_' || ch.is_alphabetic() => {
     let ident = self.read_ident();
 +    self.try_insert_semicolon();
@@ -526,7 +526,7 @@ ch if ch == '_' || ch.is_alphabetic() => {
 Nice and simple! This handles both case one and two of our insertion rules. Now,
 we can move on to `}` and `)`.
 
-```diff:Lexer::next_token()
+```diff
 +')' => {
 +    self.read_char();
 +    self.try_insert_semicolon();

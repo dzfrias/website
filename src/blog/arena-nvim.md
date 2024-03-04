@@ -3,7 +3,6 @@ title: "arena.nvim: A frecency-based buffer switcher"
 description:
   arena.nvim aims to be the ultimate buffer-management solution, allowing you to
   hop around files as fast as you can think!
-tags: [neovim]
 date: 2023-10-01
 ---
 
