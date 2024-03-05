@@ -1,11 +1,11 @@
 @use "sass:color";
 
-$bg: #1d1c1c;
-$bg-dark: darken($bg, 2%);
-$fg: #d1cdc0;
+$bg: rgb(34, 34, 34);
+$bg-dark: rgb(25, 25, 25);
+$fg: rgb(201, 201, 201);
 $fg-bright: #f3efe1;
 $fg-fade: #827f76;
-$accent: #d5c152;
+$accent: rgb(187, 167, 104);
 $accent-fade: color.adjust($accent, $alpha: -0.4, $saturation: -20%);
 
 $main-font: "Ubuntu", sans-serif;

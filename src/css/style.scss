@@ -15,6 +15,24 @@ html {
   font-family: variables.$main-font;
 }
 
+dialog:has(img) {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+  border: unset;
+
+  & > img {
+    cursor: unset;
+  }
+}
+
+::backdrop {
+  background: variables.$bg-dark;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
 body {
   background: variables.$bg;
   color: variables.$fg;
@@ -22,6 +40,10 @@ body {
   flex-direction: column;
   align-items: center;
   line-height: 1.75;
+
+  &:has(dialog[open]) {
+    overflow: hidden;
+  }
 }
 
 a {
@@ -102,11 +124,13 @@ ol {
 
 li::marker {
   font-weight: bold;
+  color: variables.$fg-bright;
 }
 
 img {
   border: 1px solid variables.$accent-fade;
   border-radius: 5px;
+  cursor: pointer;
 
   // Taken from https://www.zachleat.com/web/fluid-images/
   max-width: 100%;

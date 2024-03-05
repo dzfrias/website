@@ -6,6 +6,7 @@ const markdownItAnchor = require("markdown-it-anchor");
 
 module.exports = (config) => {
   config.addPassthroughCopy("./src/img/");
+  config.addPassthroughCopy("./src/js/");
 
   config.setLibrary(
     "md",
