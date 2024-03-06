@@ -14,6 +14,7 @@ jobs:
       - run: |
           npm install
           npm run build
+          echo "dzfrias.dev" > ./dist/CNAME
 
       - uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
