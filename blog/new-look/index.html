@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="The posts of Diego Frias&#39;s programming blog">
+    <meta name="description" content="In this post, I&#39;ll go over some high-level changes I&#39;ve made to this website.">
     <meta name="author" content="Diego Frias">
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
-    <title>Blog - dzfrias</title>
+    <title>Rebuilding the Website - dzfrias</title>
     <link rel="stylesheet" href="/css/style.css">
     <script type="module" src="/js/index.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com"><link data-href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet"><style data-href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap">/* cyrillic-ext */
@@ -615,7 +615,7 @@
           <a href="/">Home</a>
         </li>
         
-        <li aria-current="page">
+        <li>
           <a href="/blog/">Blog</a>
         </li>
         
@@ -629,86 +629,61 @@
         
       </ul>
     </nav>
-    <main class="" tabindex="-1">
-<h1>Blog</h1>
-<ol class="posts">
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/new-look/">Rebuilding the Website</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2024-03-06">2024-03-06</time>
-      <p class="posts-item-description">In this post, I&#39;ll go over some high-level changes I&#39;ve made to this website.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/arena-nvim/">arena.nvim: A frecency-based buffer switcher</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-10-01">2023-10-01</time>
-      <p class="posts-item-description">arena.nvim aims to be the ultimate buffer-management solution, allowing you to hop around files as fast as you can think!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/automatic-semicolon-lexer/">Build a Lexer with Automatic Semicolon Insertion in Rust</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-07-22">2023-07-22</time>
-      <p class="posts-item-description">A walkthrough on how to build your own lexer with automatic semicolon insertion!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/deploy-rust-cross-platform-github-actions/">How to Deploy Rust Binaries with GitHub Actions</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-23">2023-06-23</time>
-      <p class="posts-item-description">A tutorial for deploying Rust binaries to a GitHub release, cross-platform!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/projectable/">Projectable: A Command-Line Project Manager</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-22">2023-06-22</time>
-      <p class="posts-item-description">Projectable is a highly configurable command-line project manager: everything your project needs from a comfortable and smooth interface.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/neovim-unity-setup/">The Definitive Neovim Unity Setup of 2023</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-20">2023-06-20</time>
-      <p class="posts-item-description">A neovim setup for Unity that actually works in 2023, with minimal dependencies.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/the-beginning-of-this-blog/">The Beginning of this Blog</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-16">2023-06-16</time>
-      <p class="posts-item-description">Welcome to the blog! This post contains a bit about blog and what to expect.</p>
-    </article>
-  </li>
-  </ol>
+    <main class="" tabindex="-1"><h1>Rebuilding the Website</h1>
+<p>A few weeks ago, I was thinking about completely redesigining this website
+<strong>from the ground up</strong>. I didn't like the colors that much, and it generally
+wasn't as performant as I would've liked.</p>
+<p>I was super busy working on <a href="https://github.com/dzfrias/wsh">wsh</a> at that time,
+so I held off from reworking anything. But after deciding to take a short break
+from the project, I got time to do work on this website!</p>
+<p>In this post, I'll go over <a href="#what's-different">what's different</a> and
+<a href="#what's-the-same">what's stayed the same</a>!</p>
+<h2 id="what's-different" tabindex="-1"><a class="header-anchor" href="#what's-different">What's Different</a></h2>
+<p>The whole website is now made with <a href="https://www.11ty.dev/">11ty</a>, which I could
+not recommend enough. I'd previously used <a href="https://kit.svelte.dev/">SvelteKit</a>
+for the blog, but this was completely unnecessary for a few reasons:</p>
+<ol>
+<li>The content of this website is (and will probably always be) static</li>
+<li>The website is too small to make meaningful use Svelte's component
+abstractions</li>
+<li>There was little to no use of interactive JavaScript</li>
+</ol>
+<p>In my first iteration of this website, I didn't know much about developing
+&quot;<em>real</em>&quot; sites for the web, so I just chose SvelteKit because it sounded nice.
+This just turned out to be <strong>huge</strong> overkill and made things much more
+complicated than they needed to be.</p>
+<p>11ty is a super simple static site generator. It handles the annoying stuff for
+you (like parsing <a href="https://www.markdownguide.org/">Markdown</a>), while still
+allowing you to have full control over your website. It doesn't do anything
+crazy under the hood, or deliver <em>any</em> client-side JavaScript. For building
+static websites, I can't recommend it enough.</p>
+<h3 id="color-changes" tabindex="-1"><a class="header-anchor" href="#color-changes">Color Changes</a></h3>
+<p>Perhaps the most visually noticable difference is the colors and general site
+layout.</p>
+<p><picture><source type="image/webp" srcset="/img/VojZcjZXWX-1888.webp 1888w"><img loading="lazy" decoding="async" src="/img/VojZcjZXWX-1888.jpeg" alt="The old website home page" width="1888" height="902"></picture></p>
+<p>The <a href="/">home page</a> looks pretty different now! I think <em>both</em> color schemes
+worked pretty well for a personal site, but I wanted something different for
+this version of dzfrias.</p>
+<h3 id="projects-page" tabindex="-1"><a class="header-anchor" href="#projects-page">Projects Page</a></h3>
+<p>New to this website is my <a href="/projects/">projects page</a>! This is meant to hold the
+projects that I'm most proud of. Although they vary in levels of usability (I
+think I'd be able to make some of them a lot better if I tried them now), I
+still want to feature the projects that I've poured tons of hours into.</p>
+<h3 id="backend" tabindex="-1"><a class="header-anchor" href="#backend">Backend</a></h3>
+<p>Since this site is fully static, it's now being served using
+<a href="https://pages.github.com/">GitHub Pages</a>! I was previously using
+<a href="https://vercel.com/about">Vercel</a>. Similar to the 11ty/SvelteKit story, using a
+dedicated server was a bit overkill.</p>
+<p>I use a <a href="https://docs.github.com/en/actions">GitHub Action</a> for deploying my
+website. The
+<a href="https://github.com/dzfrias/website/blob/40a068a58f4481350c1d531c087f33d435927dd4/.github/workflows/deploy.yml">relevant workflow</a>
+is nice and simple!</p>
+<h2 id="what's-the-same" tabindex="-1"><a class="header-anchor" href="#what's-the-same">What's the Same</a></h2>
+<p>I tried to make sure that all of the URLs of the site stayed the same. For
+<em>most</em> of the content, that was definitely successful. A few minor pieces of
+content, like image paths, <strong>are not</strong> consistent with v1 of the website.</p>
+<p>It's generally good practice to make sure that your URLs don't change
+(<a href="https://www.w3.org/Provider/Style/URI">cool URIs don't change</a>).</p>
 </main>
   </body>
 </html>
