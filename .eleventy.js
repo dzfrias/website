@@ -1,9 +1,9 @@
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+const pluginTOC = require("eleventy-plugin-toc");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 const eleventyGoogleFonts = require("eleventy-google-fonts");
-const faviconsPlugin = require("eleventy-plugin-gen-favicons");
 
 module.exports = (config) => {
   config.addPassthroughCopy("./src/img/");
@@ -18,10 +18,8 @@ module.exports = (config) => {
   );
 
   config.addPlugin(eleventyGoogleFonts);
+  config.addPlugin(pluginTOC);
   config.addPlugin(syntaxHighlight);
-  config.addPlugin(faviconsPlugin, {
-    outputDir: "./dist",
-  });
   config.addPlugin(eleventyImageTransformPlugin, {
     extensions: "html",
     formats: ["webp", "jpeg"],
