@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A walkthrough on how to build your own lexer with automatic semicolon insertion!">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Build a Lexer with Automatic Semicolon Insertion in Rust - dzfrias</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="module" src="/js/index.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com"><link data-href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet"><style data-href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap">/* cyrillic-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgK_7Ss9XZYalI.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgIv7Ss9XZYalI.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgKv7Ss9XZYalI.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgJf7Ss9XZYalI.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgKP7Ss9XZYalI.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bX2SlFPv1weGeLZDtgJv7Ss9XZYQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3Hk_fUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3HmvfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3HkvfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3HnffUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3HkPfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDto1d3HnvfUS5NBBA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHk_fUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHmvfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHkvfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHnffUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHkPfUS5NBBASF.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/firamono/v14/N0bS2SlFPv1weGeLZDtondvHnvfUS5NBBA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyCN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyLN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyDN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyMN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyBN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZftVyPN4FNgYUJ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej75l0miFYxnu4w.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej7wl0miFYxnu4w.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej74l0miFYxnu4w.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej73l0miFYxnu4w.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej76l0miFYxnu4w.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCu6KVjbNBYlgoKej70l0miFYxn.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyCN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyLN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyDN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyMN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyBN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejYHtFyPN4FNgYUJ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyCN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyLN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyDN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyMN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyBN4FNgYUJ31U.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCp6KVjbNBYlgoKejZPslyPN4FNgYUJ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1CzjvWyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1CzjtGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1CzjvGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1Czjs2yNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1CzjvmyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoC1CzjsGyNPYZvgw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKcg72nU6AF7xm.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKew72nU6AF7xm.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKcw72nU6AF7xm.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKfA72nU6AF7xm.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKcQ72nU6AF7xm.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgoKfw72nU6AFw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3jvWyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3jtGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3jvGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3js2yNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3jvmyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCjC3jsGyNPYZvgw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjvWyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjtGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjvGyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjs2yNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjvmyNPYZvg7UI.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjsGyNPYZvgw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+  </head>
+  <body>
+    <nav aria-label="site-nav">
+      <span class="name-header">dzfrias</span>
+      <ul>
+        
+        <li>
+          <a href="/">Home</a>
+        </li>
+        
+        <li>
+          <a href="/blog/">Blog</a>
+        </li>
+        
+        <li>
+          <a href="/projects/">Projects</a>
+        </li>
+        
+        <li>
+          <a href="https://github.com/dzfrias">GitHub</a>
+        </li>
+        
+      </ul>
+    </nav>
+    <main class="" tabindex="-1"><h1>Build a Lexer with Automatic Semicolon Insertion in Rust</h1>
+<p>If you're looking to write a programming language, it's very likely that you'll
+need a <strong>lexer</strong>. Lexers are immensely helpful in the parsing process, and can
+even allow you to have (fancy) semicolon-less syntax. However, building a lexer
+can be a bit confusing, especially one with automatic semicolon insertion. In
+this post, you'll learn how to write your own lexer with the following features:</p>
+<ul>
+<li>Basic token handling</li>
+<li><a href="https://go.dev/ref/spec#Semicolons">Go-style automatic semicolon insertion</a></li>
+<li>Insignificant whitespace</li>
+</ul>
+<p>This post also assumes you have <em>some familiarity</em> with Rust; you won't have to
+have a deep knowledge or familiarity of the language, just your way around the
+syntax.</p>
+<h2 id="getting-started" tabindex="-1"><a class="header-anchor" href="#getting-started">Getting Started</a></h2>
+<p>If you know nothing about lexers, they essentially take your program's raw
+string input and turn it into a <strong>stream of tokens</strong>. A token represents a
+single unit in your syntax. Lexers are helpful for writing parsers, as the
+parsers don't have to work with strings anymore, instead receiving well-defined
+pieces of your program.</p>
+<p>Here are some examples of what lexers would do with your input:</p>
+<pre class="language-text"><code class="language-text">"i + x" becomes Token::Ident("i"), Token::Plus, Token::Ident("x")
+"x = y" becomes Token::Ident("x"), Token::Assign, Token::Ident("y")</code></pre>
+<h3 id="defining-our-token-type" tabindex="-1"><a class="header-anchor" href="#defining-our-token-type">Defining our Token Type</a></h3>
+<p>First, we should define what our possible tokens should be. In this post, we
+will cover only a small subset of what is realistic in a general-purpose
+programming language, but you'll hopefully have enough knowledge to extend the
+lexer as you wish!</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug, PartialEq)]</span>
+<span class="token keyword">pub</span> <span class="token keyword">enum</span> <span class="token type-definition class-name">Token</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Illegal</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment">// Denotes when our input ends</span>
+    <span class="token constant">EOF</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// In programming languages, identifiers are usually used for variable names</span>
+    <span class="token class-name">Ident</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Assign</span><span class="token punctuation">,</span>
+    <span class="token class-name">Plus</span><span class="token punctuation">,</span>
+    <span class="token class-name">Minus</span><span class="token punctuation">,</span>
+    <span class="token class-name">Bang</span><span class="token punctuation">,</span>
+    <span class="token class-name">Asterisk</span><span class="token punctuation">,</span>
+    <span class="token class-name">Slash</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// &lt;</span>
+    <span class="token class-name">Langle</span><span class="token punctuation">,</span>
+    <span class="token comment">// ></span>
+    <span class="token class-name">Rangle</span><span class="token punctuation">,</span>
+    <span class="token class-name">Eq</span><span class="token punctuation">,</span>
+    <span class="token class-name">NotEq</span><span class="token punctuation">,</span>
+    <span class="token comment">// >=</span>
+    <span class="token class-name">Ge</span><span class="token punctuation">,</span>
+    <span class="token comment">// &lt;=</span>
+    <span class="token class-name">Le</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Semicolons ARE in the language, just not usually written by the programmer</span>
+    <span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+    <span class="token class-name">Comma</span><span class="token punctuation">,</span>
+
+    <span class="token class-name">Lparen</span><span class="token punctuation">,</span>
+    <span class="token class-name">Rparen</span><span class="token punctuation">,</span>
+    <span class="token class-name">Lbrace</span><span class="token punctuation">,</span>
+    <span class="token class-name">Rbrace</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// The only keyword in our language. This can easily be extended!</span>
+    <span class="token class-name">Return</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span></code></pre>
+<p>These are the tokens that make up the language's syntax!</p>
+<h3 id="defining-our-lexer" tabindex="-1"><a class="header-anchor" href="#defining-our-lexer">Defining our Lexer</a></h3>
+<p>I'll start by explaining what our lexer will actually do. Our lexer is basically
+an iterator that yields <code>Token</code>s. It has a single public method, <code>next_token()</code>,
+that advances the iterator and returns a single <code>Token</code>.</p>
+<p>To accomplish this, our lexer essentially has a pointer to a place in our input.
+When <code>next_token()</code> is called, the lexer returns what it pointed to and then
+advances to the start of the next token.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token comment">// Asumming an input of "+ =="</span>
+
+<span class="token comment">// ===INITIAL STATE===</span>
+
+<span class="token comment">// input: + ==</span>
+<span class="token comment">// lexer: ^</span>
+
+<span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Plus</span><span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">// ===NEW STATE===</span>
+
+<span class="token comment">// input: + ==</span>
+<span class="token comment">// lexer:   ^</span>
+
+<span class="token macro property">assert_eq!</span><span class="token punctuation">(</span><span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Eq</span><span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">// ===NEW STATE===</span>
+<span class="token comment">//</span>
+<span class="token comment">// input: + ==</span>
+<span class="token comment">// lexer:     ^</span></code></pre>
+<p>We'll start by writing the basic layout of our Lexer struct.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug)]</span>
+<span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token type-definition class-name">Lexer</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    input<span class="token punctuation">:</span> <span class="token class-name">Chars</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span><span class="token punctuation">,</span>
+    current<span class="token punctuation">:</span> <span class="token keyword">char</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span></code></pre>
+<p>First off, our lexer is generic over the lifetime <code>'a</code>, as a result of <code>Chars</code>.
+<code>Chars</code> is an iterator that yields <code>char</code>s, and is tied to our program's input
+(<code>&amp;'a str</code>). Much like how our lexer yields <code>Token</code>s, <code>Chars</code> yields <code>char</code>s.</p>
+<p>We also have <code>current</code>, which is the current character that our lexer's pointer
+points to.</p>
+<p>With this foundation, hopefully you now know what our lexer does! We'll get
+started with some of the fundamental methods we'll need to get it operational.</p>
+<h3 id="fundamental-methods" tabindex="-1"><a class="header-anchor" href="#fundamental-methods">Fundamental Methods</a></h3>
+<p>Let's first write a constructor for our lexer.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token class-name">Lexer</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>input<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
+          input<span class="token punctuation">:</span> input<span class="token punctuation">.</span><span class="token function">chars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          current<span class="token punctuation">:</span> '\\<span class="token number">0</span>'<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+      lexer<span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      lexer
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>It takes an <code>&amp;'a str</code>, for our program's input. We create our <code>Chars</code> based on
+this input, and feed it to our lexer. We also give it a <em>placeholder</em> <code>current</code>
+(the null terminator). Then, we call <code>read_char</code> to replace the placeholder we
+just initialized! Wait. We haven't even defined <code>read_char</code> yet...</p>
+<p><code>read_char</code> is the heart of our lexer; all it does is advance our pointer by one
+character. That's it.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_char</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>input<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap_or</span><span class="token punctuation">(</span>'\\<span class="token number">0</span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>The conceptual &quot;pointer&quot; of our lexer is actually <code>Chars</code> (which is an
+iterator)! You may also be wondering about the <code>unwrap_or</code> call!</p>
+<p><code>self.input.next()</code> only returns <code>None</code> when our input ends. In this case, we
+replace it with our null terminator so we don't have to handle it in
+<code>read_char</code>. Handling the end of our input is generally something our parser
+does, so this will be bubbled up in the form of <code>Token::EOF</code> when <code>next_token</code>
+is called.</p>
+<h2 id="a-basic-%22next-token%22-method" tabindex="-1"><a class="header-anchor" href="#a-basic-%22next-token%22-method">A Basic &quot;Next Token&quot; Method</a></h2>
+<p>Now we can define the only public method we'll need on our lexer! For a
+refresher, <code>Lexer::next_token()</code> should advance our pointer until a valid token
+is found, and then return it.</p>
+<p>Let's get a basic definition out of the way. Nothing fancy, just the super
+simple tokens!</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">next_token</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> token <span class="token operator">=</span> <span class="token keyword">match</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token punctuation">{</span>
+        <span class="token char">'+'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Plus</span><span class="token punctuation">,</span>
+        <span class="token char">'-'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Minus</span><span class="token punctuation">,</span>
+        <span class="token char">'/'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Slash</span><span class="token punctuation">,</span>
+        <span class="token char">'*'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Asterisk</span><span class="token punctuation">,</span>
+        <span class="token char">'('</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lparen</span><span class="token punctuation">,</span>
+        <span class="token char">'{'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lbrace</span><span class="token punctuation">,</span>
+        <span class="token char">','</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Comma</span><span class="token punctuation">,</span>
+        <span class="token char">';'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        '\\<span class="token number">0</span>' <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token constant">EOF</span><span class="token punctuation">,</span>
+
+        c <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Illegal</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    token
+<span class="token punctuation">}</span></code></pre>
+<p>I'm going to hold off on the closing counterparts of <code>(</code> and <code>{</code>, as those will
+be candidates for our semicolon insertion. Anyway, these tokens provide a simple
+implementation of the behavior visualized when we
+<a href="#defining-our-lexer">defined the lexer</a>. Lets write a test!</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">lexes_basic_tokens</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"(,{+-*/#"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lparen</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Comma</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lbrace</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Plus</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Minus</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Asterisk</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Slash</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Illegal</span><span class="token punctuation">(</span><span class="token char">'#'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token constant">EOF</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> expecteds <span class="token punctuation">{</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="a-peek-buffer" tabindex="-1"><a class="header-anchor" href="#a-peek-buffer">A Peek Buffer</a></h2>
+<p>Okay, now we need to handle more complicated stuff... Let's try tokenizing <code>!=</code>.
+The problem with our current setup is that our lexer can't distinguish a
+<code>Token::Bang</code> and a <code>Token::NotEq</code> in <code>next_token()</code>. We need some sort of
+&quot;peek&quot;. When our lexer encounters a <code>!</code>, it needs to peek at the next character
+and see if it's an <code>=</code>. If it is, we consume the peeked character and return
+<code>Token::NotEq</code>.</p>
+<p>A possible to solution to this problem is a &quot;peek buffer&quot;. When we call our
+<code>peek()</code> method, the lexer should advance our pointer, and store its result in
+the buffer. Then, the next time we call <code>read_char()</code>, it will try to first
+consume a character from the peek buffer before advancing our <code>Chars</code> pointer
+again.</p>
+<p>Let's get into how we'd represent this with code.</p>
+<pre class="language-diff"><code class="language-diff">#[derive(Debug)]
+pub struct Lexer&lt;'a> {
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   input: Chars&lt;'a>,
+</span><span class="token prefix unchanged"> </span><span class="token line">   current: char,
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    peek_buffer: VecDeque&lt;char>,
+</span></span>}</code></pre>
+<p>We want our peek buffer to be a queue, as the behavior described above is a
+first-in-first-out system. Let's add it to our constructor, too.</p>
+<pre class="language-diff"><code class="language-diff">let mut lexer = Self {
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   input: input.chars(),
+</span><span class="token prefix unchanged"> </span><span class="token line">   current: '\\0',
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    peek_buffer: VecDeque::new(),
+</span></span>};</code></pre>
+<p>Now, let's make our <code>peek</code> method! Here, we should advance <code>Chars</code> and push the
+result to <code>peek_buffer</code>.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">peek</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">char</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>peek_buffer<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token operator">*</span>c
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> next <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>input<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap_or</span><span class="token punctuation">(</span>'\\<span class="token number">0</span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>peek_buffer<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>next<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        next
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>If our peek buffer already has something in it, we should just return that
+character, as we want to be able to call <code>peek()</code> an arbitrary number of times
+and always get the same result back.</p>
+<p>Now, we must make a small modification to <code>read_char()</code>. We need to consume our
+peek buffer before we advance <code>Chars</code>!</p>
+<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">if let Some(ch) = self.peek_buffer.pop_front() {
+</span><span class="token prefix inserted">+</span><span class="token line">    self.current = ch;
+</span><span class="token prefix inserted">+</span><span class="token line">    return;
+</span><span class="token prefix inserted">+</span><span class="token line">}
+</span></span>self.current = self.input.next().unwrap_or('\\0');</code></pre>
+<p>At this point, we should have a working <code>peek()</code> method! Let's tokenize <code>!=</code>!
+I'll write a method, <code>try_peek_eq</code>, that takes two <code>Token</code>s.</p>
+<p>If the peeked character is an <code>=</code>, we return the first argument. If not, we
+return the second one. <code>self.try_peek_eq(Token::NotEq, Token::Bang)</code> will return
+<code>Token::Bang</code> if the peeked character is <strong>not</strong> <code>=</code>, and <code>NotEq</code> if it is.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_peek_eq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">,</span> not_matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">peek</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token char">'='</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        matched
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        not_matched
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Finally, we can put it all together into <code>next_token</code>!</p>
+<pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
+</span></span>
+<span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
+</span></span>};</code></pre>
+<p>We'll also need this for <code>&lt;=</code>, <code>&gt;=</code>, and the like, so I'll add those in really
+quick.</p>
+<pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
+</span></span>
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    '=' => self.try_peek_eq(Token::Eq, Token::Assign),
+</span><span class="token prefix inserted">+</span><span class="token line">    '&lt;' => self.try_peek_eq(Token::Le, Token::Langle),
+</span><span class="token prefix inserted">+</span><span class="token line">    '>' => self.try_peek_eq(Token::Ge, Token::Rangle),
+</span></span>};</code></pre>
+<p>Great! Let's write a test for those, too.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">lexes_complex_tokens</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"!=&lt;>="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">NotEq</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Langle</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Ge</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token constant">EOF</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> expecteds <span class="token punctuation">{</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Passed! With that, we can move on to another part of our lexer!</p>
+<h2 id="reading-identifiers" tabindex="-1"><a class="header-anchor" href="#reading-identifiers">Reading Identifiers</a></h2>
+<p>Our lexer also has to be able read identifiers. For example, when we input
+<code>hello</code> to our lexer, it should give us <code>Token::Ident(&quot;hello&quot;)</code>.</p>
+<p>Let's start by adding a case in the <code>next_token</code> method!</p>
+<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">ch if ch == '_' || ch.is_alphabetic() => {
+</span><span class="token prefix inserted">+</span><span class="token line">    let ident = self.read_ident();
+</span><span class="token prefix inserted">+</span><span class="token line">    return match ident.as_str() {
+</span><span class="token prefix inserted">+</span><span class="token line">        "return" => Token::Return,
+</span><span class="token prefix inserted">+</span><span class="token line">        _ => Token::Ident(ident),
+</span><span class="token prefix inserted">+</span><span class="token line">    };
+</span><span class="token prefix inserted">+</span><span class="token line">}
+</span></span></code></pre>
+<p>We know that whenever we encounter an alphabetic (or <code>_</code>) character, our lexer
+has either reached an identifier or a keyword. In that case, we call the
+<code>read_ident()</code> method. This method advances our lexer until the end of the
+identifier is found, returning it in a <code>String</code>. Then, we do some simple
+matching to produce the final token!</p>
+<p>It is important to note the <code>return</code> here. Our <code>next_token()</code> method advances
+our lexer by one right before returning (at the very bottom of the method). By
+returning early from the <code>match</code> arm, we <em>circumvent</em> this advancement. If we
+didn't, we'd lose a character, because <code>read_ident()</code> already advances our lexer
+to the next character after the identifier.</p>
+<p>Speaking of <code>read_ident()</code>, we should probably define that!</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_ident</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> ident <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_alphabetic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">==</span> <span class="token char">'_'</span> <span class="token operator">||</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_digit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ident<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    ident
+<span class="token punctuation">}</span></code></pre>
+<p>The implementation is nothing special, so I won't bore you the details. With
+that out of the way, we can get to handling whitespace!</p>
+<h2 id="whitespace" tabindex="-1"><a class="header-anchor" href="#whitespace">Whitespace</a></h2>
+<p>For this post, we'll be ignoring whitespace completely for the sake of brevity.
+In full lexers, it's usually good to not <em>completely</em> ignore them, if only
+because our tokens should usually have location spans attached to them.</p>
+<p>Anyway, to achieve whitespace insignificance, we need a single method:</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">skip_whitespace</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Pretty simple! And we'll only need it in one place (for now)!</p>
+<pre class="language-diff"><code class="language-diff">pub fn next_token(&amp;mut self) -> Token {
+<span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    self.skip_whitespace();
+</span></span>
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   let token = match self.current {
+</span></span></code></pre>
+<p>Now, whenever we call <code>next_token()</code> all whitespace is skipped!</p>
+<p>And with that...... Congrats! You've built a basic lexer! At this point, I'd say
+the lexer has enough to extend it with your own features and tokens! Let's write
+some celebratory tests and move on to the next big challenge: automatic
+semicolon insertion.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">lexer_skips_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
+        <span class="token string">",    ; ==
+            !"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Comma</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Eq</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Bang</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token constant">EOF</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> expecteds <span class="token punctuation">{</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Passed!</p>
+<h2 id="automatic-semicolon-insertion" tabindex="-1"><a class="header-anchor" href="#automatic-semicolon-insertion">Automatic Semicolon Insertion</a></h2>
+<p>With our current lexer setup, adding automatic semicolon insertion should be
+pretty simple! We'll be following in the footsteps of the
+<a href="https://go.dev">Go language</a> and their
+<a href="https://go.dev/ref/spec#Semicolons">semicolon specification</a>. If you're not
+familiar with it, Go has a very simple rule in their lexer:</p>
+<p>A semicolon is inserted if the last token in a line is an:</p>
+<ol>
+<li>Identifier</li>
+<li>Literal</li>
+<li>One of: <code>break</code>, <code>continue</code>, <code>fallthrough</code>, or <code>return</code></li>
+<li>One of the operators/punctuation: <code>++</code>, <code>--</code>, <code>)</code>, <code>]</code>, <code>}</code></li>
+</ol>
+<p>For our current token set, our lexer needs to insert a semicolon after it finds
+an:</p>
+<ol>
+<li>Identifier</li>
+<li><code>return</code></li>
+<li><code>)</code> or <code>}</code></li>
+</ol>
+<p>First, let's define what we need to do in order to actually &quot;insert&quot; a
+semicolon.</p>
+<p>After reading one of the three things listed above, we'll see if our lexer's
+current character is a newline. If so, we'll add a semicolon to the front of our
+peek buffer. Since we'll have a semicolon at the front, our <code>read_char</code> will
+consume that instead of more input! This isn't actually &quot;inserting&quot; anything,
+more just queueing it into our token stream!</p>
+<p>Let's define a method, <code>try_insert_semicolon()</code> that we can call whenever we
+<em>might</em> have a semicolon that needs to be inserted.</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_insert_semicolon</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Skip whitespace before possible semicolon</span>
+    <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">!=</span> '\\n' <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// Also handle edge case of the null byte being last</span>
+    <span class="token keyword">if</span> <span class="token macro property">matches!</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">,</span> '\\n' <span class="token operator">|</span> '\\<span class="token number">0</span>'<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>peek_buffer<span class="token punctuation">.</span><span class="token function">push_front</span><span class="token punctuation">(</span><span class="token char">';'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>We first skip any whitespace that might precede our possible semicolon. We do
+this to allow semicolons inserted in a line with trailing whitespace. The rest
+is pretty simple!</p>
+<p>With the <code>try_insert_semicolon()</code> method in place, we can call it where needed!
+Let's start with identifiers.</p>
+<pre class="language-diff"><code class="language-diff">ch if ch == '_' || ch.is_alphabetic() => {
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   let ident = self.read_ident();
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    self.try_insert_semicolon();
+</span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   return match ident.as_str() {
+</span></span></code></pre>
+<p>Nice and simple! This handles both case one and two of our insertion rules. Now,
+we can move on to <code>}</code> and <code>)</code>.</p>
+<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">')' => {
+</span><span class="token prefix inserted">+</span><span class="token line">    self.read_char();
+</span><span class="token prefix inserted">+</span><span class="token line">    self.try_insert_semicolon();
+</span><span class="token prefix inserted">+</span><span class="token line">    Token::Rparen
+</span><span class="token prefix inserted">+</span><span class="token line">}
+</span><span class="token prefix inserted">+</span><span class="token line">'}' => {
+</span><span class="token prefix inserted">+</span><span class="token line">    self.read_char();
+</span><span class="token prefix inserted">+</span><span class="token line">    self.try_insert_semicolon();
+</span><span class="token prefix inserted">+</span><span class="token line">    Token::Rbrace
+</span><span class="token prefix inserted">+</span><span class="token line">}
+</span></span>
+'!' => self.try_peek_eq(Token::NotEq, Token::Bang),</code></pre>
+<p>To get these to work, we need to advance our lexer by one (past the <code>)</code> or <code>}</code>),
+which will set us up to use <code>try_insert_semicolon()</code>, a consequence of the way
+we wrote the method.</p>
+<p>As you might've expected by now, we're gonna write a test for this behavior!</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">lexer_inserts_semicolons</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
+        <span class="token string">"ident
+    return
+    function()
+    {-}"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Ident</span><span class="token punctuation">(</span><span class="token string">"ident"</span><span class="token punctuation">.</span><span class="token function">to_owned</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Return</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Ident</span><span class="token punctuation">(</span><span class="token string">"function"</span><span class="token punctuation">.</span><span class="token function">to_owned</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lparen</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Rparen</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Lbrace</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Minus</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Rbrace</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Semicolon</span><span class="token punctuation">,</span>
+        <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token constant">EOF</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> expecteds <span class="token punctuation">{</span>
+        <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Great! Whew! We're done!</p>
+<h2 id="wrapping-up" tabindex="-1"><a class="header-anchor" href="#wrapping-up">Wrapping Up</a></h2>
+<p>If you've read this far, I hope you enjoyed and found use from this post.
+Although the lexer defined in this tutorial is definitely <em>not</em> complete, my
+hope is that it's not too hard to extend it.</p>
+<p>The roots of this post lie in Thorsten Ball's excellent book,
+<a href="https://interpreterbook.com/">Writing an Interpreter in Go</a>. The design of the
+lexer featured in this post is largely similar to that of the book's, with the
+main addition being the semicolon insertion. I highly recommend the book for any
+future programming language endeavors you might find yourself on; it's short,
+easy to grasp, and leaves with you with just enough information for you to add
+your own features!</p>
+<p>As always, if there are any issues in the post, please don't hesitate to submit
+an <a href="https://github.com/dzfrias/blog/issues/new">issue on GitHub</a>!</p>
+</main>
+  </body>
+</html>
