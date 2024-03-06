@@ -92,8 +92,10 @@ nav[aria-label="site-nav"] {
 
   ul {
     display: flex;
+    margin-left: 1rem;
+    margin-right: 1rem;
     flex-wrap: wrap;
-    gap: 2rem;
+    column-gap: 2rem;
     justify-content: center;
     margin-bottom: unset;
 
@@ -191,7 +193,7 @@ h1 {
 
   // headers with a link to a section
   h#{$i} > a.header-anchor {
-    color: white;
+    color: variables.$fg-bright;
     text-decoration: none;
 
     &:hover {
@@ -201,8 +203,10 @@ h1 {
   }
 }
 
-b {
+b,
+strong {
   font-weight: bold;
+  color: variables.$fg-bright;
 }
 
 em {
