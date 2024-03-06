@@ -8,7 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: npm run build
+      - run: |
+          npm install
+          npm run build
 
       - uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
