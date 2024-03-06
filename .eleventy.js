@@ -3,6 +3,7 @@ const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginTOC = require("eleventy-plugin-toc");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
+const eleventyGoogleFonts = require("eleventy-google-fonts");
 
 module.exports = (config) => {
   config.addPassthroughCopy("./src/img/");
@@ -16,6 +17,7 @@ module.exports = (config) => {
     }),
   );
 
+  config.addPlugin(eleventyGoogleFonts);
   config.addPlugin(pluginTOC);
   config.addPlugin(syntaxHighlight);
   config.addPlugin(eleventyImageTransformPlugin, {

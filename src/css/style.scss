@@ -19,7 +19,8 @@ dialog:has(img) {
   position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) scale(1.5);
+  transform: translate(-50%, -50%);
+  width: 75%;
   border: unset;
 
   & > img {
@@ -41,6 +42,7 @@ body {
   align-items: center;
   line-height: 1.75;
 
+  // Prevent scrolling when opening a modal
   &:has(dialog[open]) {
     overflow: hidden;
   }
@@ -211,6 +213,10 @@ p {
   margin-bottom: $spacing;
 }
 
+.full {
+  width: min(90%, calc(100% - 1rem));
+}
+
 .posts {
   list-style: none;
   position: relative;
@@ -236,8 +242,39 @@ p {
   }
 }
 
-.vertical-line {
-  position: absolute;
-  height: 100%;
-  border-left: 1px solid variables.$accent-fade;
+.projects {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &-item {
+    background: variables.$bg-dark;
+    border: 1px solid variables.$accent-fade;
+    border-radius: 5px;
+    padding: 1rem;
+    width: calc(100% * var(--importance));
+    height: min-content;
+    opacity: 0%;
+    animation-name: appear;
+    animation-duration: 400ms;
+    animation-delay: var(--delay);
+    animation-fill-mode: forwards;
+    text-align: center;
+
+    @keyframes appear {
+      to {
+        opacity: 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      width: 100%;
+    }
+
+    &-img {
+      border: none;
+      width: 100%;
+    }
+  }
 }

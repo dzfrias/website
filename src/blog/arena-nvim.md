@@ -13,7 +13,7 @@ date: 2023-10-01
 Its tunable algorithm suggests the most relevant buffers for you, massively
 speeding up productivity!
 
-![arena window](/img/arena-nvim/window.webp)
+![arena window](/img/arena-nvim/window.png)
 
 Using the arena window, you can easily jump between files!
 

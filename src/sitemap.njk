@@ -17,6 +17,9 @@ eleventyExcludeFromCollections: true
         {% elif page.url == "/blog/" %}
             <priority>0.4</priority>
             <changefreq>weekly</changefreq>
+        {% elif page.url == "/projects/" %}
+            <priority>0.5</priority>
+            <changefreq>monthly</changefreq>
         {% else %}
             <priority>0.4</priority>
             <changefreq>monthly</changefreq>
