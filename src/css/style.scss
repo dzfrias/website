@@ -116,12 +116,8 @@ nav[aria-label="site-nav"] {
   }
 }
 
+ol,
 ul {
-  list-style-position: inside;
-  margin-bottom: $spacing;
-}
-
-ol {
   list-style-position: inside;
   margin-bottom: $spacing;
 }
@@ -161,7 +157,7 @@ code:not([class^="language"]) {
 }
 
 main {
-  width: min(80%, 65ch);
+  width: min(95%, 65ch);
 }
 
 h1 {
