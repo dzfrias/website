@@ -8,7 +8,7 @@ module.exports = (config) => {
   config.addPassthroughCopy("./src/img/");
   config.addPassthroughCopy("./src/js/");
   // Favicons
-  config.addPassthroughCopy({ "src/favicon/*": "" });
+  config.addPassthroughCopy({ "./src/favicon/*": "." });
 
   config.setLibrary(
     "md",
