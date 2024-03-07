@@ -26,6 +26,7 @@ module.exports = (config) => {
     defaultAttributes: {
       loading: "lazy",
       decoding: "async",
+      "aria-haspopup": "dialog",
     },
   });
 
