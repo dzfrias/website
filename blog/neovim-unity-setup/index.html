@@ -610,28 +610,30 @@
 </style>
   </head>
   <body>
-    <nav aria-label="site-nav">
-      <span class="name-header">dzfrias</span>
-      <ul>
-        
-        <li>
-          <a href="/">Home</a>
-        </li>
-        
-        <li>
-          <a href="/blog/">Blog</a>
-        </li>
-        
-        <li>
-          <a href="/projects/">Projects</a>
-        </li>
-        
-        <li>
-          <a href="https://github.com/dzfrias">GitHub</a>
-        </li>
-        
-      </ul>
-    </nav>
+    <header>
+      <nav>
+        <span class="name-header">dzfrias</span>
+        <ul>
+          
+          <li>
+            <a href="/">Home</a>
+          </li>
+          
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+          
+          <li>
+            <a href="/projects/">Projects</a>
+          </li>
+          
+          <li>
+            <a href="https://github.com/dzfrias">GitHub</a>
+          </li>
+          
+        </ul>
+      </nav>
+    </header>
     <main class="" tabindex="-1"><h1>The Definitive Neovim Unity Setup of 2023</h1>
 <p>If you use <a href="https://github.com/neovim/neovim">neovim</a> to write code for
 <a href="https://unity.com/">Unity</a>, it's likely that you want (or have wanted) a
@@ -661,7 +663,7 @@ of the LSP that is compatible with the mono you just installed.</p>
 To install, first follow that link. Then, find the asset that works with your
 system and download the <strong>non-http</strong> version of the server. Put the download in
 a path you'll remember!</p>
-<p><picture><source type="image/webp" srcset="/img/KYUMBCBS8P-2806.webp 2806w"><img loading="lazy" decoding="async" src="/img/KYUMBCBS8P-2806.jpeg" alt="OmniSharp release page v1.38.2" width="2806" height="1510"></picture></p>
+<p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/KYUMBCBS8P-2806.webp 2806w"><img loading="lazy" decoding="async" src="/img/KYUMBCBS8P-2806.jpeg" alt="OmniSharp release page v1.38.2" width="2806" height="1510"></picture></button><dialog><picture><source type="image/webp" srcset="/img/KYUMBCBS8P-2806.webp 2806w"><img loading="lazy" decoding="async" src="/img/KYUMBCBS8P-2806.jpeg" alt="OmniSharp release page v1.38.2" width="2806" height="1510"></picture></dialog></div><p></p>
 <p>The last dependency you need is
 <a href="https://code.visualstudio.com/">Visual Studio Code</a> (VSCode). Yes, I know this
 is a strange requirement, but it's a necessary step for Unity to generate
@@ -696,7 +698,7 @@ be set up!</p>
 <h3 id="unity-setup" tabindex="-1"><a class="header-anchor" href="#unity-setup">Unity Setup</a></h3>
 <p>Now, for the Unity part. Open up any Unity project, and go to Unity &gt; Settings
 in the menu bar. This should take you to a page that looks like this:</p>
-<p><picture><source type="image/webp" srcset="/img/2Jn_5JKOnB-2830.webp 2830w"><img loading="lazy" decoding="async" src="/img/2Jn_5JKOnB-2830.jpeg" alt="preferences page" width="2830" height="894"></picture></p>
+<p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/2Jn_5JKOnB-2830.webp 2830w"><img loading="lazy" decoding="async" src="/img/2Jn_5JKOnB-2830.jpeg" alt="preferences page" width="2830" height="894"></picture></button><dialog><picture><source type="image/webp" srcset="/img/2Jn_5JKOnB-2830.webp 2830w"><img loading="lazy" decoding="async" src="/img/2Jn_5JKOnB-2830.jpeg" alt="preferences page" width="2830" height="894"></picture></dialog></div><p></p>
 <p>As seen in the picture, go to External Tools section and select VSCode as your
 external editor. Once that's done, check all the boxes and click the
 <code>Regenerate project files</code> button. Unfortunately, this means you can't set
@@ -706,7 +708,7 @@ promised earlier in the post, you can delete/uninstall VSCode now!</p>
 <p>If you've followed these steps, you should have a working LSP for Unity!
 OmniSharp takes a while to start up (for me, about 10 seconds), so stick around
 for at least a minute or two to see if it actually works or not.</p>
-<p><picture><source type="image/webp" srcset="/img/3Jt9_vgx_v-1094.webp 1094w"><img loading="lazy" decoding="async" src="/img/3Jt9_vgx_v-1094.jpeg" alt="the final working version" width="1094" height="540"></picture></p>
+<p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/3Jt9_vgx_v-1094.webp 1094w"><img loading="lazy" decoding="async" src="/img/3Jt9_vgx_v-1094.jpeg" alt="the final working version" width="1094" height="540"></picture></button><dialog><picture><source type="image/webp" srcset="/img/3Jt9_vgx_v-1094.webp 1094w"><img loading="lazy" decoding="async" src="/img/3Jt9_vgx_v-1094.jpeg" alt="the final working version" width="1094" height="540"></picture></dialog></div><p></p>
 <p>I'm using macOS Ventura with an aarch64 CPU. I don't think this should matter,
 but in the event this doesn't work, that's one possible avenue worth looking
 into.</p>
