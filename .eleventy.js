@@ -1,10 +1,15 @@
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
-const markdownIt = require("markdown-it");
+const md = require("markdown-it")();
 const markdownItAnchor = require("markdown-it-anchor");
 const eleventyGoogleFonts = require("eleventy-google-fonts");
 
 module.exports = (config) => {
+  const defaultImageRender = md.renderer.rules.image;
+  md.renderer.rules.image = function (tokens, idx, options, env, self) {
+    return `<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image">${defaultImageRender(tokens, idx, options, env, self)}</button><dialog>${defaultImageRender(tokens, idx, options, env, self)}</dialog></div>`;
+  };
+
   config.addPassthroughCopy("./src/img/");
   config.addPassthroughCopy("./src/js/");
   // Favicons
@@ -12,7 +17,7 @@ module.exports = (config) => {
 
   config.setLibrary(
     "md",
-    markdownIt({ html: true }).use(markdownItAnchor, {
+    md.use(markdownItAnchor, {
       level: 2,
       permalink: markdownItAnchor.permalink.headerLink(),
     }),
@@ -26,7 +31,6 @@ module.exports = (config) => {
     defaultAttributes: {
       loading: "lazy",
       decoding: "async",
-      "aria-haspopup": "dialog",
     },
   });
 

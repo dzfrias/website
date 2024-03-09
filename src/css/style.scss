@@ -76,15 +76,18 @@ a {
   font-size: 2rem;
 }
 
-nav[aria-label="site-nav"] {
-  font-size: 1.25rem;
+header {
+  width: 100%;
+  background: variables.$bg-dark;
   padding-bottom: 1.5rem;
   padding-top: 1rem;
+}
+
+nav {
+  font-size: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: variables.$bg-dark;
-  width: 100%;
 
   a {
     text-decoration-thickness: 3px;
@@ -104,6 +107,7 @@ nav[aria-label="site-nav"] {
 
       &[aria-current="page"] a {
         color: variables.$fg;
+
         &:hover {
           background-image: linear-gradient(
             90deg,
@@ -134,16 +138,22 @@ img {
 
   // Taken from https://www.zachleat.com/web/fluid-images/
   max-width: 100%;
+
   // Preserve aspect ratio
   &[width][height] {
     height: auto;
   }
+
   // Let SVG scale without boundaries
   &[src$=".svg"] {
     width: 100%;
     height: auto;
     max-width: none;
   }
+}
+
+button:has(picture, img) {
+  border: none;
 }
 
 pre {
