@@ -83,7 +83,7 @@ If you have [oh-my-zsh](https://ohmyz.sh/), the installation is (_slightly_)
 easier. Download the repository and do the following:
 
 ```bash
-$ mv <DOWNLOAD_PATH> $ZSH_CUSTOM
+$ mv <DOWNLOAD_PATH> $ZSH_CUSTOM/plugins
 ```
 
 And then in your `~/.zshrc`, add `almostontop` to your plugins:
