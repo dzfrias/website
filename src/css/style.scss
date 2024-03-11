@@ -152,6 +152,12 @@ img {
   }
 }
 
+video {
+  margin-bottom: $spacing;
+  border-radius: 5px;
+  border: 1px solid variables.$accent-fade
+}
+
 button:has(picture, img) {
   border: none;
 }

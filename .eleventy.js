@@ -1,6 +1,6 @@
 const { eleventyImageTransformPlugin } = require("@11ty/eleventy-img");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
-const md = require("markdown-it")();
+const md = require("markdown-it")({ html: true });
 const markdownItAnchor = require("markdown-it-anchor");
 const eleventyGoogleFonts = require("eleventy-google-fonts");
 
