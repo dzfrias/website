@@ -65,8 +65,17 @@
     </url>
     
     <url>
+        <loc>https://dzfrias.dev/blog/almostontop/</loc>
+        <lastmod>2024-03-10T00:00:00.000Z</lastmod>
+        
+            <priority>0.7</priority>
+            <changefreq>monthly</changefreq>
+        
+    </url>
+    
+    <url>
         <loc>https://dzfrias.dev/blog/</loc>
-        <lastmod>2024-03-09T15:20:51.352Z</lastmod>
+        <lastmod>2024-03-11T00:46:00.367Z</lastmod>
         
             <priority>0.4</priority>
             <changefreq>weekly</changefreq>
@@ -75,7 +84,7 @@
     
     <url>
         <loc>https://dzfrias.dev/</loc>
-        <lastmod>2024-03-09T15:20:51.360Z</lastmod>
+        <lastmod>2024-03-11T00:46:00.375Z</lastmod>
         
             <priority>0.9</priority>
             <changefreq>monthly</changefreq>
@@ -84,7 +93,7 @@
     
     <url>
         <loc>https://dzfrias.dev/projects/</loc>
-        <lastmod>2024-03-09T15:20:51.360Z</lastmod>
+        <lastmod>2024-03-11T00:46:00.375Z</lastmod>
         
             <priority>0.5</priority>
             <changefreq>monthly</changefreq>
