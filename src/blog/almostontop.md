@@ -63,7 +63,7 @@ Now, you'll need to edit your `~/.zshrc` to run the plugin when zsh starts up.
 This is as simple as doing the following:
 
 ```bash
-$ echo "source ~/.zsh-plugins/almostontop" >> ~/.zshrc
+$ echo "source ~/.zsh-plugins/almostontop/almostontop.plugin.zsh" >> ~/.zshrc
 ```
 
 If you restart zsh, the plugin _should_ be working! If it doesn't, make sure
