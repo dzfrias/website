@@ -679,7 +679,7 @@ recommend something like <code>~/.zsh-plugins/almostontop</code>, so you can put
 plugins in <code>.zsh-plugins</code> if/when you want them.</p>
 <p>Now, you'll need to edit your <code>~/.zshrc</code> to run the plugin when zsh starts up.
 This is as simple as doing the following:</p>
-<pre class="language-bash"><code class="language-bash">$ <span class="token builtin class-name">echo</span> <span class="token string">"source ~/.zsh-plugins/almostontop"</span> <span class="token operator">>></span> ~/.zshrc</code></pre>
+<pre class="language-bash"><code class="language-bash">$ <span class="token builtin class-name">echo</span> <span class="token string">"source ~/.zsh-plugins/almostontop/almostontop.plugin.zsh"</span> <span class="token operator">>></span> ~/.zshrc</code></pre>
 <p>If you restart zsh, the plugin <em>should</em> be working! If it doesn't, make sure
 that the <code>$ALMOSONTOP</code> environment variable is set with the following:</p>
 <pre class="language-bash"><code class="language-bash">$ <span class="token builtin class-name">echo</span> <span class="token variable">$ALMOSONTOP</span>
