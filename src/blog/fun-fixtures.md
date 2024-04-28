@@ -46,7 +46,7 @@ Okay, so what if we had a test that:
 - Has arbitrary metadata at the top
 - Gets its own entry in the `cargo test` output
 
-Maye something like this:
+Maybe something like this:
 
 ```text
 ---
