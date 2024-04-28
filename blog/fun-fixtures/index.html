@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="The posts of Diego Frias&#39;s programming blog">
+    <meta name="description" content="Learn about writing fixture tests and a fixture harness in Rust!">
     <meta name="author" content="Diego Frias">
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
-    <title>Blog - dzfrias</title>
+    <title>Fun Fixture Tests in Rust - dzfrias</title>
     <link rel="stylesheet" href="/css/style.css">
     <script type="module" src="/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -619,7 +619,7 @@
             <a href="/">Home</a>
           </li>
           
-          <li aria-current="page">
+          <li>
             <a href="/blog/">Blog</a>
           </li>
           
@@ -634,108 +634,76 @@
         </ul>
       </nav>
     </header>
-    <main class="" tabindex="-1">
-<h1>Blog</h1>
-<ol class="posts">
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/fun-fixtures/">Fun Fixture Tests in Rust</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2024-03-15">2024-03-15</time>
-      <p class="posts-item-description">Learn about writing fixture tests and a fixture harness in Rust!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/almostontop/">Fix your posture with almostontop</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2024-03-10">2024-03-10</time>
-      <p class="posts-item-description">An introduction to my favorite shell plugin, almostontop. Save your neck the pain in those long coding sessions!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/new-look/">Rebuilding the Website</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2024-03-06">2024-03-06</time>
-      <p class="posts-item-description">In this post, I&#39;ll go over some high-level changes I&#39;ve made to this website.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/arena-nvim/">arena.nvim: A frecency-based buffer switcher</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-10-01">2023-10-01</time>
-      <p class="posts-item-description">arena.nvim aims to be the ultimate buffer-management solution, allowing you to hop around files as fast as you can think!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/automatic-semicolon-lexer/">Build a Lexer with Automatic Semicolon Insertion in Rust</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-07-22">2023-07-22</time>
-      <p class="posts-item-description">A walkthrough on how to build your own lexer with automatic semicolon insertion!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/deploy-rust-cross-platform-github-actions/">How to Deploy Rust Binaries with GitHub Actions</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-23">2023-06-23</time>
-      <p class="posts-item-description">A tutorial for deploying Rust binaries to a GitHub release, cross-platform!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/projectable/">Projectable: A Command-Line Project Manager</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-22">2023-06-22</time>
-      <p class="posts-item-description">Projectable is a highly configurable command-line project manager: everything your project needs from a comfortable and smooth interface.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/neovim-unity-setup/">The Definitive Neovim Unity Setup of 2023</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-20">2023-06-20</time>
-      <p class="posts-item-description">A neovim setup for Unity that actually works in 2023, with minimal dependencies.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/the-beginning-of-this-blog/">The Beginning of this Blog</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-16">2023-06-16</time>
-      <p class="posts-item-description">Welcome to the blog! This post contains a bit about blog and what to expect.</p>
-    </article>
-  </li>
-  </ol>
+    <main class="" tabindex="-1"><h1>Fun Fixture Tests in Rust</h1>
+<p>Recently, I've been working on an interpreter/shell
+(<a href="https://github.com/dzfrias/wsh">wsh</a>). For projects like this, I want to make
+sure I have lots of tests! However, as my features got more complex and nuanced,
+I found it hard to freely write tests in a <strong>streamlined</strong> manner.</p>
+<p>For example, let's say you're testing a simple interpreter. Writing tests for it
+should normally involve you doing something like this:</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">some_math</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> input <span class="token operator">=</span> <span class="token string">"1 + 1"</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> expected <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>No problem, right? But what happens when you need to test semi-complex control
+flow?</p>
+<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<span class="token keyword">fn</span> <span class="token function-definition function">looping_and_break</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> input <span class="token operator">=</span> <span class="token string">"x = 0\nwhile true:\n    x += 1\n    if x == 10:\n        break\nx"</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> expected <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Not as nice... and while you can use multiline strings (or even use the
+<a href="https://crates.io/crates/indoc"><code>indoc</code></a> macro), there is still some
+boilerplate, and it began to bother me. Yes, a solution <em>might</em> be unnecessary.
+But it's <em>fun</em> (and it looks cool)!</p>
+<p>Okay, so what if we had a test that:</p>
+<ul>
+<li>Is described by a file</li>
+<li>Has arbitrary metadata at the top</li>
+<li>Gets its own entry in the <code>cargo test</code> output</li>
+</ul>
+<p>Maye something like this:</p>
+<pre class="language-text"><code class="language-text">---
+expected: 10
+---
+
+x = 0
+while true:
+    x += 1
+    if x == 10:
+        break
+x</code></pre>
+<p>This is called a
+<a href="https://en.wikipedia.org/wiki/Test_fixture#Software">test fixture</a>, and is a
+common pattern for certain types of software.</p>
+<h2 id="inspiration-%26-implementation" tabindex="-1"><a class="header-anchor" href="#inspiration-%26-implementation">Inspiration &amp; Implementation</a></h2>
+<p>The idea for this style of test was inspired by the excellent
+<a href="https://github.com/WebAssembly/wabt">WABT</a> project.
+<a href="https://github.com/WebAssembly/wabt/tree/356931a867c7d642bc282fff46a1c95ab0e843f3/test">Their tests</a>
+are run by a much more complicated fixture harness than what my implementation
+has (with their own fancy
+<a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a>), so if you want
+to look at something more robust, definitely check WABT out.</p>
+<p><a href="https://github.com/dzfrias/wsh/blob/d59ad832931519838bf233248dd2c8c19e6169d2/tests/shell.rs">My own implementation</a>
+is largely driven by <a href="https://github.com/serde-rs/serde">serde</a> and
+<a href="https://github.com/fe-lang/dir-test">dir-test</a>. Serde is used to parse the
+metadata (in the <code>---</code>), and dir-test is used to generate tests cases based on
+<strong>files in a directory</strong> (at compile time). So, every file in the
+<a href="https://github.com/dzfrias/wsh/tree/d59ad832931519838bf233248dd2c8c19e6169d2/tests/fixtures">fixtures directory</a>
+corresponds to a test.</p>
+<p>If you want to use this style of testing in your own project, keep in mind that
+<a href="https://github.com/dzfrias/wsh/blob/d59ad832931519838bf233248dd2c8c19e6169d2/tests/shell.rs">my implementation</a>
+is for a shell, so some parts may have to be adapted. It's quite simple though
+(only about ~80 lines); it shouldn't be too hard to apply to something else!</p>
+<h2 id="closing-thoughts" tabindex="-1"><a class="header-anchor" href="#closing-thoughts">Closing Thoughts</a></h2>
+<p>Using this style of testing in wsh has been pretty great! It was fun to
+implement, and it's now much nicer to write tests. It also helps when <strong>viewing
+diffs</strong>, which was an unexpected bonus when I first wrote the fixture harness.</p>
+<p>Let me know if you have any further questions or if there were any issues you
+found in this post!</p>
 </main>
   </body>
 </html>
