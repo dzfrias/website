@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="In this post, I&#39;ll go over some high-level changes I&#39;ve made to this website.">
+    <meta name="description" content="This post introduces ungoogled-chromium, my web browser of choice.">
     <meta name="author" content="Diego Frias">
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
-    <title>Rebuilding the Website - dzfrias</title>
+    <title>Privacy with ungoogled-chromium - dzfrias</title>
     <link rel="stylesheet" href="/css/style.css">
     <script type="module" src="/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -84,61 +84,85 @@
       
 <div class="article-container">
   <div class="article-wrapper">
-    <h1>Rebuilding the Website</h1>
-<p>A few weeks ago, I was thinking about completely redesigining this website
-<strong>from the ground up</strong>. I didn't like the colors that much, and it generally
-wasn't as performant as I would've liked.</p>
-<p>I was super busy working on <a href="https://github.com/dzfrias/wsh">wsh</a> at that time,
-so I held off from reworking anything. But after deciding to take a short break
-from the project, I got time to do work on this website!</p>
-<p>In this post, I'll go over <a href="#what's-different">what's different</a> and
-<a href="#what's-the-same">what's stayed the same</a>!</p>
-<h2 id="what's-different" tabindex="-1"><a class="header-anchor" href="#what's-different">What's Different</a></h2>
-<p>The whole website is now made with <a href="https://www.11ty.dev/">11ty</a>, which I could
-not recommend enough. I'd previously used <a href="https://kit.svelte.dev/">SvelteKit</a>
-for the blog, but this was completely unnecessary for a few reasons:</p>
+    <h1>Privacy with ungoogled-chromium</h1>
+<p>The word &quot;<em>privacy</em>&quot; regarding modern browsers is similar to the word
+&quot;<em>healthy</em>&quot;
+<a href="https://www.nytimes.com/2018/07/07/opinion/sunday/juice-is-not-healthy-sugar.html">in regards to fruit juice</a>.
+It's ambiguous, relative, and more often than not, deceiving. Just about every
+browser will make claims about the protection of user data, yet it seems as
+though there's always a caveat just beyond the surface. As a consumer, it
+becomes hard to know what private <em>really means</em> to browser companies.</p>
+<p>For better or for worse, I've gone on a browser-searching rampage that was
+mainly motivated by what I can only describe as &quot;heat-of-the-moment paranoia.&quot;
+In this post, I will introduce
+<a href="https://github.com/ungoogled-software/ungoogled-chromium">ungoogled-chromium</a>,
+and why it stood out in my quest for a better browser. I will spend as little
+time as possible discussing other browsers, because ironically, I'm not in a
+position to evaluate how private they actually are. I chose ungoogled-chromium
+because there are things about the project that I know that I can <strong>trust</strong>, not
+because I've formally audited the user data protection models of <em>every single
+browser</em> and decided that ungoogled-chromium has the best one.</p>
+<h2 id="what-is-ungoogled-chromium%3F" tabindex="-1"><a class="header-anchor" href="#what-is-ungoogled-chromium%3F">What is ungoogled-chromium?</a></h2>
+<p>Taken from
+<a href="https://github.com/ungoogled-software/ungoogled-chromium">their own description</a>,
+ungoogled-chromium is</p>
+<blockquote>
+<p>Google Chromium, sans integration with Google</p>
+</blockquote>
+<p>This is an apt description, but what is Chromium?
+<a href="https://www.chromium.org/Home/">Chromium</a> is a browser engine that's backed by
+Google, and in my opinion, is the <em>highest quality</em> browser engine out there. It
+powers Google Chrome and a host of other browsers, including:</p>
+<ul>
+<li><a href="https://www.opera.com/">Opera</a></li>
+<li><a href="https://brave.com/">Brave</a></li>
+<li><a href="https://arc.net/">Arc</a></li>
+<li><a href="https://vivaldi.com/">Vivaldi</a></li>
+</ul>
+<p>To name a few. Web browser engines are extraordinarily complex tools (just look
+at the <a href="https://www.w3.org/TR/">standards...</a>), so there's a good reason that
+all these browsers use Chromium: it's fast, correct, and stable. New standards
+are drafted all the time too, and Chromium is always on top in terms of
+implementing them.</p>
+<p>ungoogled-chromium is a <strong>fork</strong> of Chromium that gets rid of <strong>all</strong> the
+built-in integrations Chromium has with Google, while still aiming to feel like
+Google Chrome. The
+<a href="https://github.com/ungoogled-software/ungoogled-chromium/blob/master/docs/design.md">design document</a>
+details how this works. Basically, ungoogled-chromium ensures the protection of
+your data by cutting off all internal communications with Google.</p>
+<h2 id="why-ungoogled-chromium%3F" tabindex="-1"><a class="header-anchor" href="#why-ungoogled-chromium%3F">Why ungoogled-chromium?</a></h2>
+<p>I like ungoogled-chromium for three main reasons:</p>
 <ol>
-<li>The content of this website is (and will probably always be) static</li>
-<li>The website is too small to make meaningful use Svelte's component
-abstractions</li>
-<li>There was little to no use of interactive JavaScript</li>
+<li>I can be <em>actually sure</em> about what it's doing with my data</li>
+<li>It uses Chromium</li>
+<li>It does its job, and nothing more</li>
 </ol>
-<p>In my first iteration of this website, I didn't know much about developing
-&quot;<em>real</em>&quot; sites for the web, so I just chose SvelteKit because it sounded nice.
-This just turned out to be <strong>huge</strong> overkill and made things much more
-complicated than they needed to be.</p>
-<p>11ty is a super simple static site generator. It handles the annoying stuff for
-you (like parsing <a href="https://www.markdownguide.org/">Markdown</a>), while still
-allowing you to have full control over your website. It doesn't do anything
-crazy under the hood, or deliver <em>any</em> client-side JavaScript. For building
-static websites, I can't recommend it enough.</p>
-<h3 id="color-changes" tabindex="-1"><a class="header-anchor" href="#color-changes">Color Changes</a></h3>
-<p>Perhaps the most visually noticable difference is the colors and general site
-layout.</p>
-<p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/VojZcjZXWX-1888.webp 1888w"><img loading="lazy" decoding="async" src="/img/VojZcjZXWX-1888.jpeg" alt="The old website home page" width="1888" height="902"></picture></button><dialog><picture><source type="image/webp" srcset="/img/VojZcjZXWX-1888.webp 1888w"><img loading="lazy" decoding="async" src="/img/VojZcjZXWX-1888.jpeg" alt="The old website home page" width="1888" height="902"></picture></dialog></div><p></p>
-<p>The <a href="/">home page</a> looks pretty different now! I think <em>both</em> color schemes
-worked pretty well for a personal site, but I wanted something different for
-this version of dzfrias.</p>
-<h3 id="projects-page" tabindex="-1"><a class="header-anchor" href="#projects-page">Projects Page</a></h3>
-<p>New to this website is my <a href="/projects/">projects page</a>! This is meant to hold the
-projects that I'm most proud of. Although they vary in levels of usability (I
-think I'd be able to make some of them a lot better if I tried them now), I
-still want to feature the projects that I've poured tons of hours into.</p>
-<h3 id="backend" tabindex="-1"><a class="header-anchor" href="#backend">Backend</a></h3>
-<p>Since this site is fully static, it's now being served using
-<a href="https://pages.github.com/">GitHub Pages</a>! I was previously using
-<a href="https://vercel.com/about">Vercel</a>. Similar to the 11ty/SvelteKit story, using a
-dedicated server was a bit overkill.</p>
-<p>I use a <a href="https://docs.github.com/en/actions">GitHub Action</a> for deploying my
-website. The
-<a href="https://github.com/dzfrias/website/blob/40a068a58f4481350c1d531c087f33d435927dd4/.github/workflows/deploy.yml">relevant workflow</a>
-is nice and simple!</p>
-<h2 id="what's-the-same" tabindex="-1"><a class="header-anchor" href="#what's-the-same">What's the Same</a></h2>
-<p>I tried to make sure that all of the URLs of the site stayed the same. For
-<em>most</em> of the content, that was definitely successful. A few minor pieces of
-content, like image paths, <strong>are not</strong> consistent with v1 of the website.</p>
-<p>It's generally good practice to make sure that your URLs don't change
-(<a href="https://www.w3.org/Provider/Style/URI">cool URIs don't change</a>).</p>
+<p>To go over point one, the project is open source, actively maintained, and
+carefully documents <strong>exactly</strong> what it changes about the base Chromium, which
+is viewable in the patchset.</p>
+<p>In regard to the second point, I just got tired of using Firefox's engine.
+Chromium browsers just <strong>felt smoother</strong>, and I use my browser a lot, every
+single day. I also didn't like the opt-out integrations with products like
+<a href="https://support.mozilla.org/en-US/kb/what-is-pocket">Pocket</a>.</p>
+<p>Relating to the aforementioned Pocket integration, I just want a browser that
+will <strong>appropriately display a webpage</strong>. Nothing more. Ultimately, a browser
+has a simple role for the user: render a webpage's information in the way that a
+server described. However complex that task might actually be, the point is that
+a web browser's goal is to allow the user to <em>interact with the World Wide Web</em>,
+not interact with the browser itself.</p>
+<h2 id="final-thoughts" tabindex="-1"><a class="header-anchor" href="#final-thoughts">Final Thoughts</a></h2>
+<p>That's pretty much all I have to say about ungoogled-chromium! I've been using
+it for a few months now, and it's been great! However, I will mention that
+<em>some</em> (very select) parts of pages will not work. This almost never happens to
+me, and it's not like the whole webpage ever completely breaks. It'll never be a
+rendering issue or anything like that, but sometimes a request might fail
+because ungoogled-chromium blocked it (which might be a good thing in some
+scenarios). For that reason, I recommend keeping another browser installed on
+your machine.</p>
+<p>As always, if you had any questions, comments, or issues with this post, feel
+free to <a href="https://github.com/dzfrias/website/issues/new">submit an issue</a> on
+GitHub! If you'd like to learn more about ungoogled-chromium, check out its
+<a href="https://github.com/ungoogled-software/ungoogled-chromium">GitHub page</a>.</p>
 
   </div>
 </div>
