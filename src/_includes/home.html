@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="home-content">
+  <div class="split">
+    <div>
+      {{ content | safe }}
+    </div>
+    <div class="profile-container">
+      {% include "logo.svg" %}
+    </div>
+  </div>
+</div>
+{% endblock %}

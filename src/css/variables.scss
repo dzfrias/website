@@ -1,11 +1,21 @@
 @use "sass:color";
 
-$bg: rgb(34, 34, 34);
+@font-face {
+  font-family: "Frank Ruhl Libre Fallback";
+  src: local("Georgia");
+  ascent-override: 97.1825%;
+  descent-override: 33.9174%;
+  size-adjust: 98.4745%;
+}
+
+$bg: rgb(15, 15, 15);
 $bg-dark: rgb(25, 25, 25);
-$fg: rgb(201, 201, 201);
-$fg-bright: #f3efe1;
+$fg: rgb(200, 200, 200);
+$fg-bright: rgb(220, 220, 220);
 $fg-fade: #939393;
-$accent: rgb(187, 167, 104);
+$accent: $fg-bright;
 $accent-fade: color.adjust($accent, $alpha: -0.4, $saturation: -20%);
 
-$main-font: "Ubuntu", sans-serif;
+$main-font: "Frank Ruhl Libre", "Frank Ruhl Libre Fallback", serif;
+$code-font: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New",
+  monospace;
