@@ -142,6 +142,10 @@ nav {
     li {
       display: inline;
 
+      a {
+        text-decoration: none;
+      }
+
       &[aria-current="page"] a {
         color: variables.$fg;
 
