@@ -1,6 +1,7 @@
 ---
 title: Redesigning the website
-description: Woah
+description: The blog went through another redesign! This post goes over
+some of the change I made.
 date: 2024-04-02
 ---
 
