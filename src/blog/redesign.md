@@ -1,8 +1,8 @@
 ---
 title: Redesigning the website
 description:
-  The blog went through another redesign! This post goes over some of the change
-  I made.
+  The blog went through another redesign! This post goes over some of the
+  changes I've made.
 date: 2024-04-02
 ---
 
