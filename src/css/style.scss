@@ -295,6 +295,10 @@ p {
     &-title {
       font-size: 1.5rem;
       margin-bottom: unset;
+
+      a {
+        text-decoration: none;
+      }
     }
 
     &-time {
