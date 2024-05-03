@@ -56,7 +56,9 @@ dialog:has(img) {
 ::backdrop {
   background: variables.$bg-dark;
   opacity: 0.75;
-  cursor: pointer;
+  cursor: -moz-zoom-out;
+  cursor: -webkit-zoom-out;
+  cursor: zoom-out;
 }
 
 body {
@@ -199,7 +201,9 @@ img {
 }
 
 button[aria-haspopup="dialog"] {
-  cursor: pointer;
+  cursor: -moz-zoom-in;
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in;
 }
 
 video {
