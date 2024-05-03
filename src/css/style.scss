@@ -183,7 +183,6 @@ video {
 img {
   border: 1px solid variables.$accent-fade;
   border-radius: 5px;
-  cursor: pointer;
 
   // Taken from https://www.zachleat.com/web/fluid-images/
   // Preserve aspect ratio
@@ -197,6 +196,10 @@ img {
     height: auto;
     max-width: none;
   }
+}
+
+button[aria-haspopup="dialog"] {
+  cursor: pointer;
 }
 
 video {
