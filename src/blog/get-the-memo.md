@@ -1,7 +1,7 @@
 ---
 title: "Game Project: Get The Memo"
 description:
-  An reflection on a video game project that I've been working on for a few
+  A reflection on a video game project that I've been working on for a few
   months!
 date: 2024-05-15
 ---
@@ -67,8 +67,8 @@ design, which I spent a long time on (graphics programming is hard!).
 We competed in the same state competition last year, with
 [_Roadent Rampage_](https://github.com/dzfrias/roadent_rampage), and our game
 was **much better** this time around! Anyway, I hope you enjoyed my reflections
-on _Get The Memo_. I didn't show much gameplay, but you can go to the
-game's [GitHub repository](https://github.com/dzfrias/GetTheMemo) for that kind of
+on _Get The Memo_. I didn't show much gameplay, but you can go to the game's
+[GitHub repository](https://github.com/dzfrias/GetTheMemo) for that kind of
 content. As always, let me know on
 [this blog's GitHub repo](https://github.com/dzfrias/website) if there are any
 issues!
