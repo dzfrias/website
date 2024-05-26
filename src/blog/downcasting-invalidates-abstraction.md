@@ -184,7 +184,7 @@ you haven't already!
 
 # Wrap up
 
-Depending on the language downcasting is a necessary evil. While it's certainly
+Depending on the language, downcasting is a necessary evil. While it's certainly
 not going to ruin your codebase in _every case_, you must be careful when you
 use it. Ask yourself the following questions:
 
