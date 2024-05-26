@@ -5,7 +5,7 @@ description:
   The home page of Diego Frias's personal website and programming blog.
 ---
 
-# Welcome
+<h1>Welcome</h1>
 
 This is the personal website of **Diego Frias**. I write about programming and
 feature some of the [projects](/projects/) that I'm working on. My

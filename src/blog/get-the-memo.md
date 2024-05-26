@@ -6,8 +6,6 @@ description:
 date: 2024-05-15
 ---
 
-# Game Project: Get The Memo
-
 For the past few months, a few friends and I have been working on a video game
 called _Get The Memo_ ([GitHub](https://github.com/dzfrias/GetTheMemo)). From
 our official description:
@@ -37,7 +35,7 @@ challenge, and I think that game development is unique in that respect. Games
 are the intersection of so many different crafts, programming included, which
 makes working on a team difficult but in a good, challenging way!
 
-## Programming
+# Programming
 
 I can't say that I like writing game code, but certainly teaches some good
 lessons! We wrote the game in Unity, and the main struggle was **decoupling**
@@ -57,7 +55,7 @@ guarantees. I think being able to analyze a program statically is useful for
 games, since there are so many independent variables and combinations of state.
 I've (very recently) been coming back to Rust, which has been really nice.
 
-## Final Thoughts
+# Final Thoughts
 
 Working on _Get The Memo_ was overall a great experience. Being on a team with
 talented artists and musicians was unique and presented many challenges! The

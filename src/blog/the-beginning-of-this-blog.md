@@ -5,8 +5,6 @@ description:
 date: 2023-06-16
 ---
 
-# The Beginning of this Blog
-
 Welcome to this blog! I've wanted to start one for a while, and hopefully it'll
 eventually become a collection of my thoughts on all things computer science
 related. Whether that means tutorials, ideas, or updates, I hope to put it all

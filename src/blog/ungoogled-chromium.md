@@ -4,8 +4,6 @@ description: This post introduces ungoogled-chromium, my web browser of choice.
 date: 2024-03-22
 ---
 
-# Privacy with ungoogled-chromium
-
 The word "_privacy_" regarding modern browsers is similar to the word
 "_healthy_"
 [in regards to fruit juice](https://www.nytimes.com/2018/07/07/opinion/sunday/juice-is-not-healthy-sugar.html).
@@ -25,7 +23,7 @@ because there are things about the project that I know that I can **trust**, not
 because I've formally audited the user data protection models of _every single
 browser_ and decided that ungoogled-chromium has the best one.
 
-## What is ungoogled-chromium?
+# What is ungoogled-chromium?
 
 Taken from
 [their own description](https://github.com/ungoogled-software/ungoogled-chromium),
@@ -56,7 +54,7 @@ Google Chrome. The
 details how this works. Basically, ungoogled-chromium ensures the protection of
 your data by cutting off all internal communications with Google.
 
-## Why ungoogled-chromium?
+# Why ungoogled-chromium?
 
 I like ungoogled-chromium for three main reasons:
 
@@ -80,7 +78,7 @@ server described. However complex that task might actually be, the point is that
 a web browser's goal is to allow the user to _interact with the World Wide Web_,
 not interact with the browser itself.
 
-## Final Thoughts
+# Final Thoughts
 
 That's pretty much all I have to say about ungoogled-chromium! I've been using
 it for a few months now, and it's been great! However, I will mention that

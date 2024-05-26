@@ -4,8 +4,6 @@ description: Learn about writing fixture tests and a fixture harness in Rust!
 date: 2024-03-15
 ---
 
-# Fun Fixture Tests in Rust
-
 Recently, I've been working on an interpreter/shell
 ([wsh](https://github.com/dzfrias/wsh)). For projects like this, I want to make
 sure I have lots of tests! However, as my features got more complex and nuanced,
@@ -65,7 +63,7 @@ This is called a
 [test fixture](https://en.wikipedia.org/wiki/Test_fixture#Software), and is a
 common pattern for certain types of software.
 
-## Inspiration & Implementation
+# Inspiration & Implementation
 
 The idea for this style of test was inspired by the excellent
 [WABT](https://github.com/WebAssembly/wabt) project.
@@ -88,7 +86,7 @@ If you want to use this style of testing in your own project, keep in mind that
 is for a shell, so some parts may have to be adapted. It's quite simple though
 (only about ~80 lines); it shouldn't be too hard to apply to something else!
 
-## Closing Thoughts
+# Closing Thoughts
 
 Using this style of testing in wsh has been pretty great! It was fun to
 implement, and it's now much nicer to write tests. It also helps when **viewing

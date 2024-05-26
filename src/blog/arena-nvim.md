@@ -6,8 +6,6 @@ description:
 date: 2023-10-01
 ---
 
-# arena.nvim
-
 [arena.nvim](https://github.com/dzfrias/arena.nvim) is a
 [**frecency**](https://en.wikipedia.org/wiki/Frecency)-based buffer switcher.
 Its tunable algorithm suggests the most relevant buffers for you, massively
@@ -17,7 +15,7 @@ speeding up productivity!
 
 Using the arena window, you can easily jump between files!
 
-## Motivation
+# Motivation
 
 I wrote `arena.nvim` because I was tired of how long it took to get back to a
 buffer I'd previously opened. Fuzzy finders took too long, especially for large
@@ -34,7 +32,7 @@ With `arena.nvim`, you no longer have to spend any energy trying to get back to
 a file you've already edited. Rather, it'll most likely be listed in as soon as
 you open the arena window!
 
-## Extra Stuff
+# Extra Stuff
 
 The design and feel of the window is very-much inspired by ThePrimeagen's
 [harpoon](https://github.com/ThePrimeagen/harpoon). Although `arena.nvim` has a

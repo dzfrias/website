@@ -6,8 +6,6 @@ description:
 date: 2024-03-10
 ---
 
-# Fix your posture with almostontop
-
 In this post, I'm going to introduce a shell plugin that's been improving my
 terminal experience for over a year now:
 [`almostontop`](https://github.com/Valiev/almostontop). If you do most of your
@@ -32,7 +30,7 @@ With `almostontop`, you can stop having to crane your neck downwards while
 you're working. The change might look small (even a bit superfluous), but it's
 been a _huge_ help for me.
 
-## Installing
+# Installing
 
 `almostontop` is a [zsh](https://zsh.sourceforge.io/) plugin. If you're a
 [bash](https://www.gnu.org/software/bash/) user, you can use
@@ -46,7 +44,7 @@ If you're a zsh user, here are two ways you can install `almostontop`:
 1. [Installing raw](#installing-raw)
 2. [Installing with oh-my-zsh](#installing-with-oh-my-zsh)
 
-### Installing Raw
+## Installing Raw
 
 At the most basic level, visit
 [the GitHub repository](https://github.com/Valiev/almostontop) and download:
@@ -77,7 +75,7 @@ true
 Yes, the misspelling **is** intentional. If it's not set or `false`, run
 `almostontop on`.
 
-### Installing with oh-my-zsh
+## Installing with oh-my-zsh
 
 If you have [oh-my-zsh](https://ohmyz.sh/), the installation is (_slightly_)
 easier. Download the repository and do the following:
@@ -98,7 +96,7 @@ plugins=(
 
 Restart `zsh`, and everything should be working!
 
-## Other Shells
+# Other Shells
 
 As far as I know, **only** zsh and bash have plugins for this. **However**, you
 can easily emulate this behavior by taking advantage of "post-prompt" hooks that

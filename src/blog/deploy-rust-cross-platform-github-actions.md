@@ -5,8 +5,6 @@ description:
 date: 2023-06-23
 ---
 
-# How to Deploy Rust Binaries with GitHub Actions
-
 If you're ready to release the first version of your
 [Rust](https://www.rust-lang.org/) project, it's likely that you want to upload
 some assets containing pre-built binaries (for macOS, Linux, and Windows) to
@@ -24,7 +22,7 @@ Linux, and macOS. You'll have a releases page that looks something like this:
 
 You might even learn a bit about GitHub Actions along the way!
 
-## Workflow Trigger
+# Workflow Trigger
 
 First, we need the condition in which we should run our action. Since releases
 are coupled with git tags, we want our automatic-releaser to run when a new tag
@@ -48,14 +46,14 @@ on:
 Alright, with that out of the way, let's get into what our action will actually
 do!
 
-## Building the Action
+# Building the Action
 
 To compile our binaries cross-platform, we'll need to create a new job. Let's
 call it `build-and-upload`, because this job will also be in charge of building
 the binaries and uploading them to a new release. A _job_ is a bundle of
 _steps_, and a _step_ is just anything our action does!
 
-### Defining the Metadata
+## Defining the Metadata
 
 Let's begin writing our job. First, we need to define the metadata before we get
 into the steps.
@@ -93,7 +91,7 @@ being used in the `runs-on` key, meaning our job will run on a different
 operating system each time, where the operating system is defined by the `os`
 key of each matrix item.
 
-### Installing Dependencies
+## Installing Dependencies
 
 Okay, with that finished, we need to start adding steps. The first two are easy:
 just clone our repository and install Rust!
@@ -124,7 +122,7 @@ using the `with` key. We utilize this in
 [`dtolnay/rust-toolchain`](https://github.com/dtolnay/rust-toolchain) to tell it
 what target our Rust should compile to.
 
-### Getting the Version
+## Getting the Version
 
 Another one of the "preparation steps" we need to take is getting the version.
 We'll use this information [later](#compressing-the-binaries)!
@@ -144,7 +142,7 @@ The script itself puts the version from our tag into an environment variable,
 steps to communicate with each other, as we'll now be able to access our version
 tag name (like "0.1.0") with `${{ env.VERSION }}` for the rest of this job.
 
-### Building the Binaries
+## Building the Binaries
 
 Okay, now we can get to building the binaries. For this, we'll use
 [cross](https://github.com/cross-rs/cross), a Rust tool that uses
@@ -167,7 +165,7 @@ This step tells GitHub Actions that we'd like to build our project using
 `target/<TARGET>/release/<BINARY_NAME>`, where `<TARGET>` is our `target` key of
 the matrix. The name of the binary obviously depends on your project.
 
-### Compressing the Binaries
+## Compressing the Binaries
 
 We're almost done! Now that we have our binaries built, we need to compress them
 into a `.tar.gz` file (or `.zip`) so they're easier to download from our assets
@@ -209,7 +207,7 @@ This step is pretty long, but not that complicated. Let's go over how it works:
 
 You can see our `$VERSION` environment variable coming into play here!
 
-### Uploading the Binaries
+## Uploading the Binaries
 
 With our binaries compressed, we're ready to upload upload them! This is the
 final step of our job!
@@ -231,7 +229,7 @@ created in the previous step).
 And we're done! Any time we push to GitHub with a tag like `2.1.0`, we'll create
 a release, build our cross-platform binaries, and upload them!
 
-## Wrapping Up + Final Code
+# Wrapping Up + Final Code
 
 I hope this post was informative and interesting, and good luck with deploying
 your future projects! If there was anything wrong with this post, please submit

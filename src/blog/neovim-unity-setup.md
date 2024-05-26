@@ -7,8 +7,6 @@ img: /img/neovim-unity-setup/working.webp
 date: 2023-06-20
 ---
 
-# The Definitive Neovim Unity Setup of 2023
-
 If you use [neovim](https://github.com/neovim/neovim) to write code for
 [Unity](https://unity.com/), it's likely that you want (or have wanted) a
 language server to be set up in your configuration, giving you access to
@@ -24,7 +22,7 @@ This post assumes you already have a neovim configuration set up, and you are
 using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for your server
 configurations.
 
-## Installing Dependencies
+# Installing Dependencies
 
 The first system-wide dependency you'll need is
 [mono](https://www.mono-project.com/). The one vendored by the lsp does not
@@ -55,14 +53,14 @@ trick). Don't worry: the download is actually only needed for a short amount of
 time; after the first time you set it up, Unity doesn't care if VSCode exists
 anymore (a bug which hopefully is never fixed).
 
-## Setting Up
+# Setting Up
 
 After you've finished [installing dependencies](#installing-dependencies), you
 can actually start setting it up! The hard part is over! This step requires a
 tiny bit of work on both the Neovim and Unity ends, but nothing too complicated
 or error-prone.
 
-### Neovim Setup
+## Neovim Setup
 
 First, start by going into your nvim-lspconfig setup, and enter the following
 code:
@@ -86,7 +84,7 @@ Of course, change the `path_to_download` variable to the actual path of the
 OmniSharp you downloaded. After that, **everything** from the Neovim side should
 be set up!
 
-### Unity Setup
+## Unity Setup
 
 Now, for the Unity part. Open up any Unity project, and go to Unity > Settings
 in the menu bar. This should take you to a page that looks like this:
@@ -99,7 +97,7 @@ external editor. Once that's done, check all the boxes and click the
 Neovim to external editor for Unity, but I think the trade-off is worth it. As
 promised earlier in the post, you can delete/uninstall VSCode now!
 
-## Wrapping Up
+# Wrapping Up
 
 If you've followed these steps, you should have a working LSP for Unity!
 OmniSharp takes a while to start up (for me, about 10 seconds), so stick around

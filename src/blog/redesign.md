@@ -6,8 +6,6 @@ description:
 date: 2024-04-02
 ---
 
-# Redesigning the website
-
 Yes, I changed the design of this website **again**. But it was worth it!
 This'll be the last time for a while too (I think). The first time I redid the
 website [was a month ago](/blog/new-look/). But that was a **complete
@@ -17,7 +15,7 @@ become a blog redesign addict, so I will try my very best to hold off on
 changing anything major for a while. Anyway, in this post, I'm going to talk
 about the new look!
 
-## Changes
+# Changes
 
 For the record, here's what the blog looked like before:
 
@@ -54,7 +52,7 @@ I also changed the layout, but this was by far the most subtle modification.
 Instead of being centered, the main elements now have a slight preference to the
 left. I thought it made the blog posts just a little bit easier to read.
 
-## Wrap-Up
+# Wrap-Up
 
 So that's what I've changed! I also made a [fancy new logo](/img/logo.png) based
 on the initials of my name, but I think that's less relevant not very relevant

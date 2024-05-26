@@ -6,8 +6,6 @@ description:
 date: 2023-07-22
 ---
 
-# Build a Lexer with Automatic Semicolon Insertion in Rust
-
 If you're looking to write a programming language, it's very likely that you'll
 need a **lexer**. Lexers are immensely helpful in the parsing process, and can
 even allow you to have (fancy) semicolon-less syntax. However, building a lexer
@@ -22,7 +20,7 @@ This post also assumes you have _some familiarity_ with Rust; you won't have to
 have a deep knowledge or familiarity of the language, just your way around the
 syntax.
 
-## Getting Started
+# Getting Started
 
 If you know nothing about lexers, they essentially take your program's raw
 string input and turn it into a **stream of tokens**. A token represents a
@@ -37,7 +35,7 @@ Here are some examples of what lexers would do with your input:
 "x = y" becomes Token::Ident("x"), Token::Assign, Token::Ident("y")
 ```
 
-### Defining our Token Type
+## Defining our Token Type
 
 First, we should define what our possible tokens should be. In this post, we
 will cover only a small subset of what is realistic in a general-purpose
@@ -87,7 +85,7 @@ pub enum Token {
 
 These are the tokens that make up the language's syntax!
 
-### Defining our Lexer
+## Defining our Lexer
 
 I'll start by explaining what our lexer will actually do. Our lexer is basically
 an iterator that yields `Token`s. It has a single public method, `next_token()`,
@@ -140,7 +138,7 @@ points to.
 With this foundation, hopefully you now know what our lexer does! We'll get
 started with some of the fundamental methods we'll need to get it operational.
 
-### Fundamental Methods
+## Fundamental Methods
 
 Let's first write a constructor for our lexer.
 
@@ -180,7 +178,7 @@ replace it with our null terminator so we don't have to handle it in
 does, so this will be bubbled up in the form of `Token::EOF` when `next_token`
 is called.
 
-## A Basic "Next Token" Method
+# A Basic "Next Token" Method
 
 Now we can define the only public method we'll need on our lexer! For a
 refresher, `Lexer::next_token()` should advance our pointer until a valid token
@@ -236,7 +234,7 @@ fn lexes_basic_tokens() {
 }
 ```
 
-## A Peek Buffer
+# A Peek Buffer
 
 Okay, now we need to handle more complicated stuff... Let's try tokenizing `!=`.
 The problem with our current setup is that our lexer can't distinguish a
@@ -363,7 +361,7 @@ fn lexes_complex_tokens() {
 
 Passed! With that, we can move on to another part of our lexer!
 
-## Reading Identifiers
+# Reading Identifiers
 
 Our lexer also has to be able read identifiers. For example, when we input
 `hello` to our lexer, it should give us `Token::Ident("hello")`.
@@ -408,7 +406,7 @@ fn read_ident(&mut self) -> String {
 The implementation is nothing special, so I won't bore you the details. With
 that out of the way, we can get to handling whitespace!
 
-## Whitespace
+# Whitespace
 
 For this post, we'll be ignoring whitespace completely for the sake of brevity.
 In full lexers, it's usually good to not _completely_ ignore them, if only
@@ -462,7 +460,7 @@ fn lexer_skips_whitespace() {
 
 Passed!
 
-## Automatic Semicolon Insertion
+# Automatic Semicolon Insertion
 
 With our current lexer setup, adding automatic semicolon insertion should be
 pretty simple! We'll be following in the footsteps of the
@@ -579,7 +577,7 @@ fn lexer_inserts_semicolons() {
 
 Great! Whew! We're done!
 
-## Wrapping Up
+# Wrapping Up
 
 If you've read this far, I hope you enjoyed and found use from this post.
 Although the lexer defined in this tutorial is definitely _not_ complete, my
