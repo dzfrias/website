@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="My thoughts on the idea of downcasting.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Downcasting invalidates abstraction - dzfrias</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="module" src="/js/index.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <meta name="theme-color" content="#0f0f0f">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="https://fonts.gstatic.com"><link data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap" rel="stylesheet"><style data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap">/* hebrew */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW7Ll4brkiY-xBg.woff2) format('woff2');
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW77l4brkiY-xBg.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW7Dl4brkiY8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" aria-label="Home">
+          <div class="header-logo">
+            <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+          </div>
+        </a>
+        <ul>
+          
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+          
+          <li>
+            <a href="/projects/">Projects</a>
+          </li>
+          
+          <li>
+            <a href="https://github.com/dzfrias">GitHub</a>
+          </li>
+          
+        </ul>
+      </nav>
+    </header>
+    <main class="" tabindex="-1">
+      
+<div class="article-container">
+  <div class="article-wrapper">
+    <h1>Downcasting invalidates abstraction</h1>
+    <p>Downcasting is a common pattern in programming. In general terms, it allows the
+programmer to take a <em>supertype</em> and &quot;<strong>downcast</strong>&quot; it into a <em>subtype</em>, so long
+as the actual the object being cast is actually that subtype. You might be
+familiar with downcasting from pretty much any statically typed language, like
+Java, Go, C#, C++, and (very rarely) Rust.</p>
+<p>In this post, I'm going to talk about a few reasons why I believe that
+downcasting is a particularly nasty thing to rely on in a <strong>statically typed
+language</strong>. I will not being talking about languages like Python or Ruby,
+because technically, you're downcasting any time you do literally anything, and
+you have no choice. However, in a statically typed language, downcasting
+<em>invalidates abstractions</em>, and <em>undermines type safety</em> as a whole.</p>
+<h2 id="conflicting-with-abstractions" tabindex="-1"><a class="header-anchor" href="#conflicting-with-abstractions">Conflicting with abstractions</a></h2>
+<p>In the context of a function, the point of receiving or returning a supertype
+should be to rely on the type's abstractness. In some senses, that's one of the
+core ideas of inheritance. The &quot;is a&quot; relationship <em>should</em> allow us to treat a
+subtype <strong>exactly the same</strong> as its supertype. This allows our types to be
+extendable (in theory). I'll give a quick example in C#:</p>
+<pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token class-name">Animal</span> animal<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      animal<span class="token punctuation">.</span><span class="token function">Speak</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Yes, I know. You're probably tired of seeing animal-related abstractions. Me
+too. But, at this point, they've become the foo and bar of type hierarchies, so
+I'm using them for their ubiquity. Anyway, <code>DoSomething</code> will work the same for
+any animal subtype! Abstraction achieved!</p>
+<p>Now, let's suppose we have a new function:</p>
+<pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SomethingElse</span><span class="token punctuation">(</span><span class="token class-name">Animal</span> animal<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>animal <span class="token keyword">is</span> <span class="token class-name">Dog</span> dog<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        dog<span class="token punctuation">.</span><span class="token function">Fetch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>animal <span class="token keyword">is</span> <span class="token class-name">Bird</span> bird<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        bird<span class="token punctuation">.</span><span class="token function">Fly</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        bird<span class="token punctuation">.</span><span class="token function">Speak</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">{</span>
+        animal<span class="token punctuation">.</span><span class="token function">Speak</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>In this function, we're considering a <em>finite</em> number of subtypes. And no, even
+though there's an <code>else</code> case, I'd still argue that the scope of our function is
+still limited. Because we've inherently (no pun intended) tied it to <code>Dog</code> and
+<code>Bird</code>, we've invalidated the thing that <code>Animal</code> should provide us:
+abstraction. We're reaching for functionality that isn't in the <strong>information</strong>
+of the function itself (the parameter). As such, we've chosen and used the
+<strong>wrong abstraction</strong>.</p>
+<p>For whatever <code>Animal</code> we pass into a function, we <em>should</em> have confidence that
+the function's mechanisms will work the same. Failing to uphold that promise
+creates dodgy API's and hard-to-track-down bugs. So, just as the internal state
+of types shouldn't be exposed, the subtypes of a type should be irrelevant
+information with regard to the type itself.</p>
+<h2 id="undermining-type-safety" tabindex="-1"><a class="header-anchor" href="#undermining-type-safety">Undermining type safety</a></h2>
+<p>One of the main selling points of languages like Java, C#, and C++ is <strong>type
+safety</strong>. That is, you will know every value's type before runtime, and thus
+will be able to more effectively reason about, debug, and write programs. While
+this promise is mostly upheld in the aforementioned languages, I have trouble
+calling them truly type safe, especially when downcasting exists.</p>
+<p>I once worked in the C++ codebase of a pretty awesome project,
+<a href="https://github.com/WebAssembly/wabt">WABT</a>, and I tried to fix a bug in one of
+their tools. Their codebase goes pretty crazy with the abstractions C++ gives
+you, which I attempted to use to stay consistent with the rest of the code, even
+though I'm not very familiar with the language. So, I made my changes, hopeful
+that I could knock out the fix in under an hour. But when I ran the tests, I was
+shocked by the result! I got a type error at runtime! The error message I got
+was in some (very primitive) pointer type defined in the codebase that was
+performing a cast, which failed, so C++ panicked.</p>
+<p>I struggled for hours trying to fix the bug. I was using and instantiating a
+type wrong. Yes, I understand that an experienced C++ developer who's familiar
+with the codebase would probably understand what happened in a few minutes, but
+I believe that it took me an unreasonable amount of time to fix for the scope of
+the problem. I'm not calling out the WABT codebase, it's very well written, but
+I just had an unfortunate experience. In my case, downcasting invalidated type
+safety that should've been statically guaranteed.</p>
+<p>So, along with invalidating abstractions, downcasting undermines type safety. It
+can cause type-related <strong>runtime</strong> panics if you're not careful! Runtime type
+errors are for dynamically typed languages, not statically typed ones.</p>
+<h2 id="so-how-do-we-fix-it%3F" tabindex="-1"><a class="header-anchor" href="#so-how-do-we-fix-it%3F">So how do we fix it?</a></h2>
+<p>Unfortunately, the answer is not as simple as: &quot;don't downcast!&quot; because
+downcasting is a fundamental concept for a lot of languages.</p>
+<h3 id="a-real-example" tabindex="-1"><a class="header-anchor" href="#a-real-example">A real example</a></h3>
+<p>All I've been giving is cat and dog examples in this post, so I think you
+deserve a real-world example now. Say you're representing a server's message. It
+can be one of the following:</p>
+<ul>
+<li>A &quot;delete&quot; message containing a 32-bit integer</li>
+<li>An &quot;add&quot; message containing a string</li>
+<li>A &quot;compare&quot; message containing two 32-bit integers</li>
+</ul>
+<p>Now, in a language without
+<a href="https://en.wikipedia.org/wiki/Tagged_union">tagged unions</a> (like C#), you
+pretty much have to represent this using an inheritance/interface model combined
+with downcasts:</p>
+<pre class="language-csharp"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Message</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DeleteMessage</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Message</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">int</span></span> id<span class="token punctuation">;</span>
+
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AddMessage</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Message</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">string</span></span> contents<span class="token punctuation">;</span>
+
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CompareMessage</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Message</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">int</span></span> id1<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name"><span class="token keyword">int</span></span> id2<span class="token punctuation">;</span>
+
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>If you want to process all add messages, you'd need to receive each message,
+check if it's an <code>AddMessage</code>, and then getting the corresponding state if it is
+(i.e. you'll need a downcast!).</p>
+<p>So, in these types of languages, you often <strong>don't have a choice</strong>. This usage
+of downcasting, though, is less egregious than others. There are absolutely
+better/worse cases for downcasting, and I think it just takes time to get an
+intuition for when it's necessary and when it's extraneous. It's all about
+<em>what</em> is using your abstraction.</p>
+<h3 id="other-languages" tabindex="-1"><a class="header-anchor" href="#other-languages">Other Languages</a></h3>
+<p>There are a lot of languages that don't have this problem. Take Rust, for
+example. Something <em>like</em> downcasting exists, but is basically never used. One
+of the big reasons is that Rust has
+<a href="https://en.wikipedia.org/wiki/Tagged_union">tagged unions</a>. This is how you'd
+represent the <code>Message</code> type in Rust:</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">pub</span> <span class="token keyword">enum</span> <span class="token type-definition class-name">Message</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Delete</span><span class="token punctuation">(</span><span class="token keyword">u32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Add</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Compare</span><span class="token punctuation">(</span><span class="token keyword">u32</span><span class="token punctuation">,</span> <span class="token keyword">u32</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Here, there is no abstraction at all! You simply have all the information up
+front. I recommend learning about
+<a href="https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html">Rust enums</a> if
+you haven't already!</p>
+<h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap up</a></h2>
+<p>Depending on the language downcasting is a necessary evil. While it's certainly
+not going to ruin your codebase in <em>every case</em>, you must be careful when you
+use it. Ask yourself the following questions:</p>
+<ol>
+<li>Am I invalidating an abstraction's contracts?</li>
+<li>Am I reaching for information that an abstraction does not contain?</li>
+</ol>
+<p>Also, as with all things in software engineering, <strong>no</strong> code is written
+perfectly first try. Just write code and see how it works. If it sucks, then fix
+it! Don't spend too long trying to design a complex system for a problem that
+you don't fully understand.</p>
+<p>Anyway, I hope you enjoyed this post. If you found an error or have a
+suggestion, please feel free to
+<a href="https://github.com/dzfrias/website/issues/new">open an issue</a> on this website's
+<a href="https://github.com/dzfrias/website">GitHub repo</a>.</p>
+
+  </div>
+</div>
+
+    </main>
+  </body>
+</html>
