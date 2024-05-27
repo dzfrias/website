@@ -46,6 +46,14 @@ module.exports = (config) => {
     return defaultHeadingCloseRenderer(tokens, idx, options, env, self);
   };
 
+  config.setLibrary("md", md.use(require("markdown-it-footnote")));
+  // Default footnote renderer without brackets
+  md.renderer.rules.footnote_caption = function (tokens, idx) {
+    let n = Number(tokens[idx].meta.id + 1).toString();
+    if (tokens[idx].meta.subId > 0) n += `:${tokens[idx].meta.subId}`;
+    return n;
+  };
+
   config.addPassthroughCopy("./src/img/");
   config.addPassthroughCopy("./src/fonts/");
   config.addPassthroughCopy("./src/js/");

@@ -1,6 +1,7 @@
 @use "prism-theme.scss";
 @use "variables.scss";
 @use "sass:color";
+@use "sass:math";
 
 // Default vertical space between items on the page (paragraphs, lists, etc.)
 $spacing: 1.5rem;
@@ -392,5 +393,23 @@ p {
       border: none;
       width: 100%;
     }
+  }
+}
+
+hr {
+  margin-bottom: $spacing;
+}
+
+.footnote-item {
+  margin-bottom: math.div($spacing, 2);
+
+  & > p {
+    display: inline;
+  }
+}
+
+.footnote-ref {
+  & > a {
+    text-decoration: none;
   }
 }
