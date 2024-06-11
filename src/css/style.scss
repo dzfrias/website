@@ -414,3 +414,40 @@ hr {
     text-decoration: none;
   }
 }
+
+.pagination-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &-arrows {
+    width: 100%;
+    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 1rem;
+
+    &-item {
+      $padding: 0.2rem;
+
+      border: 2px solid variables.$accent;
+      text-decoration: none;
+      padding: $padding;
+      box-shadow: 5px 5px variables.$fg;
+
+      svg {
+        $size: 2rem;
+        width: $size;
+        height: $size;
+      }
+
+      &:hover {
+        background: unset;
+        background: #2f2f2f;
+        padding: $padding;
+      }
+    }
+  }
+}

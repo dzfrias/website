@@ -67,6 +67,12 @@ module.exports = (config) => {
     }),
   );
 
+  config.addCollection("sortedPosts", function (collectionApi) {
+    return collectionApi.getFilteredByTag("posts").sort(function (a, b) {
+      return b.date - a.date;
+    });
+  });
+
   config.addPlugin(eleventyGoogleFonts);
   config.addPlugin(syntaxHighlight);
   config.addPlugin(eleventyImageTransformPlugin, {
