@@ -117,7 +117,7 @@ questions on there.
 # Wrap Up
 
 I'm excited to see what I can do for Ladybird's Wasm implementation! I think
-100% by the end of the month is a reasonable goal, even with the numerous
+100% by the end of the summer is a reasonable goal, even with the numerous
 challenges. In just this last week, I feel like I've been able to make a
 difference in the codebase. I'll continue to post updates, though they'll likely
 be smaller than this one. If you're reading this and are interested in helping
