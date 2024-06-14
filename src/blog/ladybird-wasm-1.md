@@ -5,7 +5,7 @@ date: 2024-06-13
 ---
 
 It's been a little over a week since
-[my first post](https://dzfrias.dev/ladybird-wasm-0/) regarding the
+[my first post](https://dzfrias.dev/blog/ladybird-wasm-0/) regarding the
 [Ladybird](https://ladybird.dev/) web browser! For a quick recap: I've set a
 goal to get the Ladybird [WebAssembly](https://webassembly.org/) virtual machine
 to full spec compliance **by the end of the summer**. Why, and what is
