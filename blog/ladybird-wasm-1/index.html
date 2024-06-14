@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="The posts of Diego Frias&#39;s programming blog">
+    <meta name="description" content="My second update on the Ladybird WebAssembly implementation.">
     <meta name="author" content="Diego Frias">
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
-    <title>Blog - dzfrias</title>
+    <title>Ladybird WebAssembly Update #1 - dzfrias</title>
     <link rel="stylesheet" href="/css/style.css">
     <script type="module" src="/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -84,70 +84,86 @@
     </header>
     <main class="" tabindex="-1">
       
-      <div class="article-container"><div class="article-wrapper">
-<h1>Blog</h1>
-<ol class="posts">
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/automatic-semicolon-lexer/">Build a Lexer with Automatic Semicolon Insertion in Rust</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-07-22">2023-07-22</time>
-      <p class="posts-item-description">A walkthrough on how to build your own lexer with automatic semicolon insertion!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/deploy-rust-cross-platform-github-actions/">How to Deploy Rust Binaries with GitHub Actions</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-23">2023-06-23</time>
-      <p class="posts-item-description">A tutorial for deploying Rust binaries to a GitHub release, cross-platform!</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/projectable/">Projectable: A Command-Line Project Manager</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-22">2023-06-22</time>
-      <p class="posts-item-description">Projectable is a highly configurable command-line project manager: everything your project needs from a comfortable and smooth interface.</p>
-    </article>
-  </li>
-  
-  <li class="posts-item">
-    <article>
-      <h2 class="posts-item-title">
-        <a href="/blog/neovim-unity-setup/">The Definitive Neovim Unity Setup of 2023</a>
-      </h2>
-      
-      <time class="posts-item-time" datetime="2023-06-20">2023-06-20</time>
-      <p class="posts-item-description">A neovim setup for Unity that actually works in 2023, with minimal dependencies.</p>
-    </article>
-  </li>
-  </ol>
-<div class="pagination-nav">
-  <div class="pagination-nav-arrows">
-    <a class="pagination-nav-arrows-item" aria-label="Go to previous page" href="/blog/2/"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6 12H18M6 12L11 7M6 12L11 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</a>
-    <a class="pagination-nav-arrows-item" aria-label="Go to next page" href="/blog/4/"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</a>
+<div class="article-container">
+  <div class="article-wrapper">
+    <h1>Ladybird WebAssembly Update #1</h1>
+    <p>It's been a little over a week since
+<a href="https://dzfrias.dev/ladybird-wasm-0/">my first post</a> regarding the
+<a href="https://ladybird.dev/">Ladybird</a> web browser! For a quick recap: I've set a
+goal to get the Ladybird <a href="https://webassembly.org/">WebAssembly</a> virtual machine
+to full spec compliance <strong>by the end of the summer</strong>. Why, and what is
+WebAssembly? I think the original post explains it pretty well, so go check it
+out if you're interested in that.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></p>
+<p>Anyway, some great progress has been made, and not just by me! Here's a short
+list of the things I've done:</p>
+<ol>
+<li>Finish the
+<a href="https://github.com/LadybirdBrowser/ladybird/pull/96">UTF-8 validation fix</a>.
+Update #0 explains
+<a href="https://dzfrias.dev/blog/ladybird-wasm-0/#challenges-thus-far">my troubles with this PR</a></li>
+<li>Finish the new spec test generator
+(<a href="https://github.com/LadybirdBrowser/ladybird/pull/41">see PR</a> and
+<a href="https://dzfrias.dev/blog/ladybird-wasm-0/#test-generation">my last update</a>)</li>
+<li>Validate imports more thoroughly
+(<a href="https://github.com/LadybirdBrowser/ladybird/pull/130">see PR</a>)</li>
+<li>Make loops work
+(<a href="https://github.com/LadybirdBrowser/ladybird/pull/148">see PR</a>)</li>
+<li>Tighten validation algorithm
+(<a href="https://github.com/LadybirdBrowser/ladybird/pull/147">see PR</a>)</li>
+<li>Tiny <code>memory.fill</code> fix
+(<a href="https://github.com/LadybirdBrowser/ladybird/pull/149">see PR</a>)</li>
+<li>Miscellaneous validator fixes (see
+<a href="https://github.com/LadybirdBrowser/ladybird/pull/134">this PR</a> and
+<a href="https://github.com/LadybirdBrowser/ladybird/pull/97">this PR</a>)</li>
+</ol>
+<h2 id="reflection" tabindex="-1"><a class="header-anchor" href="#reflection">Reflection</a></h2>
+<p>From these PRs, we've gone from 1k+ failing tests<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup> to just over 200! I'd say
+the most impactful PRs were 1 through 5. 6 and 7 were pretty small, fixing at
+most 3 tests per commit included.</p>
+<p>The largest changes code-wise were definitely 3 and 5.</p>
+<p>In 3, I validated that import and export types matched. This was my first <em>real</em>
+foray into the code base, because it required me to write more code than I was
+getting rid of.</p>
+<p>In 5, I rewrote one of the core aspects of the validation algorithm (stack
+polymorphism support). This allowed for some pretty important validation checks
+to be made, like stack height validation.</p>
+<p>It's worth noting that some of the most impactful changes I made required <em>very
+little</em> changes code-wise. Take the fourth PR I listed (making loops work). I
+added two lines of code and deleted seven, but loops are fully spec-compliant
+now, and we no longer have to skip the test file in CI! Pretty much all the
+framework for the VM is already in place, but it just has a lot of minor issues
+that cause major bugs. Another good example of small things making major issues
+is PR 6 (<code>memory.fill</code>). The bug here was a result of a typo and a <em>small</em> spec
+misunderstanding (probably). Yet, it cut down the number of failed tests by 200
+alone.</p>
+<h3 id="new-webassembly-contributor" tabindex="-1"><a class="header-anchor" href="#new-webassembly-contributor">New WebAssembly contributor</a></h3>
+<p>A user named <a href="https://github.com/Enverbalalic">Enverbalalic</a> has been
+contributing to the SIMD side of the Wasm VM! With their help, we might actually
+be able to get full spec compliance (<strong>SIMD included</strong>) by the end of the
+summer! I hope they keep working on it, because I know absolutely nothing about
+SIMD nor how it works in WebAssembly!</p>
+<h2 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h2>
+<p>And that's it for this update! I'm trying to keep these small and easily
+digestible by intention. I'm not going into the weeds about the changes I'm
+making, but I recommend reading my PRs and the relevant spec pages if you're
+interested. The <a href="https://webassembly.github.io/spec/core/">specification</a> isn't
+too hard to read if you're just getting into it!</p>
+<p>As always, if you have any feedback or questions, make sure to
+<a href="https://github.com/dzfrias/website/issues/new">submit an issue</a> on this blog's
+GitHub repository!</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Or don't. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>I'm not including SIMD as part of the spec-compliance goal. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
   </div>
-  <p>4 of 5</p>
 </div>
-</div></div>
-      
+
     </main>
   </body>
 </html>
