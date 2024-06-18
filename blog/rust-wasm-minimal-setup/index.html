@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="This post will go over the quickest way to get your Rust code running on the web in 2024!">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>The Minimal Rust-Wasm Setup for 2024 - dzfrias</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="module" src="/js/index.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <meta name="theme-color" content="#0f0f0f">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="https://fonts.gstatic.com"><link data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap" rel="stylesheet"><style data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap">/* hebrew */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW7Ll4brkiY-xBg.woff2) format('woff2');
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW77l4brkiY-xBg.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/frankruhllibre/v21/j8_w6_fAw7jrcalD7oKYNX0QfAnPW7Dl4brkiY8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" aria-label="Home">
+          <div class="header-logo">
+            <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+          </div>
+        </a>
+        <ul>
+          
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+          
+          <li>
+            <a href="/projects/">Projects</a>
+          </li>
+          
+          <li>
+            <a href="https://github.com/dzfrias">GitHub</a>
+          </li>
+          
+        </ul>
+      </nav>
+    </header>
+    <main class="" tabindex="-1">
+      
+<div class="article-container">
+  <div class="article-wrapper">
+    <h1>The Minimal Rust-Wasm Setup for 2024</h1>
+    <p>If you're looking to get your Rust code on the browser, chances are you've
+stumbled across the various <a href="https://github.com/rust-lang/mdBook">mdBooks</a>
+written by the Rust+Wasm community.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> These books are great, but they
+require <strong>a lot of tooling/setup</strong> for what should be a pretty simple task:
+compile my Rust program to WebAssembly and interface with it using
+JavaScript!<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup></p>
+<p>So, this post is for anyone who was as overwhelmed as I once was with the
+tooling. By the end, you'll have a minimal Rust+Wasm setup, with <strong>as few
+dependencies as possible</strong>! I'll start from the very beginning and explain the
+role of each tool as we go.</p>
+<h2 id="the-rust-part" tabindex="-1"><a class="header-anchor" href="#the-rust-part">The Rust Part</a></h2>
+<p>Before we even think about JavaScript or HTML, we're going to want a WebAssembly
+binary. In this section, we're going to build one. If you don't have a Rust
+project already, enter the following commands in your shell:</p>
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cargo</span> new <span class="token parameter variable">--lib</span> rustwasm
+$ <span class="token builtin class-name">cd</span> rustwasm</code></pre>
+<p>Additionally, we'll want to edit the <code>Cargo.toml</code> file to include
+<a href="https://github.com/rustwasm/wasm-bindgen"><code>wasm-bindgen</code></a>. <code>wasm-bindgen</code> is a
+Rust crate that makes it <em>much</em> easier to communicate between Rust and
+JavaScript. It generates <strong>bindings</strong> so that your JavaScript code doesn't have
+to interact with low-level WebAssembly stuff, and your Rust code doesn't have to
+deal with FFI! Anyway, this is what your <code>Cargo.toml</code> should look like:</p>
+<pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">package</span><span class="token punctuation">]</span>
+<span class="token key property">name</span> <span class="token punctuation">=</span> <span class="token string">"rustwasm"</span>
+<span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"0.1.0"</span>
+<span class="token key property">edition</span> <span class="token punctuation">=</span> <span class="token string">"2021"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">dependencies</span><span class="token punctuation">]</span>
+<span class="token key property">wasm-bindgen</span> <span class="token punctuation">=</span> <span class="token string">"0.2"</span>
+
+<span class="token punctuation">[</span><span class="token table class-name">lib</span><span class="token punctuation">]</span>
+<span class="token key property">crate-type</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"cdylib"</span><span class="token punctuation">,</span> <span class="token string">"rlib"</span><span class="token punctuation">]</span></code></pre>
+<p>Notice the <code>crate-type</code> declaration. This is <strong>required</strong> for compiling Rust
+libraries to WebAssembly.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup> Now, we can get to actually writing our
+Rust code! Modify <code>lib.rs</code> to contain the following:</p>
+<pre class="language-rust"><code class="language-rust"><span class="token keyword">use</span> <span class="token namespace">wasm_bindgen<span class="token punctuation">::</span>prelude<span class="token punctuation">::</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token attribute attr-name">#[wasm_bindgen]</span>
+<span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Import `alert` from JS runtime</span>
+    <span class="token keyword">fn</span> <span class="token function-definition function">alert</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Export `greet`</span>
+<span class="token attribute attr-name">#[wasm_bindgen]</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Our Wasm module will export the function, <code>greet</code>, and import the
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/alert">JavaScript function</a>,
+<code>alert</code>.<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup></p>
+<p>This is all we need from the Rust side of things! There's one catch though: you
+can't use <code>cargo build</code> to build the Wasm binary! You need a special tool to
+generate the bindings files. For that, we'll use
+<a href="https://github.com/rustwasm/wasm-pack"><code>wasm-pack</code></a>. Go ahead and follow the
+installation instructions if you don't already have it.</p>
+<pre class="language-bash"><code class="language-bash">$ wasm-pack build <span class="token parameter variable">--target</span> web --out-dir web/dist</code></pre>
+<p>This command should build the Rust project and put it in <code>web/dist/</code> directory
+at the root of your project. If you visit the directory, you'll see a Wasm
+binary accompanied by some JavaScript files. Those JS files are the <strong>glue</strong>
+between your JavaScript code and your Rust code (they wrap the Wasm module, so
+you don't interface with it directly)!<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup></p>
+<p>We're (eventually) going to serve our <code>index.html</code> file from the <code>web/</code>
+directory, so it's important that our Wasm stuff is in there. Speaking of HTML
+and JS, it's time to move on!</p>
+<h2 id="the-html-%26-js-part" tabindex="-1"><a class="header-anchor" href="#the-html-%26-js-part">The HTML &amp; JS Part</a></h2>
+<p>All I'm going to do from the JavaScript side is make a script (<code>index.js</code>) that
+calls the <code>greet</code> function we defined earlier. Make sure you're operating in the
+<code>web/</code> directory. Calling <code>greet</code> can be accomplished like so:</p>
+<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> init<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">as</span> wasm <span class="token keyword">from</span> <span class="token string">"./dist/rustwasm.js"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">await</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+wasm<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>The <code>init()</code> call will initialize our Wasm module. Make sure to <em>always</em> call
+this first! Also, <strong>this operation is asynchronous</strong>, so we're using a top-level
+<code>await</code>, which is an important detail.</p>
+<p>With our <code>index.js</code> file written, all we need is an <code>index.html</code> to serve our
+website! I'll give an example one below:</p>
+<pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>utf-8<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Rust+Wasm Minimal Setup<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./index.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<p>Notice that we make our script of type <strong>module</strong>. This enables us to use a
+top-level <code>await</code>. We're now ready to serve it! I like using Python to serve my
+files on localhost, but you can use your favorite tool.</p>
+<pre class="language-bash"><code class="language-bash">$ python3 <span class="token parameter variable">-m</span> http.server</code></pre>
+<p>Visit <code>http://localhost:8000/</code> and you should see the greeting message!</p>
+<p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/RQ5Y7YQfJ3-2876.webp 2876w"><img loading="lazy" decoding="async" src="/img/RQ5Y7YQfJ3-2876.jpeg" alt="Final product" width="2876" height="1356"></picture></button><dialog><picture><source type="image/webp" srcset="/img/RQ5Y7YQfJ3-2876.webp 2876w"><img loading="lazy" decoding="async" src="/img/RQ5Y7YQfJ3-2876.jpeg" alt="Final product" width="2876" height="1356"></picture></dialog></div><p></p>
+<h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap-Up</a></h2>
+<p>In this post, we made a website that uses a <strong>minimal</strong> Rust and WebAssembly
+configuration. I tried to keep this post short and concise, but if you want to
+do further readings to really learn how things work, I've left plenty of
+footnotes!</p>
+<p>As always, if you have any feedback or questions,
+<a href="https://github.com/dzfrias/website/issues/new">open an issue</a> on this blog's
+GitHub repository!</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>See the <a href="https://rustwasm.github.io/wasm-bindgen/"><code>wasm-bindgen</code> book</a>, the
+<a href="https://rustwasm.github.io/docs/book/"><code>wasm-bindgen</code> in-depth tutorial</a>,
+and the
+<a href="https://rustwasm.github.io/docs/wasm-pack/introduction.html"><code>wasm-pack</code> book</a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>In fact, I wrote <a href="https://dzfrias.dev/blog/romberg">a blog post</a> about the
+struggle! <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Read the <a href="https://doc.rust-lang.org/reference/linkage.html">Rust reference</a>
+for more info on this.
+<a href="https://stackoverflow.com/questions/56227766/why-must-a-wasm-library-in-rust-set-the-crate-type-to-cdylib">This StackOverflow post</a>
+was helpful too. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><code>wasm-bindgen</code> can do a lot more than just that though! You can
+<a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">read the book</a>
+if you're curious. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>If you're wondering what <code>--target web</code> is, it just tells <code>wasm-pack</code> to not
+build for an external bundler or node. It's not the default, but I think it
+simplifies things a lot and reduces the number of external tools (no npm!) <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+  </div>
+</div>
+
+    </main>
+  </body>
+</html>
