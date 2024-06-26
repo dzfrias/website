@@ -60,6 +60,7 @@ module.exports = (config) => {
   // Favicons
   config.addPassthroughCopy({ "./src/favicon/*": "." });
 
+  config.setLibrary("md", md.use(require("markdown-it-katex")));
   config.setLibrary(
     "md",
     md.use(markdownItAnchor, {
