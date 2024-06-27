@@ -286,6 +286,26 @@ p {
   overflow-wrap: break-word;
 }
 
+table {
+  border-collapse: collapse;
+  margin-bottom: $spacing;
+}
+
+thead {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+th,
+td {
+  border: 1px solid variables.$accent;
+  padding: 0.3rem 1rem 0.3rem 0.3rem;
+}
+
+tr:hover {
+  background: variables.$bg-dark;
+}
+
 .full {
   width: min(90%, calc(100% - 1rem));
 }
