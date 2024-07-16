@@ -19,7 +19,7 @@ the scope of this challenge!
 # Improvements
 
 Right now, we're sitting at a mere **10 tests** that do not pass on my
-machine.[^simd] Here's a list of the PR's I've made, from most to least recent:
+machine.[^simd] Here's a list of the PRs I've made, from most to least recent:
 
 1. Fix a tiny `memory.grow` bug
    ([see PR](https://github.com/LadybirdBrowser/ladybird/pull/563))
