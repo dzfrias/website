@@ -111,9 +111,9 @@ that!
 # Going Forward
 
 It's taken a good amount of work to the point of full spec-compliance, which was
-made possible by [Ali](https://github.com/alimpfard), who maintains LibWasm
-and gave feedback on a lot of my PRs. But, even though my goal has been
-completed, I'm _nowhere_ near done hacking on Ladybird!
+made possible by [Ali](https://github.com/alimpfard), who maintains LibWasm and
+gave feedback on a lot of my PRs. But, even though my goal has been completed,
+I'm _nowhere_ near done hacking on Ladybird!
 
 Right now, complex Wasm websites are nearly unusable because of how slow the
 bytecode interpreter is. In the next few weeks, I think I'll focus my efforts on
