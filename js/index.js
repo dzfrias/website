@@ -69,3 +69,11 @@ document.addEventListener("scroll", () => {
     ticking = true;
   }
 });
+
+for (const progressBar of document.getElementsByClassName("progress-bar")) {
+  const inner = progressBar.firstElementChild;
+  document.addEventListener("scroll", () => {
+    const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
+    inner.style.width = `${scrollPercent * 100}%`
+  });
+}
