@@ -231,8 +231,14 @@ code:not([class^="language"]) {
 main {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+
+#main-left {
+  flex: 1;
+}
+
+#main-right {
+  flex: 1;
 }
 
 blockquote {
@@ -349,11 +355,6 @@ tr:hover {
   width: min(95%, 65ch);
 }
 
-.home-content {
-  width: var(--width);
-  margin-top: 1.5rem;
-}
-
 .profile-container {
   margin-top: 2rem;
   width: 800px;
@@ -413,6 +414,46 @@ tr:hover {
       border: none;
       width: 100%;
     }
+  }
+}
+
+.toc {
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
+
+  position: sticky;
+  margin-left: 2rem;
+  height: min-content;
+  margin-top: 30vh;
+  top: 20vh;
+  font-size: 0.95em;
+  left: 1rem;
+  padding-right: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: variables.$fg-fade;
+
+    &[aria-current="location"] {
+      color: variables.$fg;
+    }
+  }
+
+  ol {
+    margin-bottom: 0;
+
+    ol {
+      margin-top: 10px;
+      padding-left: 0.5rem;
+    }
+  }
+
+  li {
+    list-style-type: disc;
+    list-style-position: outside;
+    margin-bottom: 10px;
+    line-height: 1.5;
   }
 }
 

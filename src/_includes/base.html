@@ -36,10 +36,20 @@
         </ul>
       </nav>
     </header>
-    <main class="{% if full %}full{% endif %}" tabindex="-1">
-      {% block content %}
-      <div class="article-container"><div class="article-wrapper">{{ content | safe }}</div></div>
-      {% endblock %}
+    <main tabindex="-1">
+      <div id="main-left">
+        {% block left %}
+        {% endblock %}
+      </div>
+      <div id="main-content" style="margin-top: 1rem; width: var(--width)">
+        <div style="width: min(95%, 65ch)">
+          {% block content %}{{ content | safe }}{% endblock %}
+        </div>
+      </div>
+      <div id="main-right">
+        {% block right %}
+        {% endblock %}
+      </div>
     </main>
   </body>
 </html>
