@@ -83,12 +83,19 @@
         </ul>
       </nav>
     </header>
-    <main class="" tabindex="-1">
-      
-<div class="article-container">
-  <div class="article-wrapper">
-    <h1>How to Deploy Rust Binaries with GitHub Actions</h1>
-    <p>If you're ready to release the first version of your
+    <main tabindex="-1">
+      <div id="main-left">
+        
+<nav class="toc">
+        <ol><li><a href="#workflow-trigger">Workflow Trigger</a></li><li><a href="#building-the-action">Building the Action</a><ol><li><a href="#defining-the-metadata">Defining the Metadata</a></li><li><a href="#installing-dependencies">Installing Dependencies</a></li><li><a href="#getting-the-version">Getting the Version</a></li><li><a href="#building-the-binaries">Building the Binaries</a></li><li><a href="#compressing-the-binaries">Compressing the Binaries</a></li><li><a href="#uploading-the-binaries">Uploading the Binaries</a></li></ol></li><li><a href="#wrapping-up-%2B-final-code">Wrapping Up + Final Code</a></li></ol>
+      </nav>
+
+      </div>
+      <div id="main-content" style="margin-top: 1rem; width: var(--width)">
+        <div style="width: min(95%, 65ch)">
+          
+<h1>How to Deploy Rust Binaries with GitHub Actions</h1>
+<p>If you're ready to release the first version of your
 <a href="https://www.rust-lang.org/">Rust</a> project, it's likely that you want to upload
 some assets containing pre-built binaries (for macOS, Linux, and Windows) to
 your GitHub releases page. This is one of the earliest steps in making your
@@ -343,9 +350,13 @@ an issue on <a href="https://github.com/dzfrias/blog/issues/new">GitHub</a>.</p>
           <span class="token key atrule">files</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
             ${{ env.ASSET }}</span></code></pre>
 
-  </div>
-</div>
 
+        </div>
+      </div>
+      <div id="main-right">
+        
+        
+      </div>
     </main>
   </body>
 </html>
