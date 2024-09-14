@@ -4,6 +4,10 @@
 {{ content | toc | safe }}
 {% endblock %}
 
+{% block outside %}
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+{% endblock %}
+
 {% block content %}
 <h1>{{ title }}</h1>
 {{ super() }}
