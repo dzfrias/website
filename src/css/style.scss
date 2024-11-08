@@ -5,6 +5,7 @@
 
 // Default vertical space between items on the page (paragraphs, lists, etc.)
 $spacing: 1.5rem;
+$left-bp: 800px;
 
 *,
 *::before,
@@ -219,7 +220,11 @@ code:not([class^="language"]) {
 }
 
 #main-left {
-  flex: 0.65;
+  @media screen and (max-width: $left-bp) {
+    flex: 0.65;
+  }
+
+  flex: 0 2 min(15rem, 20vw);
 }
 
 #main-right {
@@ -397,8 +402,8 @@ tr:hover {
   }
 }
 
-.toc {
-  @media screen and (max-width: 800px) {
+.toc-container {
+  @media screen and (max-width: $left-bp) {
     display: none;
   }
 
@@ -407,9 +412,12 @@ tr:hover {
   height: min-content;
   margin-top: 30vh;
   top: 20vh;
-  font-size: 0.95em;
   left: 1rem;
   padding-right: 0.5rem;
+
+  nav {
+    font-size: 0.95rem;
+  }
 
   a {
     text-decoration: none;
@@ -424,16 +432,14 @@ tr:hover {
     margin-bottom: 0;
 
     ol {
-      margin-top: 10px;
       padding-left: 0.5rem;
     }
   }
 
   li {
-    list-style-type: disc;
-    list-style-position: outside;
-    margin-bottom: 10px;
-    line-height: 1.5;
+    list-style-type: none;
+    line-height: 1;
+    margin-top: 0.75rem;
   }
 }
 

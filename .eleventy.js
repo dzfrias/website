@@ -55,6 +55,31 @@ module.exports = (config) => {
     if (tokens[idx].meta.subId > 0) n += `:${tokens[idx].meta.subId}`;
     return n;
   };
+  const refDefaultRender = md.renderer.rules.footnote_ref;
+  md.renderer.rules.footnote_ref = function (tokens, idx, options, env, self) {
+    return refDefaultRender(tokens, idx, options, env, self).replace(
+      "<a",
+      '<a role="doc-noteref" aria-label="go to footnote"',
+    );
+  };
+  const fnDefaultRender = md.renderer.rules.footnote_anchor;
+  md.renderer.rules.footnote_anchor = function (
+    tokens,
+    idx,
+    options,
+    env,
+    self,
+  ) {
+    return fnDefaultRender(tokens, idx, options, env, self).replace(
+      "<a",
+      '<a role="doc-backlink" aria-label="back to text"',
+    );
+  };
+  md.renderer.rules.footnote_block_open = () =>
+    "<hr/>\n" +
+    '<section class="footnotes" role="doc-endnotes">\n' +
+    '<ol class="footnotes-list">\n';
+  md.renderer.rules.footnote_block_close = () => "</ol>" + "</section>";
 
   config.addPassthroughCopy("./src/img/");
   config.addPassthroughCopy("./src/fonts/");

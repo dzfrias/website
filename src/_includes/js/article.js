@@ -88,7 +88,7 @@ for (let i = 0; i < fnrefs.length; i++) {
   const paragraph = footnote.children[0].cloneNode(true);
   let container;
   anchor.addEventListener("mouseover", () => {
-    container = document.createElement("div");
+    container = document.createElement("aside");
     rightSection.appendChild(container);
     container.classList.add("footnote-preview");
     container.appendChild(paragraph);
@@ -104,12 +104,15 @@ for (let i = 0; i < fnrefs.length; i++) {
 }
 
 function selectFootnotes() {
-  for (const footenote of footnotes) {
-    footenote.ariaCurrent = "false";
-  }
   const hash = location.hash.slice(1);
   if (!hash.startsWith("fn") || hash.startsWith("fnref")) {
+    for (const footenote of footnotes) {
+      footenote.ariaCurrent = null;
+    }
     return;
+  }
+  for (const footenote of footnotes) {
+    footenote.ariaCurrent = "false";
   }
   const footnote = document.getElementById(hash);
   footnote.ariaCurrent = "true";

@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block left %}
-{{ content | toc | safe }}
+<aside class="toc-container">
+  {{ content | toc | safe }}
+</aside>
 {% endblock %}
 
 {% block outside %}
