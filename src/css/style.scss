@@ -30,6 +30,7 @@ html {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  scroll-padding-top: 2rem;
 }
 
 dialog:has(img) {
@@ -443,8 +444,16 @@ hr {
 .footnote-item {
   margin-bottom: math.div($spacing, 2);
 
-  & > p {
-    display: inline;
+  &[aria-current="false"] {
+    color: variables.$fg-fade;
+
+    &::marker {
+      color: variables.$fg-fade;
+    }
+
+    a {
+      color: inherit;
+    }
   }
 }
 
