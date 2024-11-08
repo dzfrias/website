@@ -295,7 +295,7 @@ between ease-of-writing and performance, which is exactly what Ladybird needs.
 
 It didn't take very long to write the Wasm parser, and it's already faster than
 the C++ version. Of course, I had my fair share of struggles with the language
-(and tooling) but I experience was generally extremely pleasant.
+(and tooling) but my experience was generally extremely pleasant.
 
 [^reason]:
     There were numerous reasons Swift was chosen. See

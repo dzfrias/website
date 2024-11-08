@@ -163,7 +163,7 @@ hope you enjoyed this post! If you found any problems or have any suggestions,
 make sure to open an issue on this
 [website's GitHub repository](https://github.com/dzfrias/website/issues/new).
 
-# References
+## References
 
 1. [IMAP Specification](https://www.ietf.org/rfc/rfc9051.html)
 2. [Wikipedia](https://en.wikipedia.org/wiki/Email_client)
