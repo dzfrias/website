@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#what-is-a-simd-backed-string%3F">What is a SIMD-Backed String?</a><ol><li><a href="#example">Example</a></li></ol></li><li><a href="#implementation">Implementation</a></li><li><a href="#benchmarks">Benchmarks</a></li><li><a href="#wrap-up">Wrap-Up</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -113,7 +115,7 @@ vectors are added component-wise with one instruction, all at the same time.</p>
 <p>For strings, there are a lot of ways SIMD can speed up algorithms. In Rust,
 there's the popular <a href="https://docs.rs/memchr/latest/memchr/">memchr crate</a> that
 provides a ludicrously fast SIMD byte search, and plenty of optimized parsers
-utilize SIMD.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> SIMD string algorithms generally work like this:</p>
+utilize SIMD.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> SIMD string algorithms generally work like this:</p>
 <ol>
 <li>Convert a slice of the string to a SIMD vector</li>
 <li>Execute some SIMD instructions</li>
@@ -129,7 +131,7 @@ vector, in totality</strong>. Many string operations (e.g. <code>find</code>, <c
 conversions necessary!</p>
 <p>Since the length of the string is <strong>always</strong> less than the length of a SIMD
 vector, we can do all of our standard string operations using SIMD without any
-extra work.<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup> Also, since these strings are small, they'll be cheap to
+extra work.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> Also, since these strings are small, they'll be cheap to
 copy.</p>
 <p>Here's a diagram of what a SIMD string might look like in memory:</p>
 <p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/qCSclQNw2H-920.webp 920w"><img loading="lazy" decoding="async" src="/img/qCSclQNw2H-920.jpeg" alt="example string, showing eight squares that contain the message: &quot;hello!!&quot;" width="920" height="141"></picture></button><dialog><picture><source type="image/webp" srcset="/img/qCSclQNw2H-920.webp 920w"><img loading="lazy" decoding="async" src="/img/qCSclQNw2H-920.jpeg" alt="example string, showing eight squares that contain the message: &quot;hello!!&quot;" width="920" height="141"></picture></dialog></div><p></p>
@@ -209,7 +211,7 @@ string looks like this:</p>
 intuitive, and of course, CPU-agnostic. My main only pain points were when I
 needed to swizzle a vector, but the team is
 <a href="https://github.com/rust-lang/portable-simd/issues/364">actively working on that</a>!
-I personally cannot wait until the library is stabilized!<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup></p>
+I personally cannot wait until the library is stabilized!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
 <h2 id="benchmarks" tabindex="-1"><a class="header-anchor" href="#benchmarks">Benchmarks</a></h2>
 <p>As far as I'm aware, SIMD-backed strings boast some of the <strong>best performance</strong>
 numbers out there right now. Here is a table comparing SIMD-backed strings with
@@ -251,7 +253,7 @@ various other string types, run on my M1 MacBook Air:</p>
 </tbody>
 </table>
 <p>This is only a small selection of algorithms, but similar performance behavior
-is present for the rest of the <code>Qstr</code> methods.<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup></p>
+is present for the rest of the <code>Qstr</code> methods.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
 <p>For some methods (like <code>replace</code>), the performance increase was substantial. For
 others, (i.e. <code>eq</code>), the performance increase was statistically significant but
 not as incredible. Also note that each of tests were run on a string with
@@ -276,25 +278,23 @@ SIMD knowledge is required to take advantage of SIMD's speed!</p>
 errors, or questions you came across while reading, feel free to open a
 <a href="https://github.com/dzfrias/website/issues/new">GitHub issue</a> in this website's
 GitHub repository!</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p>Examples: <a href="https://github.com/simdjson/simdjson"><code>simdjson</code></a>,
 <a href="https://github.com/y21/tl"><code>tl</code></a>, and
-<a href="https://docs.rs/atoi_simd/latest/atoi_simd/"><code>atoi-simd</code></a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<a href="https://docs.rs/atoi_simd/latest/atoi_simd/"><code>atoi-simd</code></a>. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p>The largest SIMD vectors I could find on commercial CPUs are 512-bits wide,
-but most machines support a maximum of 256-bit vectors. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+but most machines support a maximum of 256-bit vectors. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p>Right now, you need the nightly version of Rust to use it. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p>Right now, you need the nightly version of Rust to use it. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn4" class="footnote-item"><p>Note that <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> <code>String</code> operations like <code>contains</code>, <code>find</code>, and <code>eq</code> were
 done with <strong>worst-case</strong> scenarios. There were no notable worst-case
-scenarios for <code>Qstr</code> algorithms. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+scenarios for <code>Qstr</code> algorithms. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>

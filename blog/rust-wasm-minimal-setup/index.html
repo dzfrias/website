@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#the-rust-part">The Rust Part</a></li><li><a href="#the-html-%26-js-part">The HTML &amp; JS Part</a></li><li><a href="#wrap-up">Wrap-Up</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -104,10 +106,10 @@
 <h1>The Minimal Rust-Wasm Setup for 2024</h1>
 <p>If you're looking to get your Rust code on the browser, chances are you've
 stumbled across the various <a href="https://github.com/rust-lang/mdBook">mdBooks</a>
-written by the Rust+Wasm community.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> These books are great, but they
+written by the Rust+Wasm community.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> These books are great, but they
 require <strong>a lot of tooling/setup</strong> for what should be a pretty simple task:
 compile my Rust program to WebAssembly and interface with it using
-JavaScript!<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup></p>
+JavaScript!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <p>So, this post is for anyone who was as overwhelmed as I once was with the
 tooling. By the end, you'll have a minimal Rust+Wasm setup, with <strong>as few
 dependencies as possible</strong>! I'll start from the very beginning and explain the
@@ -135,7 +137,7 @@ deal with FFI! Anyway, this is what your <code>Cargo.toml</code> should look lik
 <span class="token punctuation">[</span><span class="token table class-name">lib</span><span class="token punctuation">]</span>
 <span class="token key property">crate-type</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"cdylib"</span><span class="token punctuation">,</span> <span class="token string">"rlib"</span><span class="token punctuation">]</span></code></pre>
 <p>Notice the <code>crate-type</code> declaration. This is <strong>required</strong> for compiling Rust
-libraries to WebAssembly.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup> Now, we can get to actually writing our
+libraries to WebAssembly.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> Now, we can get to actually writing our
 Rust code! Modify <code>lib.rs</code> to contain the following:</p>
 <pre class="language-rust"><code class="language-rust"><span class="token keyword">use</span> <span class="token namespace">wasm_bindgen<span class="token punctuation">::</span>prelude<span class="token punctuation">::</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
 
@@ -152,7 +154,7 @@ Rust code! Modify <code>lib.rs</code> to contain the following:</p>
 <span class="token punctuation">}</span></code></pre>
 <p>Our Wasm module will export the function, <code>greet</code>, and import the
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/alert">JavaScript function</a>,
-<code>alert</code>.<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup></p>
+<code>alert</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
 <p>This is all we need from the Rust side of things! There's one catch though: you
 can't use <code>cargo build</code> to build the Wasm binary! You need a special tool to
 generate the bindings files. For that, we'll use
@@ -163,7 +165,7 @@ installation instructions if you don't already have it.</p>
 at the root of your project. If you visit the directory, you'll see a Wasm
 binary accompanied by some JavaScript files. Those JS files are the <strong>glue</strong>
 between your JavaScript code and your Rust code (they wrap the Wasm module, so
-you don't interface with it directly)!<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup></p>
+you don't interface with it directly)!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup></p>
 <p>We're (eventually) going to serve our <code>index.html</code> file from the <code>web/</code>
 directory, so it's important that our Wasm stuff is in there. Speaking of HTML
 and JS, it's time to move on!</p>
@@ -204,33 +206,31 @@ footnotes!</p>
 <p>As always, if you have any feedback or questions,
 <a href="https://github.com/dzfrias/website/issues/new">open an issue</a> on this blog's
 GitHub repository!</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p>See the <a href="https://rustwasm.github.io/wasm-bindgen/"><code>wasm-bindgen</code> book</a>, the
 <a href="https://rustwasm.github.io/docs/book/"><code>wasm-bindgen</code> in-depth tutorial</a>,
 and the
-<a href="https://rustwasm.github.io/docs/wasm-pack/introduction.html"><code>wasm-pack</code> book</a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<a href="https://rustwasm.github.io/docs/wasm-pack/introduction.html"><code>wasm-pack</code> book</a>. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p>In fact, I wrote <a href="https://dzfrias.dev/blog/romberg">a blog post</a> about the
-struggle! <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+struggle! <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn3" class="footnote-item"><p>Read the <a href="https://doc.rust-lang.org/reference/linkage.html">Rust reference</a>
 for more info on this.
 <a href="https://stackoverflow.com/questions/56227766/why-must-a-wasm-library-in-rust-set-the-crate-type-to-cdylib">This StackOverflow post</a>
-was helpful too. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+was helpful too. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn4" class="footnote-item"><p><code>wasm-bindgen</code> can do a lot more than just that though! You can
 <a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">read the book</a>
-if you're curious. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+if you're curious. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn5" class="footnote-item"><p>If you're wondering what <code>--target web</code> is, it just tells <code>wasm-pack</code> to not
 build for an external bundler or node. It's not the default, but I think it
-simplifies things a lot and reduces the number of external tools (no npm!) <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+simplifies things a lot and reduces the number of external tools (no npm!) <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>

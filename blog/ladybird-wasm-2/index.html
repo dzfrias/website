@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#improvements">Improvements</a><ol><li><a href="#floats">Floats</a><ol><li><a href="#the-fix">The Fix</a></li></ol></li><li><a href="#simd-bitwise-operations">SIMD Bitwise Operations</a></li></ol></li><li><a href="#expanding-the-goal">Expanding the Goal</a></li><li><a href="#wrap-up">Wrap-Up</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -114,7 +116,7 @@ progress in this post. I also have an exciting announcement to make regarding
 the scope of this challenge!</p>
 <h2 id="improvements" tabindex="-1"><a class="header-anchor" href="#improvements">Improvements</a></h2>
 <p>Right now, we're sitting at a mere <strong>10 tests</strong> that do not pass on my
-machine.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> Here's a list of the PRs I've made, from most to least recent:</p>
+machine.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> Here's a list of the PRs I've made, from most to least recent:</p>
 <ol>
 <li>Fix a tiny <code>memory.grow</code> bug
 (<a href="https://github.com/LadybirdBrowser/ladybird/pull/563">see PR</a>)</li>
@@ -138,12 +140,12 @@ of the notable PRs.</p>
 <h3 id="floats" tabindex="-1"><a class="header-anchor" href="#floats">Floats</a></h3>
 <p>This was a very, <em>very</em> painful thing to work on. The main problem was this:</p>
 <p>In the <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE754 spec</a>, there are many
-float bit patterns that mean &quot;not-a-number&quot;.<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup> However, most JS
+float bit patterns that mean &quot;not-a-number&quot;.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> However, most JS
 implementations canonicalize them, meaning that two JS <code>NaN</code>s will <em>always</em> have
 the same bit pattern, even though they <em>technically</em> could have different
-internal representations and nobody would be mad.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup> For example,
+internal representations and nobody would be mad.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> For example,
 <code>0x7fc00000</code> and <code>0x7fb71688</code> are both &quot;not-a-number&quot; by IEEE754's standard, but
-JS <code>NaN</code>s are always the former.<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup></p>
+JS <code>NaN</code>s are always the former.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
 <p>&quot;Wait we're talking about Wasm, so why is this a problem?&quot; Well, the Ladybird
 Wasm testsuite <strong>uses JavaScript</strong> as a harness to run the tests! This means
 that we sometimes need to pass <code>NaN</code>s from JS to Wasm. But sometimes, we want to
@@ -176,7 +178,7 @@ tests pass now.</p>
 <p>This leads me into my next announcement...</p>
 <h2 id="expanding-the-goal" tabindex="-1"><a class="header-anchor" href="#expanding-the-goal">Expanding the Goal</a></h2>
 <p>We've reached nearly full spec-compliance (minus SIMD) <em>much faster</em> than I
-thought we would.<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup> I initially decided to ignore SIMD tests because very
+thought we would.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup> I initially decided to ignore SIMD tests because very
 few compilers take advantage of Wasm SIMD, even though it's part of the
 specification. But, since we have the extra time, <strong>why not go for 100% for
 real</strong>? The whole WebAssembly 2.0!</p>
@@ -195,13 +197,13 @@ truly believe in the project's mission.</p>
 <p>As always, if you have any issues, questions, or feedback about the post, feel
 free to post an issue on
 <a href="https://github.com/dzfrias/website/issues/new">this website's GitHub repo</a>!</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>This does not include SIMD tests, but you'll read more about that later :) <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p>This does not include SIMD tests, but you'll read more about that later :) <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p>I'd recommend checking out <a href="https://float.exposed/0x7fc00000">float.exposed</a>
-to play around with the number of <code>NaN</code>s there are! <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+to play around with the number of <code>NaN</code>s there are! <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn3" class="footnote-item"><p>This isn't fully true. Most JS implementations (including Ladybird's) do
 something called
@@ -209,16 +211,14 @@ something called
 which essentially exploit the idea that <code>NaN</code> bit patterns are arbitrary to
 the effect of storing extra information inside <code>NaN</code> values. That's actually
 the reason why <code>NaN</code>s are canonicalized in the first place (so there's &quot;one
-true NaN&quot;)! <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+true NaN&quot;)! <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn4" class="footnote-item"><p>This canonicalization behavior is not part of the JS standard, but is common
-among JS implementations. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+among JS implementations. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn5" class="footnote-item"><p>We're only about halfway through the summer! <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+<li id="fn5" class="footnote-item"><p>We're only about halfway through the summer! <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>

@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#the-basics">The Basics</a><ol><li><a href="#connecting">Connecting</a></li><li><a href="#getting-information">Getting Information</a><ol><li><a href="#logging-in">Logging In</a></li><li><a href="#retrieving-emails">Retrieving Emails</a></li></ol></li></ol></li><li><a href="#summary">Summary</a></li><li><a href="#references">References</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -115,19 +117,19 @@ but I never knew where to start.</p>
 <p>In this post, I'll be answering some of those questions. No experience with
 network programming or anything related is required!</p>
 <h2 id="the-basics" tabindex="-1"><a class="header-anchor" href="#the-basics">The Basics</a></h2>
-<p>I'm going to start from the beginning: you receive an email.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> The first
+<p>I'm going to start from the beginning: you receive an email.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> The first
 thing to find out is <em>what</em> received it, and where.</p>
 <p>Let's say your email address is <code>hello@icloud.com</code>. The <code>@icloud.com</code> means it's
 managed by iCloud Mail. iCloud Mail is what's called an <strong>email server</strong>. It
 holds all the emails of <strong>all</strong> <code>@icloud.com</code> email addresses. It's this server
 that contains the email that was sent to <code>hello@icloud.com</code> (and literally
-everyone else's)!<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup></p>
+everyone else's)!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <h3 id="connecting" tabindex="-1"><a class="header-anchor" href="#connecting">Connecting</a></h3>
 <p>So now we know that our email is stored on a remote server that iCloud Mail sets
 up. Like pretty much everything else, this server conforms to the
 <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP protocol</a>, so
 we should be able to connect to it remotely. I'll show how to do so using
-<a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a> and the command line.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup></p>
+<a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a> and the command line.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
 <pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> imap.mail.me.com:993
 <span class="token comment"># A bunch of output telling us that the connection was successful (hopefully)</span></code></pre>
 <p>We're telling OpenSSL that we want to connect to the TCP server located at
@@ -142,13 +144,13 @@ connect to. For example, Gmail uses <code>imap.gmail.com:993</code>.</p>
 <p>Ok, so now we're connected to the email server. We need to send it messages to
 request information about our emails. The question becomes: how? They key lies
 in the TCP/IP address: <code>imap.mail.me.com:993</code>. The magic word is <strong>IMAP</strong>!</p>
-<p>IMAP is a <strong>protocol</strong> that tells us two things:<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup></p>
+<p>IMAP is a <strong>protocol</strong> that tells us two things:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
 <ol>
 <li>How to structure the messages to get the information we want</li>
 <li>What the response will look like</li>
 </ol>
 <p>Using our OpenSSL client, we can compose messages by typing in some stuff, and
-we can press enter to send it.<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup> But you'll likely get a response back
+we can press enter to send it.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup> But you'll likely get a response back
 telling you that the message you sent was malformed in some way. That's because
 it didn't conform to the IMAP protocol! Let's look at some messages that <em>do</em>
 conform to the protocol.</p>
@@ -235,37 +237,35 @@ make sure to open an issue on this
 </ol>
 <p>I recommend reading through some of these sources to get a more thorough
 understanding of the concepts in this blog post.</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p>You might be thinking: “what? That's not the beginning! What about the
 person who <em>sent</em> the email?” Yes, you're right. But I'm just going to
 accept that the magical Internet wire electricity stuff happens, and the
 email is successfully sent <em>somewhere</em>. For now. An explanation of sending
-an email might come in a future post. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+an email might come in a future post. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p>This is a bit of an oversimplification, since iCloud Mail definitely isn't
 just <em>one single</em> computer that has all the <code>@icloud.com</code> emails in the
 world. But we can conceptually and practically treat it like this is the
-case, because the implementation of the server is abstracted from us. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+case, because the implementation of the server is abstracted from us. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn3" class="footnote-item"><p><code>nc</code> (or <a href="https://en.wikipedia.org/wiki/Netcat">netcat</a>) is another command
 line tool you may have heard of for connecting to remote TCP servers. iCloud
 Mail uses <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS/SSL</a>
 encryption on top of TCP, though, so it's easiest to use <code>openssl</code> to
-connect. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+connect. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn4" class="footnote-item"><p>There are other protocols email servers use.
 <a href="https://en.wikipedia.org/wiki/Post_Office_Protocol">POP</a> is another common
-one, albeit less present today. Most email servers communicate using IMAP. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+one, albeit less present today. Most email servers communicate using IMAP. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn5" class="footnote-item"><p>Remember: the OpenSSL command line tool isn't the <em>only</em> way to communicate
 with the server. Your favorite programming language likely has a way to do
-it, too. <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+it, too. <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>

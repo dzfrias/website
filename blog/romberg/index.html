@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#stuff-i-learned">Stuff I Learned</a><ol><li><a href="#wasm-rust-bindings">Wasm-Rust Bindings</a><ol><li><a href="#the-tooling-issue">The Tooling Issue</a></li></ol></li><li><a href="#rust-idioms-to-javascript">Rust Idioms to JavaScript</a></li></ol></li><li><a href="#wrap-up">Wrap Up</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -106,7 +108,7 @@
 calculator to supplement a project for a calculus class that I'm taking. In the
 project, I researched
 <a href="https://en.wikipedia.org/wiki/Romberg's_method">Romberg integration</a>, which is
-a way to approximate definite integrals with just a few calculations.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup> Along
+a way to approximate definite integrals with just a few calculations.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> Along
 with a <a href="https://github.com/dzfrias/romberg/blob/main/paper.pdf">paper</a>
 documenting my research, I also made a
 <a href="https://dzfrias.github.io/romberg/">website</a> that implements the algorithm
@@ -114,7 +116,7 @@ defined in my paper.</p>
 <p>The website was fun to make! In order to get the best performance possible, I
 wrote the core algorithm in <strong>Rust</strong> and compiled it to
 <a href="https://webassembly.org/">WebAssembly</a>. The calculator can quickly determine
-when the integral of a function over an interval does not converge,<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup> and is
+when the integral of a function over an interval does not converge,<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> and is
 able to get extremely accurate approximations in just a few milliseconds.</p>
 <p>By comparison to other online calculators, the one that I wrote is faster, just
 as accurate, and importantly, <strong>reports when the integral does not converge</strong>.
@@ -174,7 +176,7 @@ very fast-growing space, and there were a ton of dependencies required by using
 <h3 id="rust-idioms-to-javascript" tabindex="-1"><a class="header-anchor" href="#rust-idioms-to-javascript">Rust Idioms to JavaScript</a></h3>
 <p>This point is less of an annoyance and more of just an interesting problem I
 encountered. I'll start with the actual issue:</p>
-<p>We all know and love Rust's <code>Result&lt;T, E&gt;</code> type.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup> However, the
+<p>We all know and love Rust's <code>Result&lt;T, E&gt;</code> type.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> However, the
 errors-as-values idea (and even enums in general) don't translate well to
 JavaScript. In my program, the error type is defined as follows:</p>
 <pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[wasm_bindgen]</span>
@@ -231,22 +233,20 @@ the actual implementation! Or, of course, you can use the calculator on the
 or comments about this post, please
 <a href="https://github.com/dzfrias/website/issues/new">submit an issue</a> on this blog's
 GitHub repository!</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p>Basically, it takes a number of
 <a href="https://en.wikipedia.org/wiki/Riemann_sum">Riemann sums</a>, and &quot;combines&quot;
 the information in them to extrapolate a better approximation. It's fast
-because it takes calculations you've already made and produces a better one. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+because it takes calculations you've already made and produces a better one. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p>It does this <em>much</em> faster than a graphing calculator can. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p>It does this <em>much</em> faster than a graphing calculator can. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn3" class="footnote-item"><p>If you don't, I'd recommend reading about it in
-<a href="https://doc.rust-lang.org/stable/book/ch09-02-recoverable-errors-with-result.html">the Rust book</a>! <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<a href="https://doc.rust-lang.org/stable/book/ch09-02-recoverable-errors-with-result.html">the Rust book</a>! <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>

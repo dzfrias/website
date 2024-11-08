@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("div"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){for(const e of r)e.ariaCurrent="false";const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref"))return;document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
@@ -57,9 +57,11 @@
 
     <div id="main-left">
       
-<nav class="toc">
+<aside class="toc-container">
+  <nav class="toc">
         <ol><li><a href="#my-to-do-list">My To-Do List</a><ol><li><a href="#test-generation">Test Generation</a></li><li><a href="#the-validator-%26-linker">The Validator &amp; Linker</a></li><li><a href="#memory-%26-table-instructions">Memory &amp; Table Instructions</a></li></ol></li><li><a href="#challenges-thus-far">Challenges Thus Far</a></li><li><a href="#wrap-up">Wrap Up</a></li></ol>
       </nav>
+</aside>
 
     </div>
     <div id="main-content">
@@ -113,10 +115,10 @@ watched a video where he mentioned that the
 <a href="https://webassembly.org/">WebAssembly</a> (a.k.a. Wasm) virtual machine needed
 quite a bit of work before being reliable for use in the browser. After taking a
 look at how the VM fared against the official testsuite, I found myself sharing
-that opinion.<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></p>
+that opinion.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup></p>
 <p>Kling's YouTube videos had been a big inspiration for me in the past, and
 independent browser engines are
-<a href="https://dzfrias.dev/blog/ungoogled-chromium/">something I really believe in</a>.<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup>
+<a href="https://dzfrias.dev/blog/ungoogled-chromium/">something I really believe in</a>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup>
 So, since I've had some <a href="https://github.com/dzfrias/wsh">experience</a> with Wasm
 already, I decided that it's a reasonable goal to get the Ladybird VM to full
 spec-compliance. There's a lot of work to do, but I believe that we can get
@@ -183,7 +185,7 @@ these instructions will take too long, but I don't know at this point in time.</
 been working on the Ladybird project for around a week now, and there's
 definitely been some issues. First and foremost, I'm <strong>not</strong> a C++ programmer.
 Most of what I know comes from Rust. I get uncontrollably confused seeing crazy
-template logic, trying to decipher macros, and using the build system.<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup></p>
+template logic, trying to decipher macros, and using the build system.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
 <p>Additionally, since the Wasm implementation is part of a larger ecosystem (for
 the browser), changing code related to the VM can <em>easily</em> break other parts of
 the system. For example, I've been trying to make a small patch to the
@@ -207,21 +209,19 @@ thought that writing a browser engine was impossible. But, with Ladybird, I've
 asked myself the question: why not just do it? And the knowledge that thousands
 of people around the world will be working on it together, for no other reason
 than just for the belief in the project, is very motivational indeed.</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
+<hr>
+<section class="footnotes" role="doc-endnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p>Short disclaimer: the Wasm implementation is by no means the most important
 part of the browser, and it would be wrong to paint it as such. I'm happy
 that the core maintainers are focusing on making the JavaScript and layout
-engine spec-compliant. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+engine spec-compliant. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p>Seriously, we need more than just Chromium, Firefox, and WebKit. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p>Seriously, we need more than just Chromium, Firefox, and WebKit. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p>It took me two hours to set up the specification test suite... <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p>It took me two hours to set up the specification test suite... <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
-</ol>
-</section>
-
+</ol></section>
 
       </main>
     </div>
