@@ -7,14 +7,6 @@
 $spacing: 1.5rem;
 $width: 80ch;
 
-:root {
-  --width: 60vw;
-
-  @media screen and (max-width: 650px) {
-    --width: 95%;
-  }
-}
-
 *,
 *::before,
 *::after {
@@ -71,9 +63,7 @@ body {
   background: variables.$bg;
   color: variables.$fg;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.75;
+  line-height: 1.5;
 
   // Prevent scrolling when opening a modal
   &:has(dialog[open]) {
@@ -118,9 +108,9 @@ a:not(:has(svg)) {
 }
 
 header {
-  width: var(--width);
   padding-bottom: 1.5rem;
   padding-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 nav {
@@ -228,17 +218,16 @@ code:not([class^="language"]) {
   padding: 0.1rem 0.3rem;
 }
 
-main {
-  width: 100%;
-  display: flex;
-}
-
 #main-left {
-  flex: 1;
+  flex: 0.65;
 }
 
 #main-right {
   flex: 1;
+}
+
+#main-content {
+  width: min(65ch, 95vw);
 }
 
 blockquote {
@@ -344,15 +333,6 @@ tr:hover {
       margin-bottom: unset;
     }
   }
-}
-
-.article-container {
-  width: var(--width);
-  margin-top: 1rem;
-}
-
-.article-wrapper {
-  width: min(95%, 65ch);
 }
 
 .profile-container {
@@ -469,8 +449,27 @@ hr {
   }
 }
 
+.footnote-preview {
+  max-width: 30ch;
+  margin: 0rem 1rem;
+  border: 1px solid white;
+  background: variables.$bg-dark;
+  padding: 0.5rem 1rem;
+  opacity: 0%;
+  transition: opacity 200ms ease;
+
+  p {
+    margin-bottom: 0px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+}
+
 .footnote-ref {
   font-size: 0.8rem;
+
   & > a {
     text-decoration: none;
   }
@@ -518,7 +517,7 @@ hr {
   z-index: 10;
   top: 0;
   width: 100vw;
-  height: 10px;
+  height: 5px;
 
   &-inner {
     width: 0%;

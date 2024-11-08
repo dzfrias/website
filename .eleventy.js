@@ -76,7 +76,12 @@ module.exports = (config) => {
   });
 
   config.addPlugin(eleventyGoogleFonts);
-  config.addPlugin(syntaxHighlight);
+  config.addPlugin(syntaxHighlight, {
+    preAttributes: {
+      class: ({ language }) => `language-${language || "plain"}`,
+    },
+    errorOnInvalidLanguage: false,
+  });
   config.addPlugin(pluginTOC);
   config.addPlugin(eleventyImageTransformPlugin, {
     extensions: "html",
