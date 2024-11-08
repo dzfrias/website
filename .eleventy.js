@@ -48,6 +48,13 @@ module.exports = (config) => {
     return defaultHeadingCloseRenderer(tokens, idx, options, env, self);
   };
 
+  md.renderer.rules["blockquote_open"] = function () {
+    return '<aside class="side-info">';
+  };
+  md.renderer.rules["blockquote_close"] = function () {
+    return "</aside>";
+  };
+
   config.setLibrary("md", md.use(require("markdown-it-footnote")));
   // Default footnote renderer without brackets
   md.renderer.rules.footnote_caption = function (tokens, idx) {
