@@ -136,11 +136,9 @@ we should be able to connect to it remotely. I'll show how to do so using
 <code>imap.mail.me.com:993</code>. This is the standard TCP/IP address that iCloud Mail
 uses (it is not specific to me, in some way). That is, every <strong>email client</strong>
 that wants to get email data from an iCloud account uses this TCP/IP address.</p>
-<blockquote>
-<p>Different email servers, like Gmail, have different TCP/IP addresses to
+<aside class="side-info"><p>Different email servers, like Gmail, have different TCP/IP addresses to
 connect to. For example, Gmail uses <code>imap.gmail.com:993</code>.</p>
-</blockquote>
-<h3 id="getting-information" tabindex="-1"><a class="header-anchor" href="#getting-information">Getting Information</a></h3>
+</aside><h3 id="getting-information" tabindex="-1"><a class="header-anchor" href="#getting-information">Getting Information</a></h3>
 <p>Ok, so now we're connected to the email server. We need to send it messages to
 request information about our emails. The question becomes: how? They key lies
 in the TCP/IP address: <code>imap.mail.me.com:993</code>. The magic word is <strong>IMAP</strong>!</p>
@@ -165,16 +163,14 @@ home, omit the <code>C:</code>), and lines without <code>C</code> to denote serv
 <p>If we send <strong>that</strong> message (substituting in our actual email and password),
 we'll be logged in and should be able to access our emails by sending more
 IMAP-compliant messages.</p>
-<blockquote>
-<p>If you want to try this at home using your own iCloud email account, your
+<aside class="side-info"><p>If you want to try this at home using your own iCloud email account, your
 password <em>will not</em> be your iCloud account password. You'll need to create an
 <a href="https://support.apple.com/en-us/102654">app-specific password</a> and enter that
 in the message.</p>
 <p>Every email server has their own way to do passwords/authentication (I'm not
 using Gmail for this example because Google's authentication is enormously
 complicated for a blog post).</p>
-</blockquote>
-<h4 id="retrieving-emails" tabindex="-1"><a class="header-anchor" href="#retrieving-emails">Retrieving Emails</a></h4>
+</aside><h4 id="retrieving-emails" tabindex="-1"><a class="header-anchor" href="#retrieving-emails">Retrieving Emails</a></h4>
 <p>Now we're ready to look at some messages. The first thing we need to do is
 select a <strong>folder</strong>. An IMAP folder contains emails. Examples of common folders
 are:</p>

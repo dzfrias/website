@@ -119,11 +119,9 @@ git histories, they can be <em>notoriously</em> difficult to track down. In this
 I'll show you an effective way to find the <strong>exact commit</strong> which introduced the
 bug, in the order of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>log</mi><mn>2</mn></msub><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\log_2(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="vlist"><span style="top:0.24444em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> time.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <h2 id="what-is-git-bisect%3F" tabindex="-1"><a class="header-anchor" href="#what-is-git-bisect%3F">What is Git Bisect?</a></h2>
-<blockquote>
-<p>Note: This section assumes you have some knowledge of
+<aside class="side-info"><p>Note: This section assumes you have some knowledge of
 <a href="https://git-scm.com/">git</a>.</p>
-</blockquote>
-<p>I will introduce <code>git bisect</code> with an example: our goal is to find the <strong>first
+</aside><p>I will introduce <code>git bisect</code> with an example: our goal is to find the <strong>first
 version</strong> of the app that introduces the bug, in a history that looks like this:</p>
 <p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/K0kpCeqXBt-1794.webp 1794w"><img loading="lazy" decoding="async" src="/img/K0kpCeqXBt-1794.jpeg" alt="Commit history (7 commits)" width="1794" height="211"></picture></button><dialog><picture><source type="image/webp" srcset="/img/K0kpCeqXBt-1794.webp 1794w"><img loading="lazy" decoding="async" src="/img/K0kpCeqXBt-1794.jpeg" alt="Commit history (7 commits)" width="1794" height="211"></picture></dialog></div><p></p>
 <p>Each circle represents a version of your app (i.e. a commit), where the bug may
@@ -181,10 +179,8 @@ words, you have the following workflow:</p>
 <li>Good or bad</li>
 <li>Repeat until <code>git</code> finds the first bad commit!</li>
 </ol>
-<blockquote>
-<p>Note: If at any point you need to quit the bisection, run <code>git bisect reset</code>.</p>
-</blockquote>
-<h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap-Up</a></h2>
+<aside class="side-info"><p>Note: If at any point you need to quit the bisection, run <code>git bisect reset</code>.</p>
+</aside><h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap-Up</a></h2>
 <p>This post went over how <code>git bisect</code> can be used to fix regressions! I also
 showed it actually works, using <a href="#what-is-git-bisect%3F">an example</a>. I
 personally use the sub-command quite often, especially as my projects grow older
