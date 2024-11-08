@@ -95,10 +95,24 @@ for (let i = 0; i < fnrefs.length; i++) {
     container.style.position = "absolute";
     container.style.top =
       anchor.getBoundingClientRect().top + window.scrollY + "px";
-    container.style.opacity = "100%"
+    container.style.opacity = "100%";
   });
   anchor.addEventListener("mouseleave", () => {
     container.style.opacity = "0%";
-    container.addEventListener('transitionend', () => container.remove());
+    container.addEventListener("transitionend", () => container.remove());
   });
 }
+
+function selectFootnotes() {
+  for (const footenote of footnotes) {
+    footenote.ariaCurrent = "false";
+  }
+  const hash = location.hash.slice(1);
+  if (!hash.startsWith("fn") || hash.startsWith("fnref")) {
+    return;
+  }
+  const footnote = document.getElementById(hash);
+  footnote.ariaCurrent = "true";
+}
+selectFootnotes();
+window.onhashchange = selectFootnotes;
