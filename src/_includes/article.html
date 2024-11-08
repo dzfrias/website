@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script type="module" src="/js/index.js"></script>
+{% set js %} {% include "js/article.js" %} {% endset %}
+<script type="module">
+  {{ js | jsmin | safe }}
+</script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 {% endblock %}
 

@@ -4,6 +4,7 @@ const md = require("markdown-it")({ html: true });
 const markdownItAnchor = require("markdown-it-anchor");
 const eleventyGoogleFonts = require("eleventy-google-fonts");
 const pluginTOC = require("eleventy-plugin-toc");
+const { minify } = require("terser");
 
 module.exports = (config) => {
   const proxy = (tokens, idx, options, _env, self) =>
@@ -57,7 +58,6 @@ module.exports = (config) => {
 
   config.addPassthroughCopy("./src/img/");
   config.addPassthroughCopy("./src/fonts/");
-  config.addPassthroughCopy("./src/js/");
   // Favicons
   config.addPassthroughCopy({ "./src/favicon/*": "." });
 
@@ -90,6 +90,16 @@ module.exports = (config) => {
       loading: "lazy",
       decoding: "async",
     },
+  });
+
+  config.addFilter("jsmin", async function (code) {
+    try {
+      const minified = await minify(code, { module: true });
+      return minified.code;
+    } catch (err) {
+      console.error("Terser error: ", err);
+      return code;
+    }
   });
 
   // Watch CSS files for changes

@@ -26,8 +26,8 @@ pagination:
 </ol>
 <div class="pagination-nav">
   <div class="pagination-nav-arrows">
-    {% if pagination.href.previous %}<a class="pagination-nav-arrows-item" aria-label="Go to previous page" href="{{ pagination.href.previous }}">{% include "arrow-left.svg" %}</a>{% endif %}
-    {% if pagination.href.next %}<a class="pagination-nav-arrows-item" aria-label="Go to next page" href="{{ pagination.href.next }}">{% include "arrow-right.svg" %}</a>{% endif %}
+    {% if pagination.href.previous %}<a class="pagination-nav-arrows-item" aria-label="Go to previous page" href="{{ pagination.href.previous }}">{% include "svg/arrow-left.svg" %}</a>{% endif %}
+    {% if pagination.href.next %}<a class="pagination-nav-arrows-item" aria-label="Go to next page" href="{{ pagination.href.next }}">{% include "svg/arrow-right.svg" %}</a>{% endif %}
   </div>
   <p>{{ pagination.pageNumber + 1 }} of {{ (collections.sortedPosts.length + pagination.size - 1) // pagination.size }}</p>
 </div>
