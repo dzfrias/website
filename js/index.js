@@ -73,7 +73,32 @@ document.addEventListener("scroll", () => {
 for (const progressBar of document.getElementsByClassName("progress-bar")) {
   const inner = progressBar.firstElementChild;
   document.addEventListener("scroll", () => {
-    const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
-    inner.style.width = `${scrollPercent * 100}%`
+    const scrollPercent =
+      window.scrollY / (document.body.offsetHeight - window.innerHeight);
+    inner.style.width = `${scrollPercent * 100}%`;
+  });
+}
+
+const fnrefs = document.querySelectorAll('a[id^="fnref"]');
+const footnotes = document.getElementsByClassName("footnote-item");
+const rightSection = document.getElementById("main-right");
+for (let i = 0; i < fnrefs.length; i++) {
+  const anchor = fnrefs[i];
+  const footnote = footnotes[i];
+  const paragraph = footnote.children[0].cloneNode(true);
+  let container;
+  anchor.addEventListener("mouseover", () => {
+    container = document.createElement("div");
+    rightSection.appendChild(container);
+    container.classList.add("footnote-preview");
+    container.appendChild(paragraph);
+    container.style.position = "absolute";
+    container.style.top =
+      anchor.getBoundingClientRect().top + window.scrollY + "px";
+    container.style.opacity = "100%"
+  });
+  anchor.addEventListener("mouseleave", () => {
+    container.style.opacity = "0%";
+    container.addEventListener('transitionend', () => container.remove());
   });
 }

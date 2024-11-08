@@ -8,13 +8,15 @@
     <meta name="author" content="Diego Frias">
     <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
     <title>A Temporary Pause on Posts - dzfrias</title>
+    
+<script type="module" src="/js/index.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
     <link rel="stylesheet" href="/css/style.css">
-    <script type="module" src="/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
     <meta name="theme-color" content="#0f0f0f">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link rel="preconnect" href="https://fonts.gstatic.com"><link data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap" rel="stylesheet"><style data-href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&display=swap">/* hebrew */
@@ -47,11 +49,20 @@
 </style>
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="/" aria-label="Home">
-          <div class="header-logo">
-            <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1_2)">
 <rect width="200" height="200" fill="#7B7B7B"></rect>
 <path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
@@ -64,37 +75,27 @@
 </defs>
 </svg>
 
-          </div>
-        </a>
-        <ul>
-          
-          <li>
-            <a href="/blog/">Blog</a>
-          </li>
-          
-          <li>
-            <a href="/projects/">Projects</a>
-          </li>
-          
-          <li>
-            <a href="https://github.com/dzfrias">GitHub</a>
-          </li>
-          
-        </ul>
-      </nav>
-    </header>
-    
-<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
-
-    <main tabindex="-1">
-      <div id="main-left">
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
         
-
-
-      </div>
-      <div id="main-content" style="margin-top: 1rem; width: var(--width)">
-        <div style="width: min(95%, 65ch)">
-          
 <h1>A Temporary Pause on Posts</h1>
 <p>This post is a small update on the status of the blog for the coming weeks. I'm
 taking a break from (mostly weekly) posts in order to focus on other work I have
@@ -102,12 +103,11 @@ in my life.</p>
 <p>I'll be back posting when I have more time again!</p>
 
 
-        </div>
-      </div>
-      <div id="main-right">
-        
-        
-      </div>
-    </main>
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
   </body>
 </html>
