@@ -5,7 +5,6 @@
 
 // Default vertical space between items on the page (paragraphs, lists, etc.)
 $spacing: 1.5rem;
-$width: 80ch;
 
 *,
 *::before,
@@ -227,7 +226,7 @@ code:not([class^="language"]) {
 }
 
 #main-content {
-  width: min(65ch, 95vw);
+  width: min(36rem, 95vw);
 }
 
 blockquote {
