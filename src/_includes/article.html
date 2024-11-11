@@ -6,6 +6,7 @@
   {{ js | jsmin | safe }}
 </script>
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"></noscript>
 {% endblock %}
 
 {% block left %}
