@@ -18,7 +18,7 @@ There's a lot to unpack:
 - How does sending mail work?
 
 In this post, I'll be answering some of those questions. No experience with
-network programming or anything related is required!
+network programming is necessary for reading this post!
 
 # The Basics
 
@@ -45,18 +45,22 @@ $ openssl s_client -connect imap.mail.me.com:993
 ```
 
 We're telling OpenSSL that we want to connect to the TCP server located at
-`imap.mail.me.com:993`. This is the standard TCP/IP address that iCloud Mail
-uses (it is not specific to me, in some way). That is, every **email client**
-that wants to get email data from an iCloud account uses this TCP/IP address.
+`imap.mail.me.com:993`. This is the standard
+[FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) (fully
+qualified domain name) that iCloud Mail uses (note that it is not specific to
+me, in some way).[^port] That is, every **email client** that wants to get email
+data from an iCloud account uses this FQDN, which resolves to an IP address via
+a [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) lookup.[^dns] With the
+IP address, we can connect to the server.
 
-> Different email servers, like Gmail, have different TCP/IP addresses to
-> connect to. For example, Gmail uses `imap.gmail.com:993`.
+> Different email servers, like Gmail, have different domain names to connect
+> to. For example, Gmail uses `imap.gmail.com:993`.
 
 ## Getting Information
 
 Ok, so now we're connected to the email server. We need to send it messages to
 request information about our emails. The question becomes: how? They key lies
-in the TCP/IP address: `imap.mail.me.com:993`. The magic word is **IMAP**!
+in the name: `imap.mail.me.com:993`. The magic word is **IMAP**!
 
 IMAP is a **protocol** that tells us two things:[^pop]
 
@@ -163,6 +167,9 @@ hope you enjoyed this post! If you found any problems or have any suggestions,
 make sure to open an issue on this
 [website's GitHub repository](https://github.com/dzfrias/website/issues/new).
 
+> Post edited on 11/26/24 to resolve issues regarding the differences between
+> FQDNs, DNS, TCP, and IP.
+
 ## References
 
 1. [IMAP Specification](https://www.ietf.org/rfc/rfc9051.html)
@@ -192,6 +199,12 @@ understanding of the concepts in this blog post.
     Mail uses [TLS/SSL](https://en.wikipedia.org/wiki/Transport_Layer_Security)
     encryption on top of TCP, though, so it's easiest to use `openssl` to
     connect.
+
+[^port]: It also contains a port number (993).
+[^dns]:
+    This process of finding the IP address, however, is abstracted from us, so
+    we only have to worry about the FQDN, not actual IP address of the server
+    we're connecting to.
 
 [^langs]:
     Remember: the OpenSSL command line tool isn't the _only_ way to communicate
