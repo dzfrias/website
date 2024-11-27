@@ -88,7 +88,7 @@ but I never knew where to start.</p>
 <li>How does sending mail work?</li>
 </ul>
 <p>In this post, I'll be answering some of those questions. No experience with
-network programming or anything related is required!</p>
+network programming is necessary for reading this post!</p>
 <h2 id="the-basics" tabindex="-1"><a class="header-anchor" href="#the-basics">The Basics</a></h2>
 <p>I'm going to start from the beginning: you receive an email.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> The first
 thing to find out is <em>what</em> received it, and where.</p>
@@ -106,22 +106,26 @@ we should be able to connect to it remotely. I'll show how to do so using
 <pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> imap.mail.me.com:993
 <span class="token comment"># A bunch of output telling us that the connection was successful (hopefully)</span></code></pre>
 <p>We're telling OpenSSL that we want to connect to the TCP server located at
-<code>imap.mail.me.com:993</code>. This is the standard TCP/IP address that iCloud Mail
-uses (it is not specific to me, in some way). That is, every <strong>email client</strong>
-that wants to get email data from an iCloud account uses this TCP/IP address.</p>
-<aside class="side-info"><p>Different email servers, like Gmail, have different TCP/IP addresses to
-connect to. For example, Gmail uses <code>imap.gmail.com:993</code>.</p>
+<code>imap.mail.me.com:993</code>. This is the standard
+<a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a> (fully
+qualified domain name) that iCloud Mail uses (note that it is not specific to
+me, in some way).<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup> That is, every <strong>email client</strong> that wants to get email
+data from an iCloud account uses this FQDN, which resolves to an IP address via
+a <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> lookup.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup> With the
+IP address, we can connect to the server.</p>
+<aside class="side-info"><p>Different email servers, like Gmail, have different domain names to connect
+to. For example, Gmail uses <code>imap.gmail.com:993</code>.</p>
 </aside><h3 id="getting-information" tabindex="-1"><a class="header-anchor" href="#getting-information">Getting Information</a></h3>
 <p>Ok, so now we're connected to the email server. We need to send it messages to
 request information about our emails. The question becomes: how? They key lies
-in the TCP/IP address: <code>imap.mail.me.com:993</code>. The magic word is <strong>IMAP</strong>!</p>
-<p>IMAP is a <strong>protocol</strong> that tells us two things:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
+in the name: <code>imap.mail.me.com:993</code>. The magic word is <strong>IMAP</strong>!</p>
+<p>IMAP is a <strong>protocol</strong> that tells us two things:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn6" id="fnref6">6</a></sup></p>
 <ol>
 <li>How to structure the messages to get the information we want</li>
 <li>What the response will look like</li>
 </ol>
 <p>Using our OpenSSL client, we can compose messages by typing in some stuff, and
-we can press enter to send it.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup> But you'll likely get a response back
+we can press enter to send it.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn7" id="fnref7">7</a></sup> But you'll likely get a response back
 telling you that the message you sent was malformed in some way. That's because
 it didn't conform to the IMAP protocol! Let's look at some messages that <em>do</em>
 conform to the protocol.</p>
@@ -197,7 +201,9 @@ protocol</li>
 hope you enjoyed this post! If you found any problems or have any suggestions,
 make sure to open an issue on this
 <a href="https://github.com/dzfrias/website/issues/new">website's GitHub repository</a>.</p>
-<h3 id="references" tabindex="-1"><a class="header-anchor" href="#references">References</a></h3>
+<aside class="side-info"><p>Post edited on 11/26/24 to resolve issues regarding the differences between
+FQDNs, DNS, TCP, and IP.</p>
+</aside><h3 id="references" tabindex="-1"><a class="header-anchor" href="#references">References</a></h3>
 <ol>
 <li><a href="https://www.ietf.org/rfc/rfc9051.html">IMAP Specification</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Email_client">Wikipedia</a></li>
@@ -226,13 +232,19 @@ Mail uses <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS/S
 encryption on top of TCP, though, so it's easiest to use <code>openssl</code> to
 connect. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn4" class="footnote-item"><p>There are other protocols email servers use.
-<a href="https://en.wikipedia.org/wiki/Post_Office_Protocol">POP</a> is another common
-one, albeit less present today. Most email servers communicate using IMAP. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
+<li id="fn4" class="footnote-item"><p>It also contains a port number (993). <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn5" class="footnote-item"><p>Remember: the OpenSSL command line tool isn't the <em>only</em> way to communicate
+<li id="fn5" class="footnote-item"><p>This process of finding the IP address, however, is abstracted from us, so
+we only have to worry about the FQDN, not actual IP address of the server
+we're connecting to. <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>There are other protocols email servers use.
+<a href="https://en.wikipedia.org/wiki/Post_Office_Protocol">POP</a> is another common
+one, albeit less present today. Most email servers communicate using IMAP. <a role="doc-backlink" aria-label="back to text" href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>Remember: the OpenSSL command line tool isn't the <em>only</em> way to communicate
 with the server. Your favorite programming language likely has a way to do
-it, too. <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
+it, too. <a role="doc-backlink" aria-label="back to text" href="#fnref7" class="footnote-backref">↩︎</a></p>
 </li>
 </ol></section>
 
