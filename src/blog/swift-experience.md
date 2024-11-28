@@ -221,10 +221,10 @@ with a new programming language, there are two things I like to check off:
 Swift's tree-sitter grammar is great! However, it's lacking quite a bit in the
 LSP department.
 
-There's a general sluggishness when using it, even on small codebases. Many of
+There's a general sluggishness when using it, even on small codebases. Many
 handlers for the protocol haven't been implemented, too (like show-references
 and rename). The client sometimes quits unexpectedly, and error diagnostics will
-linger indefinitely after something has been fixed.
+sometimes linger indefinitely after something has been fixed.
 
 I eventually ended up using the [Xcode](https://en.wikipedia.org/wiki/Xcode) IDE
 Swift for development. Xcode is nice, but certainly not something I prefer over
