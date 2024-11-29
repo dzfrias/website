@@ -14,8 +14,8 @@ something called **SMTP** (Simple Mail Transfer Protocol), which involves
 _sending_ emails.
 
 SMTP is one of the all-time classic Internet protocols, dating back to 1980.
-Beyond just sending emails, SMTP can teach you a lot about the inner-workings of
-the Internet!
+Beyond just sending emails, SMTP can teach you a lot about the workings of the
+Internet!
 
 # Exploration
 
@@ -37,9 +37,9 @@ address: `@icloud.com`. This means that iCloud Mail manages the server, so we
 need to give our email to an iCloud mail server in order for it to be sent to
 our friend.
 
-[Apple Support](https://support.apple.com/en-us/102525) kindly tells us that the
-address and port of the iCloud Mail email server is
-`smtp.mail.me.com:587`.[^change]
+[Apple Support](https://support.apple.com/en-us/102525) tells us that the
+[FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) and port of
+the iCloud Mail email server is `smtp.mail.me.com:587`.[^change]
 
 For this demo, I'll use the [OpenSSL](https://en.wikipedia.org/wiki/OpenSSL)
 command-line tool to connect to the server:
