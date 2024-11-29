@@ -72,11 +72,11 @@ body {
   }
 }
 
-a:not(:has(svg)) {
-  color: variables.$accent;
+a {
+  color: color-mix(in srgb, currentColor 70%, white);
   text-decoration-thickness: 2px;
 
-  &:hover {
+  &:not(:has(svg)):hover {
     background-image: linear-gradient(
       90deg,
       variables.$accent-fade,
@@ -274,7 +274,7 @@ h1 {
 b,
 strong {
   font-weight: bold;
-  color: variables.$fg-bright;
+  color: color-mix(in srgb, currentColor 70%, white);
 }
 
 em {
@@ -458,6 +458,11 @@ hr {
     }
 
     a {
+      color: inherit;
+    }
+
+    b,
+    strong {
       color: inherit;
     }
   }
