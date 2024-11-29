@@ -84,8 +84,8 @@ emails are <em>retrieved</em>, featuring a protocol called IMAP. Today, we're ex
 something called <strong>SMTP</strong> (Simple Mail Transfer Protocol), which involves
 <em>sending</em> emails.</p>
 <p>SMTP is one of the all-time classic Internet protocols, dating back to 1980.
-Beyond just sending emails, SMTP can teach you a lot about the inner-workings of
-the Internet!</p>
+Beyond just sending emails, SMTP can teach you a lot about the workings of the
+Internet!</p>
 <h2 id="exploration" tabindex="-1"><a class="header-anchor" href="#exploration">Exploration</a></h2>
 <p>Our journey starts when you (<code>you@icloud.com</code>) are trying to send an email to
 your friend, <code>friend@gmail.com</code>. It might seem like this is a decentralized
@@ -101,9 +101,9 @@ server, so we can connect to it and give it our email. The key is in our email
 address: <code>@icloud.com</code>. This means that iCloud Mail manages the server, so we
 need to give our email to an iCloud mail server in order for it to be sent to
 our friend.</p>
-<p><a href="https://support.apple.com/en-us/102525">Apple Support</a> kindly tells us that the
-address and port of the iCloud Mail email server is
-<code>smtp.mail.me.com:587</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<p><a href="https://support.apple.com/en-us/102525">Apple Support</a> tells us that the
+<a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a> and port of
+the iCloud Mail email server is <code>smtp.mail.me.com:587</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <p>For this demo, I'll use the <a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a>
 command-line tool to connect to the server:</p>
 <pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> smtp.mail.me.com:587 <span class="token parameter variable">-starttls</span> smtp <span class="token parameter variable">-quiet</span> <span class="token parameter variable">-crlf</span>
