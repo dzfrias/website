@@ -110,10 +110,10 @@ computer** you're connecting from along with it (`dzfrias.local` for me).[^ehlo]
 ### Authorization
 
 Now, we want to identify ourselves as `you@icloud.com`, or else the server won't
-let us send any emails. The `250-AUTH` line tells us what authentication methods
-we can use to log in. The one that we'll be using for this demo is `PLAIN`,
-which is the simplest, and only involves sending our username and
-password:[^auth]
+let us send any emails. The `250-AUTH` line of the greeting response tells us
+what authentication methods we can use to log in. The one that we'll be using
+for this demo is `PLAIN`, which is the simplest, and only involves sending our
+username and password:[^auth]
 
 ```text
 C: AUTH PLAIN
