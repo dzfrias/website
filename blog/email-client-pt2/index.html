@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="An exploration of the SMTP email protocol, with examples featuring iCloud Mail.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>SMTP 101: Sending Emails - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+</script>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"></noscript>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#exploration">Exploration</a><ol><li><a href="#connecting">Connecting</a><ol><li><a href="#tls-stuff">TLS Stuff</a></li></ol></li><li><a href="#smtp">SMTP</a><ol><li><a href="#authorization">Authorization</a></li><li><a href="#sending-our-email">Sending Our Email</a></li></ol></li></ol></li><li><a href="#summary">Summary</a><ol><li><a href="#references">References</a></li></ol></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>SMTP 101: Sending Emails</h1>
+<p>In this post, we're going to dive into a simple question that contains <em>a lot</em>
+of complexity: <strong>how does my email client send emails</strong>? In
+<a href="https://dzfrias.dev/blog/email-client-pt1/">a previous post</a>, I explained how
+emails are <em>retrieved</em>, featuring a protocol called IMAP. Today, we're exploring
+something called <strong>SMTP</strong> (Simple Mail Transfer Protocol), which involves
+<em>sending</em> emails.</p>
+<p>SMTP is one of the all-time classic Internet protocols, dating back to 1980.
+Beyond just sending emails, SMTP can teach you a lot about the inner-workings of
+the Internet!</p>
+<h2 id="exploration" tabindex="-1"><a class="header-anchor" href="#exploration">Exploration</a></h2>
+<p>Our journey starts when you (<code>you@icloud.com</code>) are trying to send an email to
+your friend, <code>friend@gmail.com</code>. It might seem like this is a decentralized
+process: that is, you can directly send your email to their machine, somehow.
+For better and for worse, that's no longer the way to do things.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup>
+Instead, you need to pass off your email to a centralized <strong>email server</strong>,
+which will <strong>relay</strong> your message to <code>friend@gmail.com</code>.</p>
+<p>The server will take care of sending it to your friend, for you! It's a lot like
+a post office.</p>
+<h3 id="connecting" tabindex="-1"><a class="header-anchor" href="#connecting">Connecting</a></h3>
+<p>The next thing we need to figure out is the location of this helpful email
+server, so we can connect to it and give it our email. The key is in our email
+address: <code>@icloud.com</code>. This means that iCloud Mail manages the server, so we
+need to give our email to an iCloud mail server in order for it to be sent to
+our friend.</p>
+<p><a href="https://support.apple.com/en-us/102525">Apple Support</a> kindly tells us that the
+address and port of the iCloud Mail email server is
+<code>smtp.mail.me.com:587</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<p>For this demo, I'll use the <a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a>
+command-line tool to connect to the server:</p>
+<pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> smtp.mail.me.com:587 <span class="token parameter variable">-starttls</span> smtp <span class="token parameter variable">-quiet</span> <span class="token parameter variable">-crlf</span>
+<span class="token comment"># Output about the connection</span></code></pre>
+<p>There are some arguments here that you might be unfamiliar with. The most
+significant one, though, is <code>-starttls smtp</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> To understand this, we'll
+need to dive into <strong>implicit</strong> vs. <strong>opportunistic</strong> TLS.</p>
+<h4 id="tls-stuff" tabindex="-1"><a class="header-anchor" href="#tls-stuff">TLS Stuff</a></h4>
+<p>There are two ways to obtain a TLS connection:</p>
+<ol>
+<li>Opportunistically</li>
+<li>Implicitly</li>
+</ol>
+<p>A server that supports
+<a href="https://en.wikipedia.org/wiki/Opportunistic_TLS">opportunistic TLS</a> upholds
+that the connection it starts with is <strong>cleartext</strong> (not secure), but <em>can</em> be
+upgraded to a TLS connection using a special command. This command varies
+depending on the protocol.</p>
+<aside class="side-info"><p>To upgrade an HTTP connection (to an HTTPS one), for example, you can send an
+<a href="https://en.wikipedia.org/wiki/HTTP/1.1_Upgrade_header">upgrade header</a>
+telling the server that you wish to initiate a TLS handshake.</p>
+</aside><p>Some servers don't care at all about cleartext connections, though, so they use
+<strong>implicit TLS</strong>. This means that the TLS handshake is attempted when the
+connection begins (<em>not</em> upon user request).<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
+<p>Getting back to the <code>-starttls smtp</code> argument, it tells <code>openssl</code> that we want
+to write the <code>STARTTLS</code> SMTP command to the server, which is by request (it does
+not happen implicitly). So the server located at <code>smtp.mail.me.com</code> accepts
+<strong>opportunistic</strong> TLS.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn5" id="fnref5">5</a></sup></p>
+<h3 id="smtp" tabindex="-1"><a class="header-anchor" href="#smtp">SMTP</a></h3>
+<p>With all that out of the way, we can start talking about <strong>SMTP</strong>! SMTP is the
+protocol used to communicate the information of your email (i.e. contents,
+recipient, CC, BCC, etc.) to the server. We send <strong>SMTP commands</strong> that detail
+this information.</p>
+<p>Now that we're connected, the first thing we need to do is greet the server:</p>
+<pre class="language-text"><code class="language-text">C: EHLO dzfrias.local
+250-PIPELINING
+250-SIZE 28319744
+250-ETRN
+250-AUTH LOGIN PLAIN ATOKEN ATOKEN2 WSTOKEN WETOKEN XOAUTH2
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8</code></pre>
+<p>Lines beginning with <code>C:</code> denote my input, and lines without <code>C:</code> are server
+output. <code>EHLO</code> is the greeting command, and you also pass the <strong>name of the
+computer</strong> you're connecting from along with it (<code>dzfrias.local</code> for me).<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn6" id="fnref6">6</a></sup></p>
+<aside class="side-info"><p>If you want to find the name of <em>your</em> computer, use the <code>hostname</code> command on
+the command line!</p>
+</aside><h4 id="authorization" tabindex="-1"><a class="header-anchor" href="#authorization">Authorization</a></h4>
+<p>Now, we want to identify ourselves as <code>you@icloud.com</code>, or else the server won't
+let us send any emails. The <code>250-AUTH</code> line tells us what authentication methods
+we can use to log in. The one that we'll be using for this demo is <code>PLAIN</code>,
+which is the simplest, and only involves sending our username and
+password:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn7" id="fnref7">7</a></sup></p>
+<pre class="language-text"><code class="language-text">C: AUTH PLAIN
+334
+C: AHlvdUBpY2xvdWQuY29tAGVtYWlsLW1lLXlvdXItZmF2b3JpdGUtY29sb3I=
+235 2.7.0 Authentication successful</code></pre>
+<p>That seemginly random string of characters is actually super important! I'll go
+through what happened line by line:</p>
+<ol>
+<li>I told the server I wanted to authenticate using the <code>PLAIN</code> method</li>
+<li>The server said: “okay!”</li>
+<li>I gave it the base64 encoding of my username and password</li>
+<li>The server said: “looks good!”</li>
+</ol>
+<aside class="side-info"><p>If you're trying this at home (and using iCloud Mail), you can get the base64
+encoding using the command line: <code>echo -n '\00username\00password' | base64</code>.
+The username is your email address, and the password is an
+<a href="https://support.apple.com/en-us/102654">app-specific password</a>.</p>
+<p>Different email servers authenticate differently!</p>
+</aside><p>That's enough to get us authenticated, so let's get to sending the email.</p>
+<h4 id="sending-our-email" tabindex="-1"><a class="header-anchor" href="#sending-our-email">Sending Our Email</a></h4>
+<p>We can use different SMTP commands to tell the server about the email we want to
+send. For example:</p>
+<pre class="language-plain"><code class="language-plain">C: MAIL FROM:&lt;you@icloud.com>
+250 2.1.0 0k</code></pre>
+<p>This tells the server that we're sending from <code>you@icloud.com</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn8" id="fnref8">8</a></sup> We
+can also tell the server who the email is to and what it contains, using
+<code>RCPT TO</code> and <code>DATA</code>, respectively:</p>
+<pre class="language-plain"><code class="language-plain">C: RCPT TO:&lt;friend@gmail.com>
+250 2.1.5 0k
+C: DATA
+C: From: "You" &lt;you@icloud.com>
+C: To: "Friend" &lt;friend@gmail.com>
+C:
+C: This is an extremely important message.
+C: .
+250 2.0.0 0k: queued as 343FD5003CE</code></pre>
+<p>Email sent! Note the two <a href="https://en.wikipedia.org/wiki/MIME">MIME</a> headers we
+included in the content of the email. These contain <strong>crucial metadata</strong> that'll
+be packaged with our message.</p>
+<p>You might be wondering what the <code>.</code> is at the end. After we send the <code>DATA</code>
+command, the server gives us the ability to write as many lines as we want,
+which is necessary to input a multi-line email. Since line breaks <em>usually</em>
+denote the end of an input, the server needs some <em>other</em> indicator for when our
+input has ended. So instead, the server looks for a single dot on an empty line
+to terminate our input. This technique is called <strong>dot-stuffing</strong>.</p>
+<h2 id="summary" tabindex="-1"><a class="header-anchor" href="#summary">Summary</a></h2>
+<p>Here's a quick, high-level summary of this demo:</p>
+<ul>
+<li>Sending emails involves passing off your message to an email server to be
+relayed</li>
+<li>The email server corresponds to your email provider</li>
+<li>The SMTP protocol is used to communicate with the server</li>
+</ul>
+<p>I'll continue my email-client series in future posts, but I'll mostly focus on
+the <strong>implementation-side</strong> of things for a client. For now, I hope you enjoyed
+this post. If you have a problems or suggestions, feel free to
+<a href="mailto:styx5242@gmail.com">send me an email</a> or
+<a href="https://github.com/dzfrias/website/issues/new">open an issue</a> on this website's
+<a href="https://github.com/dzfrias/website">GitHub repository</a>.</p>
+<h3 id="references" tabindex="-1"><a class="header-anchor" href="#references">References</a></h3>
+<ol>
+<li><a href="https://www.rfc-editor.org/rfc/rfc5321.html">SMTP Specification</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc8314#section-3">TLS Recommendations</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc4616">PLAIN Authentication</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol">Wikipedia</a></li>
+<li><a href="https://support.apple.com/en-us/102525">Apple Support</a></li>
+</ol>
+<p>These sources were super helpful for understanding these concepts, so I
+recommend reading them to deepen your understanding of the things I touched on
+in this post.</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>There are some <strong>advantages</strong> to this: in order to send emails directly, the
+receiver's machine would have to be listening for connections 24/7. It'd
+also be much harder to access emails from two different computers, since
+directly sending would imply that the emails are stored locally. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Note that this will change depending on the email provider. Gmail, for
+example, uses <code>smtp.gmail.com:587</code>. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>All arguments are crucial, though! <code>-crlf</code> will make sure that any newlines
+we send are turned into CRLF characters. <code>-quiet</code> not only makes the output
+less verbose, but it also disables the interactive interpretation of the R
+and Q characters when typing into <code>openssl</code>. I don't fully understand what
+that means, but
+<a href="https://stackoverflow.com/a/77250517">this StackOverflow post</a> explains it.
+Not passing it in will cause problems later. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>The nuances of TLS handshakes is beyond the scope of this post. Definitely
+future-post material. For now, just know that a TLS handshake is essential
+for upgrading a cleartext connection to a TLS connection. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>If you read my IMAP post and are wondering why we didn't pass
+<code>-starttls smtp</code> to the IMAP server, it's because <code>imap.mail.me.com:993</code>
+supports implicit TLS connection. In general, the adoption of implicit TLS
+SMTP servers has been slow. <a role="doc-backlink" aria-label="back to text" href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>The greeting command <em>used</em> to be <code>HELO</code>, but it's since been deprecated in
+favor of <code>EHLO</code> (short for extended-hello). <a role="doc-backlink" aria-label="back to text" href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>I encourage you to research the other authentication methods! <code>LOGIN</code>, for
+example, is very similar to <code>PLAIN</code>, but it's no longer recommended. <a role="doc-backlink" aria-label="back to text" href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>If you try using an email address other than the one you authenticated in
+with, you'll get an error. No email spoofing allowed! <a role="doc-backlink" aria-label="back to text" href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
