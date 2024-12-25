@@ -53,9 +53,7 @@ $$
 Plugging $t$ into the first equation:
 
 $$
-\begin{aligned}
-  \Delta y &= \Delta x\tan(\theta) - \frac{g\Delta x^2}{2v^2\cos^2(\theta)}
-\end{aligned}
+\Delta y = \Delta x\tan(\theta) - \frac{g\Delta x^2}{2v^2\cos^2(\theta)}
 $$
 
 Hmm. The equation we land on doesn't seem to have an algebraic solution for
@@ -191,7 +189,7 @@ to figure it out on my own.
 
 I hope you learned something from this post! Below, I put two code
 implementations: one with Python, and one with
-[gdscript](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html).[^gdscript]
+[GDScript](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html).[^gdscript]
 
 ## Code
 
@@ -220,7 +218,7 @@ def firing_angle(v: float, dx: float, dy: float) -> float | None:
         return angle2
 ```
 
-### gdscript
+### GDScript
 
 Godot's coordinate system is a bit strange: the y-axis points **downwards**,
 which should change our answers. The fix isn't too bad, we just have to mess
@@ -260,4 +258,4 @@ static func firing_angle(v: float, dx: float, dy: float) -> float:
     I needed both the distinct roots of $f$ because _one_ of them will actually
     be the angle I want, but I don't always know which without more information.
 
-[^gdscript]: I used the gdscript version for the game I'm developing.
+[^gdscript]: I used the GDScript version for the game I'm developing.
