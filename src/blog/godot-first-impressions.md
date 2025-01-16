@@ -1,0 +1,232 @@
+---
+title: Godot - First Impressions
+description:
+  My first impressions with the Godot game engine, after using Unity for two
+  years.
+date: 2025-01-07
+---
+
+The [Godot](https://godotengine.org/) game engine has risen in popularity over
+the last few years. Beyond just being free and open-source, there's a lot to
+like about the game engine; being relatively new (and willing to make big
+breaking changes), Godot has the advantage of **hindsight**.[^hindsight]
+
+Annually, my artist friends, programmer friends, and I make a video game over
+the course of half a year. This year, we decided to use Godot instead of
+[Unity](https://unity.com/). So, after using Godot for a little over a month,
+I'm writing this post to document my highlights, complaints, and other thoughts
+related to the engine.
+
+# Highlights
+
+## Economy of Features
+
+By far, the best thing about Godot is its **economy of features**. By that, I
+mean that Godot gets a way with having _a lot_ of power with a relatively small
+set of features. It's no secret the game engines have to do a bunch of stuff for
+us. They need to handle:
+
+- Animations
+- Shaders
+- Rendering
+- Physics/collisions
+
+and much more. One of my main complaints about Unity was that, in order to
+**dive deep** into any of these, it felt like I needed to watch a 20-minute-long
+tutorial, even for things like basic animations.[^problem]
+
+By contrast, I was able to grasp Godot's animation system almost instantly. It
+had everything important packed up into a small, intuitive UI, so I could easily
+add animations to my game. All I needed was
+[this](https://docs.godotengine.org/en/stable/tutorials/animation/introduction.html)
+official, written tutorial!
+
+![Animation window](/img/godot-first-impressions/animations.png)
+
+In general, Godot's limited number of features make it feel less bloated; the
+things that the engine _does_ focus on is all high-quality and easy to use.
+
+## The Node Tree
+
+While both Unity and Godot have the concept of a node tree, Godot's
+implementation of it is much more robust. In Godot, you can only put one script
+on each node. I like this restriction – it forces you to design better
+components for your game in the end.
+
+Also, **everything** is a node! This makes it super easy to reason about
+everything. Even game scenes themselves are nodes! Implementing more advanced
+features for scene loading in Unity can be a pain, since scenes are their own
+concept. In Godot, scenes, game objects, and components all share one common
+denominator, so implementing things like preloading, scene transitions, and
+parameterization is way easier.
+
+For example, here's some scene-loading code in my game:
+
+```gdscript
+func _goto_mission() -> void:
+	var new_scene := _load_scene(_mission_scene)
+    # This is a effectively scene parameterization
+	if weather:
+		new_scene.add_child(weather)
+	new_scene.add_child(mission)
+	mission.mission_finished.connect(return_home)
+
+func _load_scene(scene: PackedScene) -> Node:
+    # Free the old scene root
+	get_tree().root.get_child(-1).free()
+	var new_scene = scene.instantiate()
+    # Add the new scene root
+	get_tree().root.add_child(new_scene)
+    # This isn't strictly necessary; some Godot APIs just expect this value to
+    # be properly set
+	get_tree().current_scene = new_scene
+	return new_scene
+```
+
+`_goto_mission` essentially injects things into the new scene depending on
+existing state. In Unity, this is much harder to do, and far less clean.
+
+## Editor & Compiler
+
+The Godot development experience is **fast**. Not only UI is intuitive and
+snappy, I spend almost no time waiting for my game build and boot up. Unity
+build times can be painfully slow at times.[^builds] And the UI can become
+laggy/unresponsive after the app stays open for a while.
+
+Godot rarely has these problems. And, if I ever do run into anything unusual, it
+takes almost no time to quit and re-open the app!
+
+## Mergability
+
+Resolving Git merge conflicts in Godot projects is not nearly as hard as it is
+in Unity. Both game engines store files in plain text, but Godot's format is
+**way more human-readable**. Here's an example of a Godot scene file:
+
+```gdresource
+[gd_scene load_steps=4 format=3 uid="uid://bm0hxwrfnl0cc"]
+
+[ext_resource type="Script" path="res://scripts/ui/lightning_indicator.gd" id="1_qnc1m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eba51"]
+bg_color = Color(0.215902, 0.215902, 0.215902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrxf2"]
+bg_color = Color(0.838505, 0.770122, 0.196965, 1)
+
+[node name="LightningIndicator" type="ProgressBar"]
+offset_right = 448.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/background = SubResource("StyleBoxFlat_eba51")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vrxf2")
+show_percentage = false
+script = ExtResource("1_qnc1m")
+```
+
+It's generated by the editor, but it would still be really easy to edit it by
+hand! This is what a Unity scene file looks like, truncated:
+
+```yaml
+--- !u!1001 &33159170
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 470797894}
+    m_Modifications:
+    - target: {fileID: 8634005852577026450, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634005852577026450, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634005852577026450, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.1240005
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634005852577026450, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 175.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634005852577026450, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8978478084425452328, guid: 29df517047e7e45deb3a257b3fb4bc39,
+        type: 3}
+      propertyPath: m_Name
+      value: chair2 (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+```
+
+Before, my team and I would do anything to avoid a Unity merge conflict, because
+resolving massive diffs that include snippets like the one I showed above is
+nearly impossible.
+
+# Pain Points
+
+These are some of the pain points I've had with Godot thus far. I'm sure I'll
+have more when I get to know the engine more, but as of this post, my list of
+complaints is quite small!
+
+## Dynamically Typed
+
+I wish GDScript was statically typed. It supports type hinting, and using them
+seems to be the norm (as opposed to a language like Python), but I still wish it
+was **fully** statically typed.
+
+This is definitely a personal preference, but I just like the safety of knowing
+the types of absolutely everything.
+
+## Breakage
+
+Godot isn't afraid to break APIs. This is both a blessing and a curse. On one
+hand, it enables some of the other things I
+[talked about earlier](#economy-of-features), but on the other, it means that a
+lot of things I read on forums or other blogs are **out of date**, and include
+APIs that don't work anymore or a slightly different.
+
+This was pretty annoying when I first started learning, but ultimately I
+realized that the best way to learn Godot is through their
+[official website](https://docs.godotengine.org/en/stable/index.html). They
+maintain it very well!
+
+# Wrap-Up
+
+Godot has answered pretty much all of my major annoyances with Unity. My overall
+experience with it has been **very pleasant**, and my team and I have been able
+to get _a lot_ done despite being new to the engine. I'm sure that I'll find
+more things that I wish were improved upon as I use it more, but I would still
+_absolutely_ recommend trying it out to anyone interested.
+
+As always, I hope you enjoyed this post! If you found any issues or feedback,
+please feel free to send an email or submit an issue on this website's
+[GitHub repository](https://github.com/dzfrias/website).
+
+[^hindsight]:
+    That is, the mistakes/annoying parts of other high-level game engines like
+    Unity and Unreal are well-known, so Godot has the opportunity to sidestep
+    such issues without breaking old stuff.
+
+[^problem]:
+    Part of the problem with Unity in this respect is that it's so old. A lot of
+    useful APIs (like events/signals) have subpar interfaces. They feel tacky.
+
+[^builds]:
+    Yes, I know that build times are a marginal (pretty much non-existent)
+    concern when talking about the quality of video game. But long build times
+    are _real_, and they _do_ hurt iteration capabilities. I remember watching
+    the creators of [Golang](https://go.dev/) give a talk about why they made
+    the language, and they cited C++ build times as one of the major reasons!
