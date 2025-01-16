@@ -181,7 +181,8 @@ the <code>run</code> key to specify what we're actually going to be executing.</
 <p>The script itself puts the version from our tag into an environment variable,
 <code>$VERSION</code>. Using <strong>environment variables</strong> is a very common idiom for getting
 steps to communicate with each other, as we'll now be able to access our version
-tag name (like &quot;0.1.0&quot;) with <code>${{ env.VERSION }}</code> for the rest of this job.</p>
+tag name (like &quot;0.1.0&quot;) with <code>${{ env.VERSION }}</code> for the
+rest of this job.</p>
 <h3 id="building-the-binaries" tabindex="-1"><a class="header-anchor" href="#building-the-binaries">Building the Binaries</a></h3>
 <p>Okay, now we can get to building the binaries. For this, we'll use
 <a href="https://github.com/cross-rs/cross">cross</a>, a Rust tool that uses
