@@ -263,8 +263,17 @@
     </url>
     
     <url>
+        <loc>https://dzfrias.dev/blog/godot-first-impressions/</loc>
+        <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+        
+            <priority>0.7</priority>
+            <changefreq>monthly</changefreq>
+        
+    </url>
+    
+    <url>
         <loc>https://dzfrias.dev/404.html</loc>
-        <lastmod>2025-01-15T04:25:36.296Z</lastmod>
+        <lastmod>2025-01-16T04:16:43.852Z</lastmod>
         
             <priority>0.4</priority>
             <changefreq>monthly</changefreq>
@@ -273,7 +282,7 @@
     
     <url>
         <loc>https://dzfrias.dev/blog/</loc>
-        <lastmod>2025-01-15T04:25:36.296Z</lastmod>
+        <lastmod>2025-01-16T04:16:43.852Z</lastmod>
         
             <priority>0.4</priority>
             <changefreq>weekly</changefreq>
@@ -282,7 +291,7 @@
     
     <url>
         <loc>https://dzfrias.dev/</loc>
-        <lastmod>2025-01-15T04:25:36.315Z</lastmod>
+        <lastmod>2025-01-16T04:16:43.872Z</lastmod>
         
             <priority>0.9</priority>
             <changefreq>monthly</changefreq>
@@ -291,7 +300,7 @@
     
     <url>
         <loc>https://dzfrias.dev/projects/</loc>
-        <lastmod>2025-01-15T04:25:36.315Z</lastmod>
+        <lastmod>2025-01-16T04:16:43.872Z</lastmod>
         
             <priority>0.5</priority>
             <changefreq>monthly</changefreq>
