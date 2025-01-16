@@ -10,6 +10,11 @@ import { minify } from "terser";
 
 const md = markdownIt({ html: true });
 
+// All images in posts will be wrapped with this
+function imgWrap(inner) {
+  return `<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image">${inner}</button><dialog>${inner}</dialog></div>`;
+}
+
 export default function (eleventyConfig) {
   const proxy = (tokens, idx, options, _env, self) =>
     self.renderToken(tokens, idx, options);
@@ -17,7 +22,7 @@ export default function (eleventyConfig) {
   // Override image rendering to use popups
   const defaultImageRender = md.renderer.rules.image || proxy;
   md.renderer.rules.image = function (tokens, idx, options, env, self) {
-    return `<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image">${defaultImageRender(tokens, idx, options, env, self)}</button><dialog>${defaultImageRender(tokens, idx, options, env, self)}</dialog></div>`;
+    return imgWrap(defaultImageRender(tokens, idx, options, env, self));
   };
 
   eleventyConfig.setLibrary("md", md.use(markdownItFootnote));
@@ -111,6 +116,13 @@ export default function (eleventyConfig) {
     });
   });
 
+  eleventyConfig.addShortcode("img", function (name, alt) {
+    const wrapped = imgWrap(
+      `<img src="/img/${this.page.fileSlug}/${name}" alt="${alt}" />`,
+    );
+    return `${wrapped}<p></p>`;
+  });
+
   eleventyConfig.addPlugin(eleventyGoogleFonts);
   eleventyConfig.addPlugin(syntaxHighlight, {
     preAttributes: {
@@ -144,7 +156,7 @@ export default function (eleventyConfig) {
   });
 
   return {
-    markdownTemplateEngine: false,
+    markdownTemplateEngine: "njk",
     dataTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
     dir: {

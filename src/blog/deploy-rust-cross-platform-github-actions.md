@@ -66,7 +66,7 @@ jobs:
 
   build-and-upload:
     name: Build and upload
-    runs-on: ${{ matrix.os }}
+    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
 
     strategy:
       matrix:
@@ -111,7 +111,7 @@ build-and-upload:
       # Arguments to pass in
       with:
         # Make Rust compile to our target (defined in the matrix)
-        targets: ${{ matrix.target }}
+        targets: {% raw %}${{ matrix.target }}{% endraw %}
 ```
 
 These step use the `uses` key. `uses` tells our runner that we're calling an
@@ -140,7 +140,8 @@ the `run` key to specify what we're actually going to be executing.
 The script itself puts the version from our tag into an environment variable,
 `$VERSION`. Using **environment variables** is a very common idiom for getting
 steps to communicate with each other, as we'll now be able to access our version
-tag name (like "0.1.0") with `${{ env.VERSION }}` for the rest of this job.
+tag name (like "0.1.0") with `{% raw %}${{ env.VERSION }}{% endraw %}` for the
+rest of this job.
 
 ## Building the Binaries
 
@@ -157,7 +158,7 @@ Let's put that in our step list:
   with:
     use-cross: true
     command: build
-    args: --verbose --release --target ${{ matrix.target }}
+    args: --verbose --release --target {% raw %}${{ matrix.target }}{% endraw %}
 ```
 
 This step tells GitHub Actions that we'd like to build our project using
@@ -178,15 +179,15 @@ page. Let's do that with this step:
     # Replace with the name of your binary
     binary_name="<BINARY_NAME>"
 
-    dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
+    dirname="$binary_name-{% raw %}${{ env.VERSION }}-${{ matrix.target }}{% endraw %}"
     mkdir "$dirname"
-    if [ "${{ matrix.os }}" = "windows-latest" ]; then
-      mv "target/${{ matrix.target }}/release/$binary_name.exe" "$dirname"
+    if [ "{% raw %}${{ matrix.os }}{% endraw %}" = "windows-latest" ]; then
+      mv "target/{% raw %}${{ matrix.target }}{% endraw %}/release/$binary_name.exe" "$dirname"
     else
-      mv "target/${{ matrix.target }}/release/$binary_name" "$dirname"
+      mv "target/{% raw %}${{ matrix.target }}{% endraw %}/release/$binary_name" "$dirname"
     fi
 
-    if [ "${{ matrix.os }}" = "windows-latest" ]; then
+    if [ "{% raw %}${{ matrix.os }}{% endraw %}" = "windows-latest" ]; then
       7z a "$dirname.zip" "$dirname"
       echo "ASSET=$dirname.zip" >> $GITHUB_ENV
     else
@@ -217,7 +218,7 @@ final step of our job!
   uses: softprops/action-gh-release@v1
   with:
     files: |
-      ${{ env.ASSET }}
+      {% raw %}${{ env.ASSET }}{% endraw %}
 ```
 
 Compared to some of the other steps, this one's pretty easy to understand. All
@@ -251,7 +252,7 @@ permissions:
 jobs:
   build-and-upload:
     name: Build and upload
-    runs-on: ${{ matrix.os }}
+    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
 
     strategy:
       matrix:
@@ -279,14 +280,14 @@ jobs:
         # Arguments to pass in
         with:
           # Make Rust compile to our target (defined in the matrix)
-          targets: ${{ matrix.target }}
+          targets: {% raw %}${{ matrix.target }}{% endraw %}
 
       - name: Build
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --verbose --release --target ${{ matrix.target }}
+          args: --verbose --release --target {% raw %}${{ matrix.target }}{% endraw %}
 
       - name: Build archive
         shell: bash
@@ -294,15 +295,15 @@ jobs:
           # Replace with the name of your binary
           binary_name="<BINARY_NAME>"
 
-          dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
+          dirname="$binary_name-{% raw %}${{ env.VERSION }}-${{ matrix.target }}{% endraw %}"
           mkdir "$dirname"
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            mv "target/${{ matrix.target }}/release/$binary_name.exe" "$dirname"
+          if [ "{% raw %}${{ matrix.os }}{% endraw %}" = "windows-latest" ]; then
+            mv "target/{% raw %}${{ matrix.target }}{% endraw %}/release/$binary_name.exe" "$dirname"
           else
-            mv "target/${{ matrix.target }}/release/$binary_name" "$dirname"
+            mv "target/{% raw %}${{ matrix.target }}{% endraw %}/release/$binary_name" "$dirname"
           fi
 
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          if [ "{% raw %}${{ matrix.os }}{% endraw %}" = "windows-latest" ]; then
             7z a "$dirname.zip" "$dirname"
             echo "ASSET=$dirname.zip" >> $GITHUB_ENV
           else
@@ -314,5 +315,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ${{ env.ASSET }}
+            {% raw %}${{ env.ASSET }}{% endraw %}
 ```

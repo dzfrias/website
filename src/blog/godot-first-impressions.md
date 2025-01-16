@@ -41,7 +41,7 @@ add animations to my game. All I needed was
 [this](https://docs.godotengine.org/en/stable/tutorials/animation/introduction.html)
 official, written tutorial!
 
-![Animation window](/img/godot-first-impressions/animations.png)
+{% img "animations.png", "Animation window" %}
 
 In general, Godot's limited number of features make it feel less bloated; the
 things that the engine _does_ focus on is all high-quality and easy to use.
