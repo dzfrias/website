@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A Zig package that builds OpenSSL using the Zig build system, with no caveats or workarounds.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>A Clean Build of OpenSSL using Zig - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+</script>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"></noscript>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#learning-zig-build">Learning Zig Build</a><ol><li><a href="#lazy-paths">Lazy Paths</a></li></ol></li><li><a href="#closing-thoughts">Closing Thoughts</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>A Clean Build of OpenSSL using Zig</h1>
+<p><a href="https://github.com/dzfrias/openssl-zig">openssl-zig</a> is a working compilation
+of <a href="https://www.openssl.org/">OpenSSL</a> using the
+<a href="https://ziglang.org/learn/build-system/">Zig build system</a> that I've been
+working on for the past couple of weeks. There are a few advantages of using Zig
+to compile:</p>
+<ul>
+<li>Fast compile times</li>
+<li>Zig build scripts are easy to hack/modify</li>
+<li>Integration with Zig projects as a package</li>
+</ul>
+<p>While there are other packages that aim to do the same thing, my goal for this
+project was to build OpenSSL is the <strong>cleanest way possible</strong>, without hacky
+workarounds or anything of that sort.</p>
+<p>In this blog post, I'll go over what I learned and my thoughts on the Zig build
+system as a whole. If you just want to read about the project, check out the
+<a href="https://github.com/dzfrias/openssl-zig">GitHub repository</a>.</p>
+<h2 id="learning-zig-build" tabindex="-1"><a class="header-anchor" href="#learning-zig-build">Learning Zig Build</a></h2>
+<p>I came into this project knowing nothing about how to write Zig build scripts.
+It took a while to know what was going on, especially given the lack of
+up-to-date documentation.</p>
+<p>The Zig docs do have <a href="https://ziglang.org/learn/build-system/">a tutorial</a> of
+sorts, but given how vast the possibilities are, it doesn't cover a lot of
+ground.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> I ended up learning how to do things in two ways:</p>
+<ol>
+<li>Trial and error</li>
+<li>Reading other build scripts</li>
+</ol>
+<p>For the latter, I read the <code>build.zig</code> file of
+<a href="https://github.com/kassane/openssl-zig/blob/zig-pkg/build.zig">a different Zig compilation of OpenSSL</a>.
+While that project does a few things that I wanted to avoid in <em>my</em> compilation,
+it was a fantastic starting place. I also read the
+<a href="https://ghostty.org/">Ghostty</a> project's
+<a href="https://github.com/ghostty-org/ghostty/blob/main/build.zig"><code>build.zig</code></a>. It's
+quite complex, but it showed me examples of more advanced things, like using the
+<a href="https://ziglang.org/documentation/0.13.0/std/#std.Build.Step.Run">Run</a> build
+step.</p>
+<h3 id="lazy-paths" tabindex="-1"><a class="header-anchor" href="#lazy-paths">Lazy Paths</a></h3>
+<p>The <a href="https://ziglang.org/documentation/0.13.0/std/#std.Build.LazyPath">LazyPath</a>
+is one of the most important concepts in the Zig build system. Getting
+comfortable with them is the <strong>best</strong> way to get good at Zig build, in my
+opinion.</p>
+<p>A <code>LazyPath</code> is the path of a file or directory that <strong>may or may not</strong> exist
+yet. To understand why we need them, it helps to know about the design of Zig
+build scripts. Zig builds are <strong>declarative</strong>, so there are two phases:</p>
+<ol>
+<li>Telling Zig <em>how</em> to build the project, in steps</li>
+<li>Executing the steps in the specified manner</li>
+</ol>
+<p>For example, in my project, one step of the build process is generating C files
+to be included in the compilation.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> Another step (the C compilation
+step) depends on those files being built. This is where <code>LazyPath</code> comes in. At
+the time of specifying the build steps (phase 1), the generated files <em>do not</em>
+exist yet. So, in order to properly describe the compilation step, we need to
+reference their <em>future</em> locations.</p>
+<h2 id="closing-thoughts" tabindex="-1"><a class="header-anchor" href="#closing-thoughts">Closing Thoughts</a></h2>
+<p>Writing my first Zig build script was an enjoyable experience <em>after</em> I got over
+the first few hurdles. Until the language stabilizes, I suspect that this will
+continue to be the case for newcomers.</p>
+<p>I think it's a very viable replacement for <a href="https://cmake.org/">CMake</a> (and
+similar meta-build tools), on account of how much more programmatic everything
+feels.</p>
+<p>Make sure to check out <a href="https://github.com/dzfrias/openssl-zig">openssl-zig</a> if
+you're at all interested! I also wrote a
+<a href="https://github.com/dzfrias/openssl-zig/blob/main/HOW.md">HOW.md</a> in case you
+want to learn more about the design of the project. I hope you enjoyed this
+post!</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>This is not a complaint about the language! As of this post, Zig is at
+version 0.13.0 and is still growing. Once the language eventually
+stabilizes, good documentation will become fair expectation to have. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>The OpenSSL project generates a lot of files <em>at build time</em> using Perl, so
+I need to re-create that generation in my build scripts. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
