@@ -82,7 +82,7 @@ values). If we have a Unicode character with code point value $x$, we can access
 its value by performing $\text{A}[x]$. This is theoretically very fast because
 it takes just one memory access, but the table ends up being 65,536 bytes large!
 
-![diagram of naïve implementation](/img/unicode-trie/v1.png)
+{% img "v1.png", "diagram of naïve implementation" %}
 
 The problem is that, in order to index to the value we want, we need 16 bits of
 information. What if we try indexing with less bits? Let's try only looking at
@@ -95,7 +95,7 @@ combining classes, though. Hence we have a problem because we cannot
 differentiate these two characters when trying to get their combining class
 values.
 
-![diagram of prefix implementation](/img/unicode-trie/v2.png)
+{% img "v2.png", "diagram of prefix implementation" %}
 
 So what if we instead stored an index in $\text{A}$, so that each
 $i = \text{A}[x \gg 6]$ identifies a group of 64 code points with the same 10
@@ -106,7 +106,7 @@ $\text{B}_i[x \, \& \, 63]$.[^mask] If we store the 8 bit combining class at
 this location, we now have a reliable key-value data structure! This, in
 essence, is a **two-stage trie**.
 
-![diagram of B_i sub-tables implentation](/img/unicode-trie/v3.png)
+{% img "v3.png", "diagram of B_i sub-tables implentation" %}
 
 For simplicity, let's concatenate each $\text{B}_i$ into one big table,
 $\text{B}$. We index into it using $\text{B}[i + (x \, \& \, 63)]$ (assuming $i$
@@ -114,7 +114,7 @@ points to where the 64 byte block starts in the big $\text{B}$ table). You might
 be wondering how this is an improvement space-wise over our naïve data
 structure. It is not right now, but it has a lot of potential.
 
-![diagram of concatenated B table implementation](/img/unicode-trie/v4.png)
+{% img "v4.png", "diagram of concatenated B table implementation" %}
 
 Here's just one application of this new key-value lookup scheme: I mentioned
 earlier that the vast majority of characters have a combining class value of
@@ -124,7 +124,7 @@ point to different zero blocks in $\text{B}$ point to the _same zero block_ in
 $\text{B}$, and drop all the other zero blocks. This alone saves us a ton of
 space in our combining class example.
 
-![diagram of deduplicated B table implementation](/img/unicode-trie/v5.png)
+{% img "v5.png", "diagram of deduplicated B table implementation" %}
 
 ## Further Compaction
 
@@ -145,14 +145,14 @@ real-world value distributions.
 Prefix-suffix deduplication can also save space. Suppose we have two distinct
 blocks, $\text{B}_i$ and $\text{B}_j$, that are of this form:
 
-![diagram of overlapping blocks](/img/unicode-trie/overlap.png)
+{% img "overlap.png", "diagram of overlapping blocks" %}
 
 Notice that the last 7 bytes of $B_i$ is the same as the first 7 bytes of $B_j$.
 This means that we can merge $\text{B}_i$ and $\text{B}_j$ in the $\text{B}$
 table so that indices pointing to $\text{B}_j$ start at the last 7 bytes of
 $\text{B}_i$.
 
-![diagram of block merging](/img/unicode-trie/merged.png)
+{% img "merged.png", "diagram of block merging" %}
 
 How do we find blocks that we can perform this operation on? One possible way is
 to try to merge blocks as we are putting together $\text{B}$ from the many
@@ -176,7 +176,7 @@ determined by how many bytes are shared between prefixes and suffixes. For
 correctness, edge weights should be less than half the block size (64 in our
 case)[^correctness].
 
-![diagram of complete directed graph](/img/unicode-trie/tsp.png)
+{% img "tsp.png", "diagram of complete directed graph" %}
 
 We can then find the optimal way to arrange these blocks by finding the
 **maximum cost Hamiltonian path**. A Hamiltonian path is a path through the
