@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Here are the tools I use, both for writing code and daily life, 2026 edition.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>The Tools I Use - 2026 - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=0,s=!1,i=null;document.addEventListener("scroll",(()=>{o=window.scrollY,s||(window.requestAnimationFrame((()=>{i&&(i.ariaCurrent="false");const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",i=t.get(e.href),s=!1})),s=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),r=document.getElementsByClassName("footnote-item"),c=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=r[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),c.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function a(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of r)e.ariaCurrent=null;return}for(const e of r)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}a(),window.onhashchange=a;
+</script>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"></noscript>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#daily-life">Daily Life</a><ol><li><a href="#things">Things</a></li><li><a href="#alfred">Alfred</a></li><li><a href="#safari">Safari</a></li><li><a href="#apple-mail">Apple Mail</a></li><li><a href="#apple-calendar">Apple Calendar</a></li></ol></li><li><a href="#programming">Programming</a><ol><li><a href="#neovim">Neovim</a></li><li><a href="#zsh">zsh</a></li><li><a href="#ghostty">Ghostty</a></li></ol></li><li><a href="#wrap-up">Wrap Up</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>The Tools I Use - 2026</h1>
+<p>This is the second installment in a <a href="/blog/tools-2024">series of posts</a> in which
+I go over the tools and applications that I use to manage my life and write
+code. A decent amount has changed over the past year and a half, so I figured
+this is a good a time as ever to write an update!</p>
+<p>I'm not going to provide specific details on anything that I go over; if those
+details are something you're interested in, check out
+<a href="https://github.com/dzfrias/dotfiles">my dotfiles</a> repository.</p>
+<h2 id="daily-life" tabindex="-1"><a class="header-anchor" href="#daily-life">Daily Life</a></h2>
+<p>I'm going to go over the applications I use for non-programming purposes. I'll
+list the stuff that hasn't changed since the last post first.</p>
+<h3 id="things" tabindex="-1"><a class="header-anchor" href="#things">Things</a></h3>
+<p>I said it in the last post and I'll say it again:
+<a href="https://culturedcode.com/things/">Things</a> is a keystone app in my life. I would
+<em>highly</em> recommend this app to literally anyone. Things is a simple to-do app at
+its core, but its quality is unmatched! Its ease-of-use allows me to sketch
+plans I have for the next 30 minutes, and its well thought out functionality
+allows me to draw out the plans I have for five years in the future.</p>
+<p>Things has such a smooth, simple interface that using it is a reflex for me at
+this point. I think of it less as a to-do app and more as a catalogue of
+everything worth thinking about that has crossed my mind.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/WVzhSKjArv-2858.webp 2858w"><img loading="lazy" decoding="async" src="/img/WVzhSKjArv-2858.jpeg" alt="One of my project-specific to-do lists" width="2858" height="1528"></picture></button><dialog><picture><source type="image/webp" srcset="/img/WVzhSKjArv-2858.webp 2858w"><img loading="lazy" decoding="async" src="/img/WVzhSKjArv-2858.jpeg" alt="One of my project-specific to-do lists" width="2858" height="1528"></picture></dialog></div><p></p>
+<h3 id="alfred" tabindex="-1"><a class="header-anchor" href="#alfred">Alfred</a></h3>
+<p>Alfred is a better spotlight search for macOS. It is the main way I move around
+my computer.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/vd2CRKvW2j-1728.webp 1728w"><img loading="lazy" decoding="async" src="/img/vd2CRKvW2j-1728.jpeg" alt="Alfred in action" width="1728" height="1192"></picture></button><dialog><picture><source type="image/webp" srcset="/img/vd2CRKvW2j-1728.webp 1728w"><img loading="lazy" decoding="async" src="/img/vd2CRKvW2j-1728.jpeg" alt="Alfred in action" width="1728" height="1192"></picture></dialog></div><p></p>
+<p>Here are a few helpful features, some of which are built-in but most of which
+are something I programmed in:</p>
+<ul>
+<li>Alfred has a built-in calculator!</li>
+<li>Alfred allows searching through clipboard history</li>
+<li>Typing &quot;ghd&quot; opens the GitHub dashboard</li>
+<li>Typing &quot;zig&quot; allows me to search through the Zig docs</li>
+<li>Certain keybinds open frequently used apps (for example, ctrl-opt-s opens
+Safari)</li>
+<li>Many custom scripts: for example, &quot;char&quot; brings up the metadata of the
+provided Unicode code point</li>
+</ul>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/UsLczrcLAv-1778.webp 1778w"><img loading="lazy" decoding="async" src="/img/UsLczrcLAv-1778.jpeg" alt="Alfred in action using a custom script" width="1778" height="1184"></picture></button><dialog><picture><source type="image/webp" srcset="/img/UsLczrcLAv-1778.webp 1778w"><img loading="lazy" decoding="async" src="/img/UsLczrcLAv-1778.jpeg" alt="Alfred in action using a custom script" width="1778" height="1184"></picture></dialog></div><p></p>
+<p>My dotfiles have a
+<a href="https://github.com/dzfrias/dotfiles/extra/alfred">dedicated Alfred section</a> if
+you want to see all my scripts.</p>
+<h3 id="safari" tabindex="-1"><a class="header-anchor" href="#safari">Safari</a></h3>
+<p>A big change I made this year was switching from
+<a href="https://github.com/ungoogled-software/ungoogled-chromium">ungoogled-chromium</a>
+to Safari. I do have a <a href="/blog/ungoogled-chromium">whole blog post</a> solely
+dedicated ungoogled-chromium, yes. This was not due to a fault of
+ungoogled-chromium, nor a specific feature of Safari. Rather, this change is a
+consequence of a larger philosophical in how I approach configuration:</p>
+<p>I've come to believe in the idea of getting as minimal configuration as
+possible. It is my opinion that being able to be productive while given the
+bare-minimum is a skill; moreover, it is a fun challenge. My configuration a
+year ago featured many of niche apps (like ungoogled-chromium), dozens of
+<a href="https://neovim.io">Neovim</a> plugins, countless zsh aliases, and tons of small
+CLI tools. None of these things are bad, but I wanted to challenge myself and
+strip that all away.</p>
+<p>Using Safari, the default web browser on macOS, certainly also follows from the
+&quot;stick to defaults&quot; mentality. In the <a href="#neovim">Neovim section</a> of this post,
+you can read further about how I applied this philosophy for stripping my Neovim
+configuration to the minimum I felt comfortable using.</p>
+<p>I use one Safari extension: <a href="https://kaylees.site/wipr2.html">Wipr</a>. Wipr is the
+best adblocker that I've come across for Safari! It does cost a few dollars
+though, but it is definitely worth it and does not have an annoying
+subscription-based monetization scheme.</p>
+<h3 id="apple-mail" tabindex="-1"><a class="header-anchor" href="#apple-mail">Apple Mail</a></h3>
+<p>I switched from <a href="https://www.thunderbird.net/en-US/">Thunderbird</a> to Apple Mail
+for my email client, again in the name of preferring defaults. I don't like
+Apple Mail all that much, and although good work has been done on my email
+client project, it is not ready for day-to-day usage yet.</p>
+<p>So for now, Apple Mail is good enough.</p>
+<h3 id="apple-calendar" tabindex="-1"><a class="header-anchor" href="#apple-calendar">Apple Calendar</a></h3>
+<p>My calendar is managed through Apple's calendar app. Again, not much thought
+behind this other than that it is the default. It is not the most pleasant app
+to use, so until I make my own, I'm stuck with it.</p>
+<h2 id="programming" tabindex="-1"><a class="header-anchor" href="#programming">Programming</a></h2>
+<p>I will now go over the programming tools I use! Not much has changed since last
+year, but there are a few things worth noting.</p>
+<h3 id="neovim" tabindex="-1"><a class="header-anchor" href="#neovim">Neovim</a></h3>
+<p><a href="https://neovim.io/">Neovim</a> is my go-to text editor for programming: it's
+configurable, fast, and most importantly, <strong>fun</strong>. My configuration, though, has
+gone through <em>a lot</em> of changes over the past few years. Continuing that trend,
+2026 brough a huge change: I deleted most of my setup. Following the same
+philosophy as in <a href="#safari">my switch to Safari</a>, I decided to challenge myself
+to use as little as possible, while still keeping my favorite keybinds,
+patterns, and settings, of course.</p>
+<p>I have nearly the same functionality as before, but with a lot less. You can
+read my <a href="https://github.com/dzfrias/dotfiles/.config/nvim">my Neovim dotfiles</a>
+for specifics. It's small, so it should be easy to read and adapt for your
+needs!</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/KHSk2T1kZ4-1608.webp 1608w"><img loading="lazy" decoding="async" src="/img/KHSk2T1kZ4-1608.jpeg" alt="Writing code in Neovim" width="1608" height="1422"></picture></button><dialog><picture><source type="image/webp" srcset="/img/KHSk2T1kZ4-1608.webp 1608w"><img loading="lazy" decoding="async" src="/img/KHSk2T1kZ4-1608.jpeg" alt="Writing code in Neovim" width="1608" height="1422"></picture></dialog></div><p></p>
+<p>Anything that I didn't think was worth using a plugin for, I implemented myself.
+For exmaple, I wrote my own integration with auto-formatters instead of using
+one of the many plugins.</p>
+<h3 id="zsh" tabindex="-1"><a class="header-anchor" href="#zsh">zsh</a></h3>
+<p>The pre-installed macOS shell, <a href="https://zsh.sourceforge.io/">zsh</a>, has been my
+main shell for a while now. Although I have many gripes with POSIX shells, they
+always get the job done.</p>
+<p>As I said in the last post in this series, I've stayed away from non-POSIX
+shells like <a href="https://www.nushell.sh/">nushell</a>. While I think these projects are
+great, and I do believe that the POSIX shell standard will be overcome at some
+point, it is my opinion that <strong>the right abstractions</strong>, ones that strike a
+balance between convenience for users while also maintaining simplicty, have not
+been settled on.</p>
+<p>In the next few paragraphs, I will present my argument for why some flagship
+features in modern shells <em>do not</em> align with what a shell's role is as a tool
+for programmers.</p>
+<p>A common point of contention between old and new shells: do shell languages need
+to be good scripting languages? zsh certainly doesn't think so<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup>, but many
+modern shells do. In this case, I stand on the side of zsh, for the reason that
+there are many very good existing scripting languages that work well with
+shells, such as <a href="https://www.python.org">Python</a>. Python, with its features,
+popularity, robustness, and vast standard library, will <em>always</em> be a better
+programming experience than any shell langauge. Python is also installed
+natively on many machines.</p>
+<p>Another thing I see a lot of new shells doing is providing better graphical
+interfaces, using colors, interactive terminal text, TUIs, etc. I think shells
+<em>should</em> have syntax highlighting and decent status bars, but doing too much can
+quickly lead to violating one of the core principles of the
+<a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a>: text programs
+should have simple, predictable outputs. nushell has made the intentional choice
+to grow past this philosophy, as builtins output typed data, not just plain
+text. While it is interesting to see what is possible with such a system, I
+think raising the level of abstraction for program input and output is not
+viable for practical use. Processes spawned by the OS are given unstructured
+input bytes, and are expected to yield unstructured output bytes. To me, shell's
+job is to mirror and expose this behavior, not abstract above it.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/aDZfYl8dRA-1150.webp 1150w"><img loading="lazy" decoding="async" src="/img/aDZfYl8dRA-1150.jpeg" alt="my zsh prompt" width="1150" height="544"></picture></button><dialog><picture><source type="image/webp" srcset="/img/aDZfYl8dRA-1150.webp 1150w"><img loading="lazy" decoding="async" src="/img/aDZfYl8dRA-1150.jpeg" alt="my zsh prompt" width="1150" height="544"></picture></dialog></div><p></p>
+<p>This was all a very long-winded explanation as to why I have stayed with zsh.
+Despite this, I support experimenting with bringing modern ideas to shells. In
+fact, I've written <a href="https://github.com/dzfrias/wsh">my own shell</a> that has a
+<a href="https://webassembly.org">WebAssembly</a> twist! The POSIX shell standard <em>will</em> be
+replaced; we just need to find the alternative that checks all the boxes.</p>
+<p>You can read <a href="https://github.com/dzfrias/dotfiles/.zshrc">my .zshrc</a> for
+specific details about my configuration.</p>
+<h3 id="ghostty" tabindex="-1"><a class="header-anchor" href="#ghostty">Ghostty</a></h3>
+<p>I now use <a href="https://ghostty.org">Ghostty</a> for my terminal. Not only that, but it
+also replaced <a href="https://github.com/tmux/tmux">tmux</a>, which I never though I would
+do!</p>
+<p>Here are the things I like about Ghostty:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<ul>
+<li>It has sane defaults but doesn't go over the top</li>
+<li>It actually has a good window multiplexing system</li>
+<li>It integrates with native macOS APIs</li>
+<li>It isn't annoying to configure</li>
+</ul>
+<p>These factors combined make Ghostty my preferred terminal. Although there are
+many terminals, they all fall short in some way against the criteria above.
+<a href="https://iterm2.com">iTerm</a>, for example, is hard to configure and has less than
+ideal defaults. Another option is the default macOS terminal, but most modern
+programs (like Neovim) aren't very compatible with it.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/XzhOlt726T-2912.webp 2912w"><img loading="lazy" decoding="async" src="/img/XzhOlt726T-2912.jpeg" alt="the Ghostty terminal in action" width="2912" height="1822"></picture></button><dialog><picture><source type="image/webp" srcset="/img/XzhOlt726T-2912.webp 2912w"><img loading="lazy" decoding="async" src="/img/XzhOlt726T-2912.jpeg" alt="the Ghostty terminal in action" width="2912" height="1822"></picture></dialog></div><p></p>
+<h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap Up</a></h2>
+<p>I hope you enjoyed this post, and got a basic understanding of how I like using
+my computer! I plan on continuing this series so I can document how my tools and
+apps change over time.</p>
+<p>If you have any feedback, comments, or questions, feel free to
+<a href="https://github.com/dzfrias/website/issues/new">submit an issue</a> on this
+website's GitHub repository.</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>zsh is a pretty unpleasant scripting language... <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>It's also written in Zig! <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
