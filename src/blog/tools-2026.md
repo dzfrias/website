@@ -8,7 +8,7 @@ date: 2026-05-18
 This is the second installment in a [series of posts](/blog/tools-2024) in which
 I go over the tools and applications that I use to manage my life and write
 code. A decent amount has changed over the past year and a half, so I figured
-this is a good a time as ever to write an update!
+this is as good a time as ever to write an update!
 
 I'm not going to provide specific details on anything that I go over; if those
 details are something you're interested in, check out
@@ -16,17 +16,17 @@ details are something you're interested in, check out
 
 # Daily Life
 
-I'm going to go over the applications I use for non-programming purposes. I'll
-list the stuff that hasn't changed since the last post first.
+In this section, I will go over applications that are not necessarily related to
+programming, going from most to least important to my daily life.
 
 ## Things
 
-I said it in the last post and I'll say it again:
-[Things](https://culturedcode.com/things/) is a keystone app in my life. I would
-_highly_ recommend this app to literally anyone. Things is a simple to-do app at
-its core, but its quality is unmatched! Its ease-of-use allows me to sketch
-plans I have for the next 30 minutes, and its well thought out functionality
-allows me to draw out the plans I have for five years in the future.
+[Things](https://culturedcode.com/things/) has been a key app in my life
+since 2021. I would _highly_ recommend this app to literally anyone. It is a
+simple to-do app at its core, but its quality is what makes it special! Its
+ease-of-use allows me to sketch plans I have for the next 30 minutes, and its
+well thought out functionality allows me to draw out the plans I have for five
+years in the future.
 
 Things has such a smooth, simple interface that using it is a reflex for me at
 this point. I think of it less as a to-do app and more as a catalogue of
@@ -37,7 +37,8 @@ everything worth thinking about that has crossed my mind.
 ## Alfred
 
 Alfred is a better spotlight search for macOS. It is the main way I move around
-my computer.
+my computer. To access all of its features, it does cost money, but the purchase
+was definitely worth it for me (and it's not subscription-based).
 
 {% img "alfred.png", "Alfred in action" %}
 
@@ -56,8 +57,8 @@ are something I programmed in:
 {% img "alfred2.png", "Alfred in action using a custom script" %}
 
 My dotfiles have a
-[dedicated Alfred section](https://github.com/dzfrias/dotfiles/extra/alfred) if
-you want to see all my scripts.
+[dedicated Alfred section](https://github.com/dzfrias/dotfiles/tree/main/extra/alfred)
+if you want to see all of my scripts.
 
 ## Safari
 
@@ -117,7 +118,8 @@ to use as little as possible, while still keeping my favorite keybinds,
 patterns, and settings, of course.
 
 I have nearly the same functionality as before, but with a lot less. You can
-read my [my Neovim dotfiles](https://github.com/dzfrias/dotfiles/.config/nvim)
+read my
+[my Neovim dotfiles](https://github.com/dzfrias/dotfiles/tree/main/.config/nvim)
 for specifics. It's small, so it should be easy to read and adapt for your
 needs!
 
@@ -174,8 +176,8 @@ fact, I've written [my own shell](https://github.com/dzfrias/wsh) that has a
 [WebAssembly](https://webassembly.org) twist! The POSIX shell standard _will_ be
 replaced; we just need to find the alternative that checks all the boxes.
 
-You can read [my .zshrc](https://github.com/dzfrias/dotfiles/.zshrc) for
-specific details about my configuration.
+You can read [my .zshrc](https://github.com/dzfrias/dotfiles/blob/main/.zshrc)
+for specific details about my configuration.
 
 ## Ghostty
 
