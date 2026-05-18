@@ -76,11 +76,12 @@ A more descriptive name for a trie is "prefix tree". There are many ways to
 interpret a trie, but I will go over the perspective that is most useful for
 this problem.
 
-Consider a naïve table lookup for a 16-bit integer. That is, we have a static
-array $\text{A}$ that contains $2^{16}$ 8-bit integers (the combining class
-values). If we have a Unicode character with code point value $x$, we can access
-its value by performing $\text{A}[x]$. This is theoretically very fast because
-it takes just one memory access, but the table ends up being 65,536 bytes large!
+Consider a naïve table lookup for a 16-bit integer.[^bits] That is, we have a
+static array $\text{A}$ that contains $2^{16}$ 8-bit integers (the combining
+class values). If we have a Unicode character with code point value $x$, we can
+access its value by performing $\text{A}[x]$. This is theoretically very fast
+because it takes just one memory access, but the table ends up being 65,536
+bytes large!
 
 {% img "v1.png", "diagram of naïve implementation" %}
 
@@ -304,6 +305,15 @@ graph) as described in the [Further Compaction](#further-compaction) section.
     Some vector instruction sets support 256-bit vectors (making 32x8 vectors
     possible), but for maximum compatibility with commonly-used instructions
     sets like ARM NEON, it is better to support 16-bit operations.
+
+[^bits]:
+    Those experienced with Unicode might be wondering why I'm not doing 32-bit
+    character lookups, as code points need at least 21 bits of information. My
+    data structure is strictly optimized for 16-bit code points. The set of such
+    code points is called the
+    [Basic Multilingual Plane](<https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane>),
+    and the vast majority of real-world text lies in this plane, meaning that
+    speed is less of a concern for code points outside of it.
 
 [^mask]:
     63 is represented with six 1s in binary, so using 63 as a mask will get the
