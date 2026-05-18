@@ -45,16 +45,18 @@ const headerAnchors = Array.from(
 headerAnchors.sort((a, b) => {
   return a.getBoundingClientRect().y - b.getBoundingClientRect().y;
 });
-let lastKnownScrollPosition = 0;
 let ticking = false;
 let current = null;
 document.addEventListener("scroll", () => {
-  lastKnownScrollPosition = window.scrollY;
-
   if (!ticking) {
     window.requestAnimationFrame(() => {
       if (current) {
         current.ariaCurrent = "false";
+      }
+      if (window.scrollY <= 0) {
+        current = null;
+        ticking = false;
+        return;
       }
       const closest = Array.from(headerAnchors).sort((a, b) => {
         const aY = a.getBoundingClientRect().top;
@@ -65,7 +67,6 @@ document.addEventListener("scroll", () => {
       current = tocItems.get(closest.href);
       ticking = false;
     });
-
     ticking = true;
   }
 });
