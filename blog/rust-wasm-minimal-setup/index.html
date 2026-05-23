@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -95,15 +95,15 @@ role of each tool as we go.</p>
 <p>Before we even think about JavaScript or HTML, we're going to want a WebAssembly
 binary. In this section, we're going to build one. If you don't have a Rust
 project already, enter the following commands in your shell:</p>
-<pre class="language-bash"><code class="language-bash">$ <span class="token function">cargo</span> new <span class="token parameter variable">--lib</span> rustwasm
+<div class="code-block-container"><pre class="language-bash"><code class="language-bash">$ <span class="token function">cargo</span> new <span class="token parameter variable">--lib</span> rustwasm
 $ <span class="token builtin class-name">cd</span> rustwasm</code></pre>
-<p>Additionally, we'll want to edit the <code>Cargo.toml</code> file to include
+</div><p>Additionally, we'll want to edit the <code>Cargo.toml</code> file to include
 <a href="https://github.com/rustwasm/wasm-bindgen"><code>wasm-bindgen</code></a>. <code>wasm-bindgen</code> is a
 Rust crate that makes it <em>much</em> easier to communicate between Rust and
 JavaScript. It generates <strong>bindings</strong> so that your JavaScript code doesn't have
 to interact with low-level WebAssembly stuff, and your Rust code doesn't have to
 deal with FFI! Anyway, this is what your <code>Cargo.toml</code> should look like:</p>
-<pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">package</span><span class="token punctuation">]</span>
+<div class="code-block-container"><pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">package</span><span class="token punctuation">]</span>
 <span class="token key property">name</span> <span class="token punctuation">=</span> <span class="token string">"rustwasm"</span>
 <span class="token key property">version</span> <span class="token punctuation">=</span> <span class="token string">"0.1.0"</span>
 <span class="token key property">edition</span> <span class="token punctuation">=</span> <span class="token string">"2021"</span>
@@ -113,10 +113,10 @@ deal with FFI! Anyway, this is what your <code>Cargo.toml</code> should look lik
 
 <span class="token punctuation">[</span><span class="token table class-name">lib</span><span class="token punctuation">]</span>
 <span class="token key property">crate-type</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"cdylib"</span><span class="token punctuation">,</span> <span class="token string">"rlib"</span><span class="token punctuation">]</span></code></pre>
-<p>Notice the <code>crate-type</code> declaration. This is <strong>required</strong> for compiling Rust
+</div><p>Notice the <code>crate-type</code> declaration. This is <strong>required</strong> for compiling Rust
 libraries to WebAssembly.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> Now, we can get to actually writing our
 Rust code! Modify <code>lib.rs</code> to contain the following:</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">use</span> <span class="token namespace">wasm_bindgen<span class="token punctuation">::</span>prelude<span class="token punctuation">::</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">use</span> <span class="token namespace">wasm_bindgen<span class="token punctuation">::</span>prelude<span class="token punctuation">::</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
 
 <span class="token attribute attr-name">#[wasm_bindgen]</span>
 <span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token punctuation">{</span>
@@ -129,7 +129,7 @@ Rust code! Modify <code>lib.rs</code> to contain the following:</p>
 <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Our Wasm module will export the function, <code>greet</code>, and import the
+</div><p>Our Wasm module will export the function, <code>greet</code>, and import the
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/alert">JavaScript function</a>,
 <code>alert</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
 <p>This is all we need from the Rust side of things! There's one catch though: you
@@ -137,8 +137,8 @@ can't use <code>cargo build</code> to build the Wasm binary! You need a special 
 generate the bindings files. For that, we'll use
 <a href="https://github.com/rustwasm/wasm-pack"><code>wasm-pack</code></a>. Go ahead and follow the
 installation instructions if you don't already have it.</p>
-<pre class="language-bash"><code class="language-bash">$ wasm-pack build <span class="token parameter variable">--target</span> web --out-dir web/dist</code></pre>
-<p>This command should build the Rust project and put it in <code>web/dist/</code> directory
+<div class="code-block-container"><pre class="language-bash"><code class="language-bash">$ wasm-pack build <span class="token parameter variable">--target</span> web --out-dir web/dist</code></pre>
+</div><p>This command should build the Rust project and put it in <code>web/dist/</code> directory
 at the root of your project. If you visit the directory, you'll see a Wasm
 binary accompanied by some JavaScript files. Those JS files are the <strong>glue</strong>
 between your JavaScript code and your Rust code (they wrap the Wasm module, so
@@ -150,16 +150,16 @@ and JS, it's time to move on!</p>
 <p>All I'm going to do from the JavaScript side is make a script (<code>index.js</code>) that
 calls the <code>greet</code> function we defined earlier. Make sure you're operating in the
 <code>web/</code> directory. Calling <code>greet</code> can be accomplished like so:</p>
-<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> init<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">as</span> wasm <span class="token keyword">from</span> <span class="token string">"./dist/rustwasm.js"</span><span class="token punctuation">;</span>
+<div class="code-block-container"><pre class="language-js"><code class="language-js"><span class="token keyword">import</span> init<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">as</span> wasm <span class="token keyword">from</span> <span class="token string">"./dist/rustwasm.js"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">await</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 wasm<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>The <code>init()</code> call will initialize our Wasm module. Make sure to <em>always</em> call
+</div><p>The <code>init()</code> call will initialize our Wasm module. Make sure to <em>always</em> call
 this first! Also, <strong>this operation is asynchronous</strong>, so we're using a top-level
 <code>await</code>, which is an important detail.</p>
 <p>With our <code>index.js</code> file written, all we need is an <code>index.html</code> to serve our
 website! I'll give an example one below:</p>
-<pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<div class="code-block-container"><pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>utf-8<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
@@ -169,11 +169,11 @@ website! I'll give an example one below:</p>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./index.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<p>Notice that we make our script of type <strong>module</strong>. This enables us to use a
+</div><p>Notice that we make our script of type <strong>module</strong>. This enables us to use a
 top-level <code>await</code>. We're now ready to serve it! I like using Python to serve my
 files on localhost, but you can use your favorite tool.</p>
-<pre class="language-bash"><code class="language-bash">$ python3 <span class="token parameter variable">-m</span> http.server</code></pre>
-<p>Visit <code>http://localhost:8000/</code> and you should see the greeting message!</p>
+<div class="code-block-container"><pre class="language-bash"><code class="language-bash">$ python3 <span class="token parameter variable">-m</span> http.server</code></pre>
+</div><p>Visit <code>http://localhost:8000/</code> and you should see the greeting message!</p>
 <p></p><div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/RQ5Y7YQfJ3-2876.webp 2876w"><img loading="lazy" decoding="async" src="/img/RQ5Y7YQfJ3-2876.jpeg" alt="Final product" width="2876" height="1356"></picture></button><dialog><picture><source type="image/webp" srcset="/img/RQ5Y7YQfJ3-2876.webp 2876w"><img loading="lazy" decoding="async" src="/img/RQ5Y7YQfJ3-2876.jpeg" alt="Final product" width="2876" height="1356"></picture></dialog></div><p></p>
 <h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap-Up</a></h2>
 <p>In this post, we made a website that uses a <strong>minimal</strong> Rust and WebAssembly

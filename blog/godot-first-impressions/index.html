@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -125,7 +125,7 @@ concept. In Godot, scenes, game objects, and components all share one common
 denominator, so implementing things like preloading, scene transitions, and
 parameterization is way easier.</p>
 <p>For example, here's some scene-loading code in my game:</p>
-<pre class="language-gdscript"><code class="language-gdscript"><span class="token keyword">func</span> <span class="token function">_goto_mission</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">void</span><span class="token punctuation">:</span>
+<div class="code-block-container"><pre class="language-gdscript"><code class="language-gdscript"><span class="token keyword">func</span> <span class="token function">_goto_mission</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">void</span><span class="token punctuation">:</span>
 	<span class="token keyword">var</span> new_scene <span class="token operator">:=</span> <span class="token function">_load_scene</span><span class="token punctuation">(</span>_mission_scene<span class="token punctuation">)</span>
     <span class="token comment"># This is a effectively scene parameterization</span>
 	<span class="token keyword">if</span> weather<span class="token punctuation">:</span>
@@ -143,7 +143,7 @@ parameterization is way easier.</p>
     <span class="token comment"># be properly set</span>
 	<span class="token function">get_tree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>current_scene <span class="token operator">=</span> new_scene
 	<span class="token keyword">return</span> new_scene</code></pre>
-<p><code>_goto_mission</code> essentially injects things into the new scene depending on
+</div><p><code>_goto_mission</code> essentially injects things into the new scene depending on
 existing state. In Unity, this is much harder to do, and far less clean.</p>
 <h3 id="editor-%26-compiler" tabindex="-1"><a class="header-anchor" href="#editor-%26-compiler">Editor &amp; Compiler</a></h3>
 <p>The Godot development experience is <strong>fast</strong>. Not only UI is intuitive and
@@ -156,7 +156,7 @@ takes almost no time to quit and re-open the app!</p>
 <p>Resolving Git merge conflicts in Godot projects is not nearly as hard as it is
 in Unity. Both game engines store files in plain text, but Godot's format is
 <strong>way more human-readable</strong>. Here's an example of a Godot scene file:</p>
-<pre class="language-gdresource"><code class="language-gdresource">[gd_scene load_steps=4 format=3 uid="uid://bm0hxwrfnl0cc"]
+<div class="code-block-container"><pre class="language-gdresource"><code class="language-gdresource">[gd_scene load_steps=4 format=3 uid="uid://bm0hxwrfnl0cc"]
 
 [ext_resource type="Script" path="res://scripts/ui/lightning_indicator.gd" id="1_qnc1m"]
 
@@ -174,9 +174,9 @@ theme_override_styles/background = SubResource("StyleBoxFlat_eba51")
 theme_override_styles/fill = SubResource("StyleBoxFlat_vrxf2")
 show_percentage = false
 script = ExtResource("1_qnc1m")</code></pre>
-<p>It's generated by the editor, but it would still be really easy to edit it by
+</div><p>It's generated by the editor, but it would still be really easy to edit it by
 hand! This is what a Unity scene file looks like, truncated:</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">---</span> <span class="token tag">!u!1001</span> <span class="token important">&amp;33159170</span>
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">---</span> <span class="token tag">!u!1001</span> <span class="token important">&amp;33159170</span>
 <span class="token key atrule">PrefabInstance</span><span class="token punctuation">:</span>
   <span class="token key atrule">m_ObjectHideFlags</span><span class="token punctuation">:</span> <span class="token number">0</span>
   <span class="token key atrule">serializedVersion</span><span class="token punctuation">:</span> <span class="token number">2</span>
@@ -218,7 +218,7 @@ hand! This is what a Unity scene file looks like, truncated:</p>
     <span class="token key atrule">m_RemovedGameObjects</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
     <span class="token key atrule">m_AddedGameObjects</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
     <span class="token key atrule">m_AddedComponents</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></code></pre>
-<p>Before, my team and I would do anything to avoid a Unity merge conflict, because
+</div><p>Before, my team and I would do anything to avoid a Unity merge conflict, because
 resolving massive diffs that include snippets like the one I showed above is
 nearly impossible.</p>
 <h2 id="pain-points" tabindex="-1"><a class="header-anchor" href="#pain-points">Pain Points</a></h2>

@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -107,9 +107,9 @@ up. Like pretty much everything else, this server conforms to the
 <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP protocol</a>, so
 we should be able to connect to it remotely. I'll show how to do so using
 <a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a> and the command line.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
-<pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> imap.mail.me.com:993
+<div class="code-block-container"><pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> imap.mail.me.com:993
 <span class="token comment"># A bunch of output telling us that the connection was successful (hopefully)</span></code></pre>
-<p>We're telling OpenSSL that we want to connect to the TCP server located at
+</div><p>We're telling OpenSSL that we want to connect to the TCP server located at
 <code>imap.mail.me.com:993</code>. This is the standard
 <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a> (fully
 qualified domain name) that iCloud Mail uses (note that it is not specific to
@@ -137,9 +137,9 @@ conform to the protocol.</p>
 <p>In order to access any data, we need to log in to our email account to make sure
 the email server knows who we are. The IMAP protocol tells us how to compose a
 message so that the server knows that we want to log in:</p>
-<pre class="language-text"><code class="language-text">C: a1 LOGIN {email} {password}
+<div class="code-block-container"><pre class="language-text"><code class="language-text">C: a1 LOGIN {email} {password}
 a1 OK user {email} logged in</code></pre>
-<p>Here I'm using <code>C</code> to denote the client message (so if you're trying this at
+</div><p>Here I'm using <code>C</code> to denote the client message (so if you're trying this at
 home, omit the <code>C:</code>), and lines without <code>C</code> to denote server output.</p>
 <p>If we send <strong>that</strong> message (substituting in our actual email and password),
 we'll be logged in and should be able to access our emails by sending more
@@ -162,7 +162,7 @@ are:</p>
 <li>Drafts</li>
 </ul>
 <p>This is how you select a folder:</p>
-<pre class="language-text"><code class="language-text">C: g21 SELECT INBOX
+<div class="code-block-container"><pre class="language-text"><code class="language-text">C: g21 SELECT INBOX
 * 1 EXISTS
 * 0 RECENT
 * OK [UNSEEN 1]
@@ -171,9 +171,9 @@ are:</p>
 * FLAGS (\Answered \Flagged \Draft \Deleted \Seen \Recent $MailFlagBit0 $MailFlagBit1 $MailFlagBit2 $Forwarded Redirected $NotJunk NotJunk)
 * OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \Recent $MailFlagBit0 $MailFlagBit1 $MailFlagBit2 $Forwarded Redirected $NotJunk NotJunk \*)]
 g21 OK [READ-WRITE] SELECT completed (took 2 ms)</code></pre>
-<p>The main output we're looking for is the first line. It tells us that there's
+</div><p>The main output we're looking for is the first line. It tells us that there's
 one email in our INBOX folder. Let's take a look at this email:</p>
-<pre class="language-plain"><code class="language-plain">C: f1 FETCH 1 RFC822.TEXT
+<div class="code-block-container"><pre class="language-plain"><code class="language-plain">C: f1 FETCH 1 RFC822.TEXT
 * 1 FETCH (RFC822.TEXT {242}
 --00000000000055129906262bbfde
 Content-Type: text/plain; charset="UTF-8"
@@ -188,7 +188,7 @@ Content-Type: text/html; charset="UTF-8"
 --00000000000055129906262bbfde--
 )
 f1 OK FETCH completed (took 153 ms)</code></pre>
-<p>Note that the output comes in two different forms: HTML and plain text.</p>
+</div><p>Note that the output comes in two different forms: HTML and plain text.</p>
 <p>The <code>FETCH</code> command is very versatile; it's the primary tool email clients use
 to retrieve the contents of your emails.</p>
 <h2 id="summary" tabindex="-1"><a class="header-anchor" href="#summary">Summary</a></h2>

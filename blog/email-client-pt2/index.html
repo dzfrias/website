@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -110,9 +110,9 @@ our friend.</p>
 the iCloud Mail email server is <code>smtp.mail.me.com:587</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <p>For this demo, I'll use the <a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a>
 command-line tool to connect to the server:</p>
-<pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> smtp.mail.me.com:587 <span class="token parameter variable">-starttls</span> smtp <span class="token parameter variable">-quiet</span> <span class="token parameter variable">-crlf</span>
+<div class="code-block-container"><pre class="language-bash"><code class="language-bash">$ openssl s_client <span class="token parameter variable">-connect</span> smtp.mail.me.com:587 <span class="token parameter variable">-starttls</span> smtp <span class="token parameter variable">-quiet</span> <span class="token parameter variable">-crlf</span>
 <span class="token comment"># Output about the connection</span></code></pre>
-<p>There are some arguments here that you might be unfamiliar with. The most
+</div><p>There are some arguments here that you might be unfamiliar with. The most
 significant one, though, is <code>-starttls smtp</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> To understand this, we'll
 need to dive into <strong>implicit</strong> vs. <strong>opportunistic</strong> TLS.</p>
 <h4 id="tls-stuff" tabindex="-1"><a class="header-anchor" href="#tls-stuff">TLS Stuff</a></h4>
@@ -142,7 +142,7 @@ protocol used to communicate the information of your email (i.e. contents,
 recipient, CC, BCC, etc.) to the server. We send <strong>SMTP commands</strong> that detail
 this information.</p>
 <p>Now that we're connected, the first thing we need to do is greet the server:</p>
-<pre class="language-text"><code class="language-text">C: EHLO dzfrias.local
+<div class="code-block-container"><pre class="language-text"><code class="language-text">C: EHLO dzfrias.local
 250-PIPELINING
 250-SIZE 28319744
 250-ETRN
@@ -151,7 +151,7 @@ this information.</p>
 250-8BITMIME
 250-DSN
 250-SMTPUTF8</code></pre>
-<p>Lines beginning with <code>C:</code> denote my input, and lines without <code>C:</code> are server
+</div><p>Lines beginning with <code>C:</code> denote my input, and lines without <code>C:</code> are server
 output. <code>EHLO</code> is the greeting command, and you also pass the <strong>name of the
 computer</strong> you're connecting from along with it (<code>dzfrias.local</code> for me).<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn6" id="fnref6">6</a></sup></p>
 <aside class="side-info"><p>If you want to find the name of <em>your</em> computer, use the <code>hostname</code> command on
@@ -162,11 +162,11 @@ let us send any emails. The <code>250-AUTH</code> line of the greeting response 
 what authentication methods we can use to log in. The one that we'll be using
 for this demo is <code>PLAIN</code>, which is the simplest, and only involves sending our
 username and password:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn7" id="fnref7">7</a></sup></p>
-<pre class="language-text"><code class="language-text">C: AUTH PLAIN
+<div class="code-block-container"><pre class="language-text"><code class="language-text">C: AUTH PLAIN
 334
 C: AHlvdUBpY2xvdWQuY29tAGVtYWlsLW1lLXlvdXItZmF2b3JpdGUtY29sb3I=
 235 2.7.0 Authentication successful</code></pre>
-<p>That seemginly random string of characters is actually super important! I'll go
+</div><p>That seemginly random string of characters is actually super important! I'll go
 through what happened line by line:</p>
 <ol>
 <li>I told the server I wanted to authenticate using the <code>PLAIN</code> method</li>
@@ -183,12 +183,12 @@ The username is your email address, and the password is an
 <h4 id="sending-our-email" tabindex="-1"><a class="header-anchor" href="#sending-our-email">Sending Our Email</a></h4>
 <p>We can use different SMTP commands to tell the server about the email we want to
 send. For example:</p>
-<pre class="language-plain"><code class="language-plain">C: MAIL FROM:&lt;you@icloud.com>
+<div class="code-block-container"><pre class="language-plain"><code class="language-plain">C: MAIL FROM:&lt;you@icloud.com>
 250 2.1.0 0k</code></pre>
-<p>This tells the server that we're sending from <code>you@icloud.com</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn8" id="fnref8">8</a></sup> We
+</div><p>This tells the server that we're sending from <code>you@icloud.com</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn8" id="fnref8">8</a></sup> We
 can also tell the server who the email is to and what it contains, using
 <code>RCPT TO</code> and <code>DATA</code>, respectively:</p>
-<pre class="language-plain"><code class="language-plain">C: RCPT TO:&lt;friend@gmail.com>
+<div class="code-block-container"><pre class="language-plain"><code class="language-plain">C: RCPT TO:&lt;friend@gmail.com>
 250 2.1.5 0k
 C: DATA
 C: From: "You" &lt;you@icloud.com>
@@ -197,7 +197,7 @@ C:
 C: This is an extremely important message.
 C: .
 250 2.0.0 0k: queued as 343FD5003CE</code></pre>
-<p>Email sent! Note the two <a href="https://en.wikipedia.org/wiki/MIME">MIME</a> headers we
+</div><p>Email sent! Note the two <a href="https://en.wikipedia.org/wiki/MIME">MIME</a> headers we
 included in the content of the email. These contain <strong>crucial metadata</strong> that'll
 be packaged with our message.</p>
 <p>You might be wondering what the <code>.</code> is at the end. After we send the <code>DATA</code>

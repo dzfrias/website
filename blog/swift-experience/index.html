@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -108,13 +108,13 @@ Swift, and it'll be performant and ergonomic.</p>
 <a href="https://developer.apple.com/documentation/swift/array"><code>Array</code></a> type is always
 <a href="https://en.wikipedia.org/wiki/Copy-on-write">copy-on-write</a>. Let's take this
 simple program:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">func</span> <span class="token function-definition function">process</span><span class="token punctuation">(</span><span class="token omit keyword">_</span> a<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token class-name">UInt8</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">func</span> <span class="token function-definition function">process</span><span class="token punctuation">(</span><span class="token omit keyword">_</span> a<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token class-name">UInt8</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token comment">// do some work</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">let</span> a<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token class-name">UInt8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
 <span class="token function">process</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span></code></pre>
-<p>In this example, <code>a</code> is not copied, even when it's passed into <code>process</code>. It's
+</div><p>In this example, <code>a</code> is not copied, even when it's passed into <code>process</code>. It's
 also not borrowed, as we might do in Rust. <strong><code>a</code> will never be copied until it
 is written to</strong>. This means that we get to treat <code>a</code> as if we own it. There's
 <em>no need</em> for lifetimes, but we can also skip the (potential) performance hit
@@ -128,7 +128,7 @@ explicit, we don't have to worry about lifetimes at all.</p>
 <p>In light of my thoughts on Swift's powerful default semantics, another thing I
 really liked was the <strong>error handling</strong> in Swift. It's <em>way</em> better than C++'s
 pretty much non-existent error handling, but that's a low bar to clear honestly.</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">enum</span> <span class="token class-name">MyError</span><span class="token punctuation">:</span> <span class="token class-name">Error</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">enum</span> <span class="token class-name">MyError</span><span class="token punctuation">:</span> <span class="token class-name">Error</span> <span class="token punctuation">{</span>
   <span class="token keyword">case</span> ten
   <span class="token keyword">case</span> twenty
 <span class="token punctuation">}</span>
@@ -142,13 +142,13 @@ pretty much non-existent error handling, but that's a low bar to clear honestly.
   <span class="token punctuation">}</span>
   <span class="token keyword">return</span> a
 <span class="token punctuation">}</span></code></pre>
-<p>When you call a fallible function in Swift (which is marked by the <code>throws</code>
+</div><p>When you call a fallible function in Swift (which is marked by the <code>throws</code>
 keyword), you have two options:</p>
 <ol>
 <li>Propagate the error with <code>try</code></li>
 <li>Handle the error with <code>do-catch</code></li>
 </ol>
-<pre class="language-swift"><code class="language-swift"><span class="token comment">// 1. Propagate, if in another function that can throw</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token comment">// 1. Propagate, if in another function that can throw</span>
 <span class="token keyword">try</span> <span class="token function">fallible</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
 
 <span class="token comment">// 2. Handle the error</span>
@@ -158,7 +158,7 @@ keyword), you have two options:</p>
   <span class="token comment">// `error` is implicitly put in scope</span>
   <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"failed: </span><span class="token interpolation-punctuation punctuation">\(</span><span class="token interpolation">error</span><span class="token interpolation-punctuation punctuation">)</span><span class="token string">"</span></span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Error handling in Swift is nice because you don't have to think about it <em>that
+</div><p>Error handling in Swift is nice because you don't have to think about it <em>that
 much</em>, but you're still forced to handle things.</p>
 <p>In Rust, which has the <a href="https://doc.rust-lang.org/std/result/"><code>Result</code></a> type,
 you have to think about your errors a lot more when designing your API. You need
@@ -177,7 +177,7 @@ questions. Since Swift has good defaults out of the box, these decisions are
 <p>This is something that I've <strong>changed my mind on</strong> over my time programming, and
 largely because of my experiences with Swift. I used to dislike the idea of
 computed properties.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> Take this example:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">struct</span> <span class="token class-name">Example</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">struct</span> <span class="token class-name">Example</span> <span class="token punctuation">{</span>
   <span class="token keyword">let</span> name<span class="token punctuation">:</span> <span class="token class-name">String</span>
   <span class="token keyword">let</span> id<span class="token punctuation">:</span> <span class="token class-name">UInt</span>
 
@@ -190,9 +190,9 @@ computed properties.<sup class="footnote-ref"><a role="doc-noteref" aria-label="
 <span class="token function">print</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>fullId<span class="token punctuation">)</span>
 <span class="token comment">// alternative w/o computed properties:</span>
 <span class="token comment">// print(e.fullId())</span></code></pre>
-<p>I don't know if it's just me. Something's kind of nice about them. I'll take a
+</div><p>I don't know if it's just me. Something's kind of nice about them. I'll take a
 real snippet from the Wasm parser:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">ValueType</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">ValueType</span> <span class="token punctuation">{</span>
   <span class="token keyword">case</span> i32
   <span class="token keyword">case</span> i64
   <span class="token keyword">case</span> f32
@@ -217,7 +217,7 @@ real snippet from the Wasm parser:</p>
     <span class="token keyword">return</span> <span class="token operator">!</span>isReference <span class="token operator">&amp;&amp;</span> <span class="token keyword">self</span> <span class="token operator">!=</span> <span class="token punctuation">.</span>v128
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>They just make sense sometimes. I don't have a lot else to say, I just like
+</div><p>They just make sense sometimes. I don't have a lot else to say, I just like
 them.</p>
 <h2 id="things-i-disliked" tabindex="-1"><a class="header-anchor" href="#things-i-disliked">Things I disliked</a></h2>
 <p>While there's <em>a lot</em> to like about Swift, there were definitely some pain
@@ -227,7 +227,7 @@ points along the way.</p>
 declare a fallible function in Swift, you <strong>can't specify</strong> the specific error
 type that the function may throw.</p>
 <p>Let me illustrate what I mean with an example:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">enum</span> <span class="token class-name">MyError</span><span class="token punctuation">:</span> <span class="token class-name">Error</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">enum</span> <span class="token class-name">MyError</span><span class="token punctuation">:</span> <span class="token class-name">Error</span> <span class="token punctuation">{</span>
   <span class="token keyword">case</span> invalidInput
   <span class="token keyword">case</span> outOfMemory
 <span class="token punctuation">}</span>
@@ -235,7 +235,7 @@ type that the function may throw.</p>
 <span class="token keyword">func</span> <span class="token function-definition function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token punctuation">{</span>
   <span class="token comment">// ...</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Even if <code>doSomething</code> can <em>only</em> throw <code>MyError</code>, there's no way to put that
+</div><p>Even if <code>doSomething</code> can <em>only</em> throw <code>MyError</code>, there's no way to put that
 info in the signature of the function. This was a little painful when designing
 APIs. Sometimes it's useful to <strong>explicitly state</strong> when a function can only
 throw a specific error.</p>
@@ -270,17 +270,17 @@ know that any borrowing/ownership problems are immediately absolved by the
 thing as storing a borrowed value in a struct field (lifetimes would have to be
 introduced, which is understandably not in the cards).</p>
 <p>The following is allowed:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">func</span> <span class="token function-definition function">doSomething</span><span class="token punctuation">(</span>with x<span class="token punctuation">:</span> borrowing <span class="token class-name">Int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">func</span> <span class="token function-definition function">doSomething</span><span class="token punctuation">(</span>with x<span class="token punctuation">:</span> borrowing <span class="token class-name">Int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token comment">// ...</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">let</span> x<span class="token punctuation">:</span> <span class="token class-name">Int</span> <span class="token operator">=</span> <span class="token number">10</span>
 <span class="token function">doSomething</span><span class="token punctuation">(</span>with<span class="token punctuation">:</span> x<span class="token punctuation">)</span></code></pre>
-<p>But there's no concept of:</p>
-<pre class="language-swift"><code class="language-swift"><span class="token keyword">struct</span> <span class="token class-name">MyStruct</span> <span class="token punctuation">{</span>
+</div><p>But there's no concept of:</p>
+<div class="code-block-container"><pre class="language-swift"><code class="language-swift"><span class="token keyword">struct</span> <span class="token class-name">MyStruct</span> <span class="token punctuation">{</span>
   <span class="token keyword">let</span> x<span class="token punctuation">:</span> borrowing <span class="token class-name">Int</span>
 <span class="token punctuation">}</span></code></pre>
-<p>The borrowing/ownership system isn't <em>incomplete</em>, but it's certainly <em>less
+</div><p>The borrowing/ownership system isn't <em>incomplete</em>, but it's certainly <em>less
 powerful</em> than Rust's. I'm not totally familiar with the system yet, so it'll
 take some getting used to.</p>
 <p>I'm getting the impression that it should be used only for hot paths and hot

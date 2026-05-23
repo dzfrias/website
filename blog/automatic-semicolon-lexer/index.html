@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -101,14 +101,14 @@ single unit in your syntax. Lexers are helpful for writing parsers, as the
 parsers don't have to work with strings anymore, instead receiving well-defined
 pieces of your program.</p>
 <p>Here are some examples of what lexers would do with your input:</p>
-<pre class="language-text"><code class="language-text">"i + x" becomes Token::Ident("i"), Token::Plus, Token::Ident("x")
+<div class="code-block-container"><pre class="language-text"><code class="language-text">"i + x" becomes Token::Ident("i"), Token::Plus, Token::Ident("x")
 "x = y" becomes Token::Ident("x"), Token::Assign, Token::Ident("y")</code></pre>
-<h3 id="defining-our-token-type" tabindex="-1"><a class="header-anchor" href="#defining-our-token-type">Defining our Token Type</a></h3>
+</div><h3 id="defining-our-token-type" tabindex="-1"><a class="header-anchor" href="#defining-our-token-type">Defining our Token Type</a></h3>
 <p>First, we should define what our possible tokens should be. In this post, we
 will cover only a small subset of what is realistic in a general-purpose
 programming language, but you'll hopefully have enough knowledge to extend the
 lexer as you wish!</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug, PartialEq)]</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug, PartialEq)]</span>
 <span class="token keyword">pub</span> <span class="token keyword">enum</span> <span class="token type-definition class-name">Token</span> <span class="token punctuation">{</span>
     <span class="token class-name">Illegal</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
     <span class="token comment">// Denotes when our input ends</span>
@@ -146,7 +146,7 @@ lexer as you wish!</p>
     <span class="token comment">// The only keyword in our language. This can easily be extended!</span>
     <span class="token class-name">Return</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span></code></pre>
-<p>These are the tokens that make up the language's syntax!</p>
+</div><p>These are the tokens that make up the language's syntax!</p>
 <h3 id="defining-our-lexer" tabindex="-1"><a class="header-anchor" href="#defining-our-lexer">Defining our Lexer</a></h3>
 <p>I'll start by explaining what our lexer will actually do. Our lexer is basically
 an iterator that yields <code>Token</code>s. It has a single public method, <code>next_token()</code>,
@@ -154,7 +154,7 @@ that advances the iterator and returns a single <code>Token</code>.</p>
 <p>To accomplish this, our lexer essentially has a pointer to a place in our input.
 When <code>next_token()</code> is called, the lexer returns what it pointed to and then
 advances to the start of the next token.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token comment">// Asumming an input of "+ =="</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">// Asumming an input of "+ =="</span>
 
 <span class="token comment">// ===INITIAL STATE===</span>
 
@@ -174,13 +174,13 @@ advances to the start of the next token.</p>
 <span class="token comment">//</span>
 <span class="token comment">// input: + ==</span>
 <span class="token comment">// lexer:     ^</span></code></pre>
-<p>We'll start by writing the basic layout of our Lexer struct.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug)]</span>
+</div><p>We'll start by writing the basic layout of our Lexer struct.</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[derive(Debug)]</span>
 <span class="token keyword">pub</span> <span class="token keyword">struct</span> <span class="token type-definition class-name">Lexer</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token punctuation">{</span>
     input<span class="token punctuation">:</span> <span class="token class-name">Chars</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span><span class="token punctuation">,</span>
     current<span class="token punctuation">:</span> <span class="token keyword">char</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span></code></pre>
-<p>First off, our lexer is generic over the lifetime <code>'a</code>, as a result of <code>Chars</code>.
+</div><p>First off, our lexer is generic over the lifetime <code>'a</code>, as a result of <code>Chars</code>.
 <code>Chars</code> is an iterator that yields <code>char</code>s, and is tied to our program's input
 (<code>&amp;'a str</code>). Much like how our lexer yields <code>Token</code>s, <code>Chars</code> yields <code>char</code>s.</p>
 <p>We also have <code>current</code>, which is the current character that our lexer's pointer
@@ -189,7 +189,7 @@ points to.</p>
 started with some of the fundamental methods we'll need to get it operational.</p>
 <h3 id="fundamental-methods" tabindex="-1"><a class="header-anchor" href="#fundamental-methods">Fundamental Methods</a></h3>
 <p>Let's first write a constructor for our lexer.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token class-name">Lexer</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">impl</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token class-name">Lexer</span><span class="token operator">&lt;</span><span class="token lifetime-annotation symbol">'a</span><span class="token operator">></span> <span class="token punctuation">{</span>
     <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">new</span><span class="token punctuation">(</span>input<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token lifetime-annotation symbol">'a</span> <span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
       <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token keyword">Self</span> <span class="token punctuation">{</span>
           input<span class="token punctuation">:</span> input<span class="token punctuation">.</span><span class="token function">chars</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
@@ -199,16 +199,16 @@ started with some of the fundamental methods we'll need to get it operational.</
       lexer
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>It takes an <code>&amp;'a str</code>, for our program's input. We create our <code>Chars</code> based on
+</div><p>It takes an <code>&amp;'a str</code>, for our program's input. We create our <code>Chars</code> based on
 this input, and feed it to our lexer. We also give it a <em>placeholder</em> <code>current</code>
 (the null terminator). Then, we call <code>read_char</code> to replace the placeholder we
 just initialized! Wait. We haven't even defined <code>read_char</code> yet...</p>
 <p><code>read_char</code> is the heart of our lexer; all it does is advance our pointer by one
 character. That's it.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_char</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_char</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>input<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap_or</span><span class="token punctuation">(</span>'\\<span class="token number">0</span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<p>The conceptual &quot;pointer&quot; of our lexer is actually <code>Chars</code> (which is an
+</div><p>The conceptual &quot;pointer&quot; of our lexer is actually <code>Chars</code> (which is an
 iterator)! You may also be wondering about the <code>unwrap_or</code> call!</p>
 <p><code>self.input.next()</code> only returns <code>None</code> when our input ends. In this case, we
 replace it with our null terminator so we don't have to handle it in
@@ -221,7 +221,7 @@ refresher, <code>Lexer::next_token()</code> should advance our pointer until a v
 is found, and then return it.</p>
 <p>Let's get a basic definition out of the way. Nothing fancy, just the super
 simple tokens!</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">next_token</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">next_token</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> token <span class="token operator">=</span> <span class="token keyword">match</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token punctuation">{</span>
         <span class="token char">'+'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Plus</span><span class="token punctuation">,</span>
         <span class="token char">'-'</span> <span class="token operator">=></span> <span class="token class-name">Token</span><span class="token punctuation">::</span><span class="token class-name">Minus</span><span class="token punctuation">,</span>
@@ -239,11 +239,11 @@ simple tokens!</p>
     <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     token
 <span class="token punctuation">}</span></code></pre>
-<p>I'm going to hold off on the closing counterparts of <code>(</code> and <code>{</code>, as those will
+</div><p>I'm going to hold off on the closing counterparts of <code>(</code> and <code>{</code>, as those will
 be candidates for our semicolon insertion. Anyway, these tokens provide a simple
 implementation of the behavior visualized when we
 <a href="#defining-our-lexer">defined the lexer</a>. Lets write a test!</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
 <span class="token keyword">fn</span> <span class="token function-definition function">lexes_basic_tokens</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"(,{+-*/#"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
@@ -261,7 +261,7 @@ implementation of the behavior visualized when we
         <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="a-peek-buffer" tabindex="-1"><a class="header-anchor" href="#a-peek-buffer">A Peek Buffer</a></h2>
+</div><h2 id="a-peek-buffer" tabindex="-1"><a class="header-anchor" href="#a-peek-buffer">A Peek Buffer</a></h2>
 <p>Okay, now we need to handle more complicated stuff... Let's try tokenizing <code>!=</code>.
 The problem with our current setup is that our lexer can't distinguish a
 <code>Token::Bang</code> and a <code>Token::NotEq</code> in <code>next_token()</code>. We need some sort of
@@ -274,22 +274,22 @@ the buffer. Then, the next time we call <code>read_char()</code>, it will try to
 consume a character from the peek buffer before advancing our <code>Chars</code> pointer
 again.</p>
 <p>Let's get into how we'd represent this with code.</p>
-<pre class="language-diff"><code class="language-diff">#[derive(Debug)]
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff">#[derive(Debug)]
 pub struct Lexer&lt;'a> {
 <span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   input: Chars&lt;'a>,
 </span><span class="token prefix unchanged"> </span><span class="token line">   current: char,
 </span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    peek_buffer: VecDeque&lt;char>,
 </span></span>}</code></pre>
-<p>We want our peek buffer to be a queue, as the behavior described above is a
+</div><p>We want our peek buffer to be a queue, as the behavior described above is a
 first-in-first-out system. Let's add it to our constructor, too.</p>
-<pre class="language-diff"><code class="language-diff">let mut lexer = Self {
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff">let mut lexer = Self {
 <span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   input: input.chars(),
 </span><span class="token prefix unchanged"> </span><span class="token line">   current: '\\0',
 </span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    peek_buffer: VecDeque::new(),
 </span></span>};</code></pre>
-<p>Now, let's make our <code>peek</code> method! Here, we should advance <code>Chars</code> and push the
+</div><p>Now, let's make our <code>peek</code> method! Here, we should advance <code>Chars</code> and push the
 result to <code>peek_buffer</code>.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">peek</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">char</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">peek</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">char</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token keyword">let</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">self</span><span class="token punctuation">.</span>peek_buffer<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token operator">*</span>c
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
@@ -298,22 +298,22 @@ result to <code>peek_buffer</code>.</p>
         next
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>If our peek buffer already has something in it, we should just return that
+</div><p>If our peek buffer already has something in it, we should just return that
 character, as we want to be able to call <code>peek()</code> an arbitrary number of times
 and always get the same result back.</p>
 <p>Now, we must make a small modification to <code>read_char()</code>. We need to consume our
 peek buffer before we advance <code>Chars</code>!</p>
-<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">if let Some(ch) = self.peek_buffer.pop_front() {
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">if let Some(ch) = self.peek_buffer.pop_front() {
 </span><span class="token prefix inserted">+</span><span class="token line">    self.current = ch;
 </span><span class="token prefix inserted">+</span><span class="token line">    return;
 </span><span class="token prefix inserted">+</span><span class="token line">}
 </span></span>self.current = self.input.next().unwrap_or('\\0');</code></pre>
-<p>At this point, we should have a working <code>peek()</code> method! Let's tokenize <code>!=</code>!
+</div><p>At this point, we should have a working <code>peek()</code> method! Let's tokenize <code>!=</code>!
 I'll write a method, <code>try_peek_eq</code>, that takes two <code>Token</code>s.</p>
 <p>If the peeked character is an <code>=</code>, we return the first argument. If not, we
 return the second one. <code>self.try_peek_eq(Token::NotEq, Token::Bang)</code> will return
 <code>Token::Bang</code> if the peeked character is <strong>not</strong> <code>=</code>, and <code>NotEq</code> if it is.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_peek_eq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">,</span> not_matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_peek_eq</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">,</span> matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">,</span> not_matched<span class="token punctuation">:</span> <span class="token class-name">Token</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">Token</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">peek</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token char">'='</span> <span class="token punctuation">{</span>
         <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         matched
@@ -321,22 +321,22 @@ return the second one. <code>self.try_peek_eq(Token::NotEq, Token::Bang)</code> 
         not_matched
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Finally, we can put it all together into <code>next_token</code>!</p>
-<pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
+</div><p>Finally, we can put it all together into <code>next_token</code>!</p>
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
 </span></span>
 <span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
 </span></span>};</code></pre>
-<p>We'll also need this for <code>&lt;=</code>, <code>&gt;=</code>, and the like, so I'll add those in really
+</div><p>We'll also need this for <code>&lt;=</code>, <code>&gt;=</code>, and the like, so I'll add those in really
 quick.</p>
-<pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff"><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '\\0' => Token::EOF,
 </span></span>
 <span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   '!' => self.try_peek_eq(Token::NotEq, Token::Bang),
 </span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    '=' => self.try_peek_eq(Token::Eq, Token::Assign),
 </span><span class="token prefix inserted">+</span><span class="token line">    '&lt;' => self.try_peek_eq(Token::Le, Token::Langle),
 </span><span class="token prefix inserted">+</span><span class="token line">    '>' => self.try_peek_eq(Token::Ge, Token::Rangle),
 </span></span>};</code></pre>
-<p>Great! Let's write a test for those, too.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+</div><p>Great! Let's write a test for those, too.</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
 <span class="token keyword">fn</span> <span class="token function-definition function">lexes_complex_tokens</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"!=&lt;>="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">let</span> expecteds <span class="token operator">=</span> <span class="token punctuation">[</span>
@@ -349,12 +349,12 @@ quick.</p>
         <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Passed! With that, we can move on to another part of our lexer!</p>
+</div><p>Passed! With that, we can move on to another part of our lexer!</p>
 <h2 id="reading-identifiers" tabindex="-1"><a class="header-anchor" href="#reading-identifiers">Reading Identifiers</a></h2>
 <p>Our lexer also has to be able read identifiers. For example, when we input
 <code>hello</code> to our lexer, it should give us <code>Token::Ident(&quot;hello&quot;)</code>.</p>
 <p>Let's start by adding a case in the <code>next_token</code> method!</p>
-<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">ch if ch == '_' || ch.is_alphabetic() => {
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">ch if ch == '_' || ch.is_alphabetic() => {
 </span><span class="token prefix inserted">+</span><span class="token line">    let ident = self.read_ident();
 </span><span class="token prefix inserted">+</span><span class="token line">    return match ident.as_str() {
 </span><span class="token prefix inserted">+</span><span class="token line">        "return" => Token::Return,
@@ -362,7 +362,7 @@ quick.</p>
 </span><span class="token prefix inserted">+</span><span class="token line">    };
 </span><span class="token prefix inserted">+</span><span class="token line">}
 </span></span></code></pre>
-<p>We know that whenever we encounter an alphabetic (or <code>_</code>) character, our lexer
+</div><p>We know that whenever we encounter an alphabetic (or <code>_</code>) character, our lexer
 has either reached an identifier or a keyword. In that case, we call the
 <code>read_ident()</code> method. This method advances our lexer until the end of the
 identifier is found, returning it in a <code>String</code>. Then, we do some simple
@@ -373,7 +373,7 @@ returning early from the <code>match</code> arm, we <em>circumvent</em> this adv
 didn't, we'd lose a character, because <code>read_ident()</code> already advances our lexer
 to the next character after the identifier.</p>
 <p>Speaking of <code>read_ident()</code>, we should probably define that!</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_ident</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">read_ident</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token class-name">String</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> <span class="token keyword">mut</span> ident <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_alphabetic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">==</span> <span class="token char">'_'</span> <span class="token operator">||</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_digit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         ident<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -381,30 +381,30 @@ to the next character after the identifier.</p>
     <span class="token punctuation">}</span>
     ident
 <span class="token punctuation">}</span></code></pre>
-<p>The implementation is nothing special, so I won't bore you the details. With
+</div><p>The implementation is nothing special, so I won't bore you the details. With
 that out of the way, we can get to handling whitespace!</p>
 <h2 id="whitespace" tabindex="-1"><a class="header-anchor" href="#whitespace">Whitespace</a></h2>
 <p>For this post, we'll be ignoring whitespace completely for the sake of brevity.
 In full lexers, it's usually good to not <em>completely</em> ignore them, if only
 because our tokens should usually have location spans attached to them.</p>
 <p>Anyway, to achieve whitespace insignificance, we need a single method:</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">skip_whitespace</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">skip_whitespace</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Pretty simple! And we'll only need it in one place (for now)!</p>
-<pre class="language-diff"><code class="language-diff">pub fn next_token(&amp;mut self) -> Token {
+</div><p>Pretty simple! And we'll only need it in one place (for now)!</p>
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff">pub fn next_token(&amp;mut self) -> Token {
 <span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    self.skip_whitespace();
 </span></span>
 <span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   let token = match self.current {
 </span></span></code></pre>
-<p>Now, whenever we call <code>next_token()</code> all whitespace is skipped!</p>
+</div><p>Now, whenever we call <code>next_token()</code> all whitespace is skipped!</p>
 <p>And with that...... Congrats! You've built a basic lexer! At this point, I'd say
 the lexer has enough to extend it with your own features and tokens! Let's write
 some celebratory tests and move on to the next big challenge: automatic
 semicolon insertion.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
 <span class="token keyword">fn</span> <span class="token function-definition function">lexer_skips_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
         <span class="token string">",    ; ==
@@ -421,7 +421,7 @@ semicolon insertion.</p>
         <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Passed!</p>
+</div><p>Passed!</p>
 <h2 id="automatic-semicolon-insertion" tabindex="-1"><a class="header-anchor" href="#automatic-semicolon-insertion">Automatic Semicolon Insertion</a></h2>
 <p>With our current lexer setup, adding automatic semicolon insertion should be
 pretty simple! We'll be following in the footsteps of the
@@ -451,7 +451,7 @@ consume that instead of more input! This isn't actually &quot;inserting&quot; an
 more just queueing it into our token stream!</p>
 <p>Let's define a method, <code>try_insert_semicolon()</code> that we can call whenever we
 <em>might</em> have a semicolon that needs to be inserted.</p>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_insert_semicolon</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function-definition function">try_insert_semicolon</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token keyword">mut</span> <span class="token keyword">self</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// Skip whitespace before possible semicolon</span>
     <span class="token keyword">while</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">is_ascii_whitespace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">self</span><span class="token punctuation">.</span>current <span class="token operator">!=</span> '\\n' <span class="token punctuation">{</span>
         <span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">read_char</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -461,19 +461,19 @@ more just queueing it into our token stream!</p>
         <span class="token keyword">self</span><span class="token punctuation">.</span>peek_buffer<span class="token punctuation">.</span><span class="token function">push_front</span><span class="token punctuation">(</span><span class="token char">';'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>We first skip any whitespace that might precede our possible semicolon. We do
+</div><p>We first skip any whitespace that might precede our possible semicolon. We do
 this to allow semicolons inserted in a line with trailing whitespace. The rest
 is pretty simple!</p>
 <p>With the <code>try_insert_semicolon()</code> method in place, we can call it where needed!
 Let's start with identifiers.</p>
-<pre class="language-diff"><code class="language-diff">ch if ch == '_' || ch.is_alphabetic() => {
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff">ch if ch == '_' || ch.is_alphabetic() => {
 <span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   let ident = self.read_ident();
 </span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    self.try_insert_semicolon();
 </span></span><span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line">   return match ident.as_str() {
 </span></span></code></pre>
-<p>Nice and simple! This handles both case one and two of our insertion rules. Now,
+</div><p>Nice and simple! This handles both case one and two of our insertion rules. Now,
 we can move on to <code>}</code> and <code>)</code>.</p>
-<pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">')' => {
+<div class="code-block-container"><pre class="language-diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">')' => {
 </span><span class="token prefix inserted">+</span><span class="token line">    self.read_char();
 </span><span class="token prefix inserted">+</span><span class="token line">    self.try_insert_semicolon();
 </span><span class="token prefix inserted">+</span><span class="token line">    Token::Rparen
@@ -485,11 +485,11 @@ we can move on to <code>}</code> and <code>)</code>.</p>
 </span><span class="token prefix inserted">+</span><span class="token line">}
 </span></span>
 '!' => self.try_peek_eq(Token::NotEq, Token::Bang),</code></pre>
-<p>To get these to work, we need to advance our lexer by one (past the <code>)</code> or <code>}</code>),
+</div><p>To get these to work, we need to advance our lexer by one (past the <code>)</code> or <code>}</code>),
 which will set us up to use <code>try_insert_semicolon()</code>, a consequence of the way
 we wrote the method.</p>
 <p>As you might've expected by now, we're gonna write a test for this behavior!</p>
-<pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token attribute attr-name">#[test]</span>
 <span class="token keyword">fn</span> <span class="token function-definition function">lexer_inserts_semicolons</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">let</span> <span class="token keyword">mut</span> lexer <span class="token operator">=</span> <span class="token class-name">Lexer</span><span class="token punctuation">::</span><span class="token function">new</span><span class="token punctuation">(</span>
         <span class="token string">"ident
@@ -516,7 +516,7 @@ we wrote the method.</p>
         <span class="token macro property">assert_eq!</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> lexer<span class="token punctuation">.</span><span class="token function">next_token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Great! Whew! We're done!</p>
+</div><p>Great! Whew! We're done!</p>
 <h2 id="wrapping-up" tabindex="-1"><a class="header-anchor" href="#wrapping-up">Wrapping Up</a></h2>
 <p>If you've read this far, I hope you enjoyed and found use from this post.
 Although the lexer defined in this tutorial is definitely <em>not</em> complete, my

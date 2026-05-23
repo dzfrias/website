@@ -11,7 +11,7 @@
     
 
 <script type="module">
-  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const r=document.querySelectorAll('a[id^="fnref"]'),l=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<r.length;e++){const t=r[e],n=l[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of l)e.ariaCurrent=null;return}for(const e of l)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.querySelectorAll("pre:has(code)");for(const[t,n]of e.entries()){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o)}}();
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
 </script>
 
 <script>
@@ -101,7 +101,7 @@ is pushed to GitHub. Not only that, but we want it to be a <strong>version tag</
 1.0.0 or 0.2.4), so GitHub doesn't run our action for a tag that's not related
 to releases.</p>
 <p>This can be done with the following code:</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token comment"># Just setting the name of our action</span>
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token comment"># Just setting the name of our action</span>
 <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
 
 <span class="token key atrule">on</span><span class="token punctuation">:</span>
@@ -109,7 +109,7 @@ to releases.</p>
     <span class="token key atrule">tags</span><span class="token punctuation">:</span>
       <span class="token comment"># Regex for a version number such as 0.2.1</span>
       <span class="token punctuation">-</span> <span class="token string">"[0-9]+.[0-9]+.[0-9]+"</span></code></pre>
-<p>Alright, with that out of the way, let's get into what our action will actually
+</div><p>Alright, with that out of the way, let's get into what our action will actually
 do!</p>
 <h2 id="building-the-action" tabindex="-1"><a class="header-anchor" href="#building-the-action">Building the Action</a></h2>
 <p>To compile our binaries cross-platform, we'll need to create a new job. Let's
@@ -119,7 +119,7 @@ the binaries and uploading them to a new release. A <em>job</em> is a bundle of
 <h3 id="defining-the-metadata" tabindex="-1"><a class="header-anchor" href="#defining-the-metadata">Defining the Metadata</a></h3>
 <p>Let's begin writing our job. First, we need to define the metadata before we get
 into the steps.</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token comment"># ...</span>
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token comment"># ...</span>
 
 <span class="token key atrule">jobs</span><span class="token punctuation">:</span>
   <span class="token comment"># ...</span>
@@ -143,7 +143,7 @@ into the steps.</p>
           <span class="token punctuation">-</span> <span class="token key atrule">build</span><span class="token punctuation">:</span> windows<span class="token punctuation">-</span>gnu
             <span class="token key atrule">os</span><span class="token punctuation">:</span> windows<span class="token punctuation">-</span>latest
             <span class="token key atrule">target</span><span class="token punctuation">:</span> x86_64<span class="token punctuation">-</span>pc<span class="token punctuation">-</span>windows<span class="token punctuation">-</span>gnu</code></pre>
-<p>You might notice the <code>matrix</code>! The matrix is an important part, as it means our
+</div><p>You might notice the <code>matrix</code>! The matrix is an important part, as it means our
 job will run for each item in included in the matrix. You can see the matrix
 being used in the <code>runs-on</code> key, meaning our job will run on a different
 operating system each time, where the operating system is defined by the <code>os</code>
@@ -151,7 +151,7 @@ key of each matrix item.</p>
 <h3 id="installing-dependencies" tabindex="-1"><a class="header-anchor" href="#installing-dependencies">Installing Dependencies</a></h3>
 <p>Okay, with that finished, we need to start adding steps. The first two are easy:
 just clone our repository and install Rust!</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token comment"># ...</span>
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token comment"># ...</span>
 
 <span class="token key atrule">build-and-upload</span><span class="token punctuation">:</span>
   <span class="token comment"># ...</span>
@@ -166,7 +166,7 @@ just clone our repository and install Rust!</p>
       <span class="token key atrule">with</span><span class="token punctuation">:</span>
         <span class="token comment"># Make Rust compile to our target (defined in the matrix)</span>
         <span class="token key atrule">targets</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> matrix.target <span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre>
-<p>These step use the <code>uses</code> key. <code>uses</code> tells our runner that we're calling an
+</div><p>These step use the <code>uses</code> key. <code>uses</code> tells our runner that we're calling an
 external action, that's premade. You can even see the actions on GitHub that
 we're calling! <a href="https://github.com/actions/checkout"><code>actions/checkout</code></a> is a
 common one - it clones our repository. Arguments to an action are passed in
@@ -176,10 +176,10 @@ what target our Rust should compile to.</p>
 <h3 id="getting-the-version" tabindex="-1"><a class="header-anchor" href="#getting-the-version">Getting the Version</a></h3>
 <p>Another one of the &quot;preparation steps&quot; we need to take is getting the version.
 We'll use this information <a href="#compressing-the-binaries">later</a>!</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Get the release version from the tag
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Get the release version from the tag
   <span class="token key atrule">shell</span><span class="token punctuation">:</span> bash
   <span class="token key atrule">run</span><span class="token punctuation">:</span> echo "VERSION=$<span class="token punctuation">{</span>GITHUB_REF<span class="token comment">#refs/tags/}" >> $GITHUB_ENV</span></code></pre>
-<p>Instead of a <code>uses</code> key, you might notice the <code>shell: bash</code>. This basically
+</div><p>Instead of a <code>uses</code> key, you might notice the <code>shell: bash</code>. This basically
 tells GitHub Actions that we're going to run a shell script. After that, we use
 the <code>run</code> key to specify what we're actually going to be executing.</p>
 <p>The script itself puts the version from our tag into an environment variable,
@@ -193,13 +193,13 @@ rest of this job.</p>
 <a href="https://www.docker.com/">Docker</a> to build your project cross-platform. There's
 already a super simple action that allows us to use <code>cross</code>!</p>
 <p>Let's put that in our step list:</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build
   <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions<span class="token punctuation">-</span>rs/cargo@v1
   <span class="token key atrule">with</span><span class="token punctuation">:</span>
     <span class="token key atrule">use-cross</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
     <span class="token key atrule">command</span><span class="token punctuation">:</span> build
     <span class="token key atrule">args</span><span class="token punctuation">:</span> <span class="token punctuation">-</span><span class="token punctuation">-</span>verbose <span class="token punctuation">-</span><span class="token punctuation">-</span>release <span class="token punctuation">-</span><span class="token punctuation">-</span>target $<span class="token punctuation">{</span><span class="token punctuation">{</span> matrix.target <span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre>
-<p>This step tells GitHub Actions that we'd like to build our project using
+</div><p>This step tells GitHub Actions that we'd like to build our project using
 <code>cross</code>. Similar to <code>cargo build</code>, our binary will end up in
 <code>target/&lt;TARGET&gt;/release/&lt;BINARY_NAME&gt;</code>, where <code>&lt;TARGET&gt;</code> is our <code>target</code> key of
 the matrix. The name of the binary obviously depends on your project.</p>
@@ -207,7 +207,7 @@ the matrix. The name of the binary obviously depends on your project.</p>
 <p>We're almost done! Now that we have our binaries built, we need to compress them
 into a <code>.tar.gz</code> file (or <code>.zip</code>) so they're easier to download from our assets
 page. Let's do that with this step:</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build archive
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build archive
   <span class="token key atrule">shell</span><span class="token punctuation">:</span> bash
   <span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
     # Replace with the name of your binary
@@ -228,7 +228,7 @@ page. Let's do that with this step:</p>
       tar <span class="token punctuation">-</span>czf "$dirname.tar.gz" "$dirname"
       echo "ASSET=$dirname.tar.gz" <span class="token punctuation">></span><span class="token punctuation">></span> $GITHUB_ENV
     fi</code></pre>
-<p>This step is pretty long, but not that complicated. Let's go over how it works:</p>
+</div><p>This step is pretty long, but not that complicated. Let's go over how it works:</p>
 <ol>
 <li>Create a directory that we'll eventually compress (like
 <code>prj-0.2.1-x86_64-apple-darwin</code>)</li>
@@ -242,12 +242,12 @@ of <code>$ASSET</code></li>
 <h3 id="uploading-the-binaries" tabindex="-1"><a class="header-anchor" href="#uploading-the-binaries">Uploading the Binaries</a></h3>
 <p>With our binaries compressed, we're ready to upload upload them! This is the
 final step of our job!</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Upload the binaries
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Upload the binaries
   <span class="token key atrule">uses</span><span class="token punctuation">:</span> softprops/action<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>release@v1
   <span class="token key atrule">with</span><span class="token punctuation">:</span>
     <span class="token key atrule">files</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
       ${{ env.ASSET }}</span></code></pre>
-<p>Compared to some of the other steps, this one's pretty easy to understand. All
+</div><p>Compared to some of the other steps, this one's pretty easy to understand. All
 we do is use the pre-made
 <a href="https://github.com/softprops/action-gh-release"><code>softprops/action-gh-release</code></a>
 to upload our compressed files (using the <code>$ASSET</code> environment variable we
@@ -259,7 +259,7 @@ a release, build our cross-platform binaries, and upload them!</p>
 your future projects! If there was anything wrong with this post, please submit
 an issue on <a href="https://github.com/dzfrias/blog/issues/new">GitHub</a>.</p>
 <p>Here's the final action, just for good measure:</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
+<div class="code-block-container"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
 
 <span class="token key atrule">on</span><span class="token punctuation">:</span>
   <span class="token key atrule">push</span><span class="token punctuation">:</span>
@@ -336,7 +336,7 @@ an issue on <a href="https://github.com/dzfrias/blog/issues/new">GitHub</a>.</p>
         <span class="token key atrule">with</span><span class="token punctuation">:</span>
           <span class="token key atrule">files</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
             ${{ env.ASSET }}</span></code></pre>
-
+</div>
 
       </main>
     </div>
