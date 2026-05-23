@@ -120,3 +120,15 @@ function selectFootnotes() {
 }
 selectFootnotes();
 window.onhashchange = selectFootnotes;
+
+function attachCopyButtons() {
+  const codeBlocks = document.querySelectorAll("pre:has(code)");
+  for (const [i, codeBlock] of codeBlocks.entries()) {
+    const code = codeBlock.getElementsByTagName("code")[0];
+    code.id = `code-block-${i}`
+    const copyButton = document.createElement("copy-button");
+    copyButton.setAttribute("data-target", code.id);
+    codeBlock.appendChild(copyButton);
+  }
+}
+attachCopyButtons();
