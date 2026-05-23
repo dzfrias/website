@@ -169,7 +169,6 @@ li::marker {
 
 img,
 picture,
-svg,
 video {
   display: block;
   max-width: 100%;
@@ -366,6 +365,7 @@ tr:hover {
 }
 
 .profile {
+  display: block;
   width: 100%;
   height: auto;
   border: 3px solid lightgrey;
@@ -534,6 +534,7 @@ hr {
 
       svg {
         $size: 2rem;
+        display: block;
         width: $size;
         height: $size;
       }

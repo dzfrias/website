@@ -2,7 +2,7 @@ import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import markdownIt from "markdown-it";
 import markdownItAnchor from "markdown-it-anchor";
-import markdownItKatex from "markdown-it-katex";
+import mathjax3 from "markdown-it-mathjax3";
 import markdownItFootnote from "markdown-it-footnote";
 import eleventyGoogleFonts from "eleventy-google-fonts";
 import pluginTOC from "eleventy-plugin-toc";
@@ -116,7 +116,7 @@ export default function (eleventyConfig) {
   // Favicons
   eleventyConfig.addPassthroughCopy({ "./src/favicon/*": "." });
 
-  eleventyConfig.setLibrary("md", md.use(markdownItKatex));
+  eleventyConfig.setLibrary("md", md.use(mathjax3));
   eleventyConfig.setLibrary(
     "md",
     md.use(markdownItAnchor, {
