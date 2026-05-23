@@ -213,7 +213,7 @@ button:has(picture, img) {
   border: none;
 }
 
-pre {
+.code-block-container {
   position: relative;
   margin-bottom: $spacing !important;
 
@@ -222,6 +222,10 @@ pre {
     top: 10px;
     right: 10px;
   }
+}
+
+pre {
+  margin: 0 !important;
 }
 
 code:not([class^="language"]) {

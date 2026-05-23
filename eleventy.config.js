@@ -15,6 +15,10 @@ function imgWrap(inner) {
   return `<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image">${inner}</button><dialog>${inner}</dialog></div>`;
 }
 
+function codeBlockWrap(inner) {
+  return `<div class="code-block-container">${inner}</div>`;
+}
+
 export default function (eleventyConfig) {
   const proxy = (tokens, idx, options, _env, self) =>
     self.renderToken(tokens, idx, options);
@@ -23,6 +27,16 @@ export default function (eleventyConfig) {
   const defaultImageRender = md.renderer.rules.image || proxy;
   md.renderer.rules.image = function (tokens, idx, options, env, self) {
     return imgWrap(defaultImageRender(tokens, idx, options, env, self));
+  };
+
+  // Wrap code blocks in `div`
+  const defaultFenceRender = md.renderer.rules.fence || proxy;
+  md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+    return codeBlockWrap(defaultFenceRender(tokens, idx, options, env, self));
+  };
+  const defaultCodeBlockRender = md.renderer.rules.code_block || proxy;
+  md.renderer.rules.code_block = function (tokens, idx, options, env, self) {
+    return codeBlockWrap(defaultCodeBlockRender(tokens, idx, options, env, self));
   };
 
   eleventyConfig.setLibrary("md", md.use(markdownItFootnote));
