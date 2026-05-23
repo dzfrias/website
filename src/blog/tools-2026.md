@@ -165,8 +165,8 @@ to grow past this philosophy, as builtins output typed data, not just plain
 text. While it is interesting to see what is possible with such a system, I
 think raising the level of abstraction for program input and output is not
 viable for practical use. Processes spawned by the OS are given unstructured
-input bytes, and are expected to yield unstructured output bytes. To me, shell's
-job is to mirror and expose this behavior, not abstract above it.
+input bytes, and are expected to yield unstructured output bytes. To me, a
+shell's job is to mirror and expose this behavior, not abstract above it.
 
 {% img "zsh.png", "my zsh prompt" %}
 
