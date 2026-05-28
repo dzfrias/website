@@ -1,5 +1,5 @@
 ---
-title: Neovim and Tree-Sitter Post-Archival
+title: Neovim and Tree-Sitter Post-Archive
 description:
   "This post introduces a replacement for nvim-treesitter: a simple Python
   script for managing tree-sitter parsers."
