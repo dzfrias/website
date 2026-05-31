@@ -43,7 +43,6 @@ The point is, the computer reads 0x00E9 and renders "é" in accordance. Now try
 running this Python code:
 
 ```python
-__runnable
 print(chr(0x00E9))
 print(chr(0x0065) + chr(0x0301))
 ```
@@ -63,7 +62,6 @@ turns out that there are many code points that have similar behavior. But this
 can also lead to problems, as in:
 
 ```python
-__runnable
 print(chr(0x00E9) == chr(0x0065) + chr(0x0301))
 ```
 
@@ -98,7 +96,6 @@ Returning to the previous example, NFD normalization expands code points where
 possible. For example, we have:
 
 ```python
-__runnable
 import unicodedata
 
 assert unicodedata.normalize("NFD", chr(0x00E9)) == chr(0x0065) + chr(0x0301)
@@ -108,7 +105,6 @@ print("Assertion passed!")
 So 0x00E9 gets expanded to 0x0065, 0x0301. NFC does the opposite:
 
 ```python
-__runnable
 import unicodedata
 
 assert unicodedata.normalize("NFC", chr(0x0065) + chr(0x0301)) == chr(0x00E9)
@@ -129,14 +125,12 @@ letter "ß" uppercases to "SS". So, if we were doing case insensitive comparison
 we would want "ß" to equal "SS". This is not the case:
 
 ```python
-__runnable
 print("ß".lower() == "SS".lower())
 ```
 
 Thus we need **case folding**, which is the proper way to do caseless matching:
 
 ```python
-__runnable
 print("ß".casefold() == "SS".casefold())
 ```
 
