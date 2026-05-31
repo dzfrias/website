@@ -107,8 +107,7 @@ character. In this particular case, &quot;é&quot; has a code point value of
 0x00E9.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
 <p>The point is, the computer reads 0x00E9 and renders &quot;é&quot; in accordance. Now try
 running this Python code:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0065</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0301</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 </div><p>You should see &quot;é&quot; printed twice. But clearly, we are printing two different
 strings. What's going on?</p>
@@ -121,14 +120,13 @@ just maps 0x00E9 directly to &quot;é&quot;.</p>
 <p>There are good reasons that both these methods of rendering &quot;é&quot; exist, and it
 turns out that there are many code points that have similar behavior. But this
 can also lead to problems, as in:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0065</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0301</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0065</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0301</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 </div><p>evaluates to false even though both strings look the exact same, which is a bad
 property. We <strong>don't</strong> have the following relationship:</p>
 
-    <span id="mjx-b731544">
+    <span id="mjx-c2dfeef">
       <style>
-      #mjx-b731544{
+      #mjx-c2dfeef{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -288,9 +286,9 @@ g[data-mml-node="xypic"] path {
     </span>
   <p>This is where Unicode normalization comes in. Normalization guarantees that:</p>
 
-    <span id="mjx-ef62bf9">
+    <span id="mjx-a87e267">
       <style>
-      #mjx-ef62bf9{
+      #mjx-a87e267{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -462,14 +460,12 @@ standard (yet they all have the property I concluded with in the last section):<
 </ul>
 <p>Returning to the previous example, NFD normalization expands code points where
 possible. For example, we have:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">import</span> unicodedata
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> unicodedata
 
 <span class="token keyword">assert</span> unicodedata<span class="token punctuation">.</span>normalize<span class="token punctuation">(</span><span class="token string">"NFD"</span><span class="token punctuation">,</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0065</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0301</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Assertion passed!"</span><span class="token punctuation">)</span></code></pre>
 </div><p>So 0x00E9 gets expanded to 0x0065, 0x0301. NFC does the opposite:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">import</span> unicodedata
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> unicodedata
 
 <span class="token keyword">assert</span> unicodedata<span class="token punctuation">.</span>normalize<span class="token punctuation">(</span><span class="token string">"NFC"</span><span class="token punctuation">,</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0065</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x0301</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">0x00E9</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Assertion passed!"</span><span class="token punctuation">)</span></code></pre>
@@ -483,11 +479,9 @@ Although the lowercase implementation is common, it is not the proper operation
 for caseless matching when writing in certain languages. For example, the German
 letter &quot;ß&quot; uppercases to &quot;SS&quot;. So, if we were doing case insensitive comparison,
 we would want &quot;ß&quot; to equal &quot;SS&quot;. This is not the case:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"ß"</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"SS"</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"ß"</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"SS"</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 </div><p>Thus we need <strong>case folding</strong>, which is the proper way to do caseless matching:</p>
-<div class="code-block-container"><pre class="language-python"><code class="language-python">__runnable
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"ß"</span><span class="token punctuation">.</span>casefold<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"SS"</span><span class="token punctuation">.</span>casefold<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"ß"</span><span class="token punctuation">.</span>casefold<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"SS"</span><span class="token punctuation">.</span>casefold<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 </div><h2 id="usage" tabindex="-1"><a class="header-anchor" href="#usage">Usage</a></h2>
 <p>xxUTF implements conversion to all normalization forms as well as case folding
 for UTF-8 and UTF-16 encoded Unicode text. It is distributed as an amalgamated C
