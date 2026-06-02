@@ -176,7 +176,7 @@ better, feel free to reach out via
 
 I also have seen a lot of comparison between NAND and EML online. I don't think
 this is totally accurate: EML as a construction already involves evaluating the
-complex exponential and the complex logarithm. NAND can be expressed a simple
+complex exponential and the complex logarithm. NAND can be expressed as a simple
 truth table.
 
 This opinion is more philosophical than mathematical, but I still don't think
