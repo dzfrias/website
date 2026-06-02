@@ -321,6 +321,10 @@ tr:hover {
   background: variables.$bg-dark;
 }
 
+mjx-container {
+  overflow-x: auto;
+}
+
 .full {
   width: min(90%, calc(100% - 1rem));
 }
