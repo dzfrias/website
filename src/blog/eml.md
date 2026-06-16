@@ -157,6 +157,7 @@ def identity(x):
 This _should_ be the identity function. But now try a non-trivial input:
 
 ```python
+# Prints something completely different
 print(identity(complex(1, 4)))
 ```
 
@@ -167,9 +168,13 @@ paper that fail because of this behavior.
 
 I hope this post gave you a more informed understanding of $\text{eml}$, and
 maybe even sparked your curiousity in complex analysis. This issue went
-unadressed in the paper. If there's anything that could've been explained
-better, feel free to reach out via
-[GitHub issue](https://github.com/dzfrias/website/issues/new) or
+unadressed in the paper. You might wonder the significance of an issue like
+this; it _is_ an "edge case," so to speak. But for constructions to be
+meaningful, they have to actually work. It is just not possible to do what the
+paper claims with $\text{eml}$.
+
+If there's anything that I could've been explained better, feel free to reach
+out via [GitHub issue](https://github.com/dzfrias/website/issues/new) or
 [email](mailto:mail@dzfrias.dev).
 
 ## ¬NAND
