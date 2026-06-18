@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A code snippet for injecting Rust syntax highlighting into doctests in Neovim, using tree-sitter.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Highlighting Rust Doctests in Neovim - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
+</script>
+
+<script>
+  const e='\n<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="3 7 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"/>\n</svg>\n';class n extends HTMLElement{constructor(){super()}connectedCallback(){const n=this.attachShadow({mode:"open"}),t=document.createElement("button");t.ariaLabel="Copy",t.innerHTML=e,n.appendChild(t);const o=this.getAttribute("data-target"),i=document.getElementById(o);t.addEventListener("click",(()=>{navigator.clipboard.writeText(i.textContent).then((()=>{t.innerHTML='\n<svg aria-hidden="true" focusable="false" width="80%" height="80%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">\n<path d="M1827.701 303.065 698.835 1431.801 92.299 825.266 0 917.564 698.835 1616.4 1919.869 395.234z" fill-rule="evenodd"/>\n</svg>\n',t.disabled=!0,setTimeout((()=>{t.innerHTML=e,t.disabled=!1}),500)})).catch((e=>alert("Failed to copy:",e)))}));const a=new CSSStyleSheet;a.replaceSync("\nbutton {\n  width: 33px;\n  height: 33px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 5px;\n  margin: 0;\n  border-width: 0;\n  background-color: var(--copy-button-background, transparent);\n}\n\nbutton:not(:disabled):hover {\n  cursor: pointer;\n}\n\nbutton > svg {\n  fill: var(--copy-button-color, white);\n}\n"),n.adoptedStyleSheets=[a]}}customElements.define("copy-button",n);
+</script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#the-query">The Query</a></li><li><a href="#the-details">The Details</a><ol><li><a href="#node-matching">Node Matching</a></li><li><a href="#predicates">Predicates</a></li><li><a href="#directives">Directives</a></li></ol></li><li><a href="#limitations">Limitations</a></li><li><a href="#wrap-up">Wrap Up</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>Highlighting Rust Doctests in Neovim</h1>
+<p>Have you ever wanted <a href="https://tree-sitter.github.io/tree-sitter/">tree-sitter</a>
+language injections for your doctests and other code blocks in
+<a href="https://neovim.io/">Neovim</a>?</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">/// Here is an important fucntion with a contrived example.</span>
+<span class="token comment">///</span>
+<span class="token comment">/// ```rust</span>
+<span class="token comment">/// # use::my_crate::important_fn;</span>
+<span class="token comment">/// assert_eq!(important_fn("hello"), 68);</span>
+<span class="token comment">/// ```</span>
+<span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function-definition function">important_fn</span><span class="token punctuation">(</span>s<span class="token punctuation">:</span> <span class="token operator">&amp;</span><span class="token keyword">str</span><span class="token punctuation">)</span> <span class="token punctuation">-></span> <span class="token keyword">usize</span> <span class="token punctuation">{</span>
+    <span class="token macro property">unimplemented!</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>Existing Rust tree-sitter query providers (like
+<a href="https://github.com/neovim-treesitter/nvim-treesitter/blob/main/runtime/queries/rust/injections.scm">nvim-treesitter</a>)
+don't do this yet, mostly because it's non-trivial to get working with the
+<a href="https://github.com/tree-sitter/tree-sitter-rust">standard Rust tree-sitter parser</a>.</p>
+<p>But I spent an afternoon figuring it out to get something that <em>almost</em>
+perfect.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> This post will that share that solution, as well as give an
+explanation for how it works.</p>
+<h2 id="the-query" tabindex="-1"><a class="header-anchor" href="#the-query">The Query</a></h2>
+<p>Here is the injection query that I created:</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @_first<span class="token punctuation">)</span> @injection.language
+  .
+  <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @injection.content<span class="token punctuation">)</span><span class="token punctuation">)</span>+
+  .
+  <span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @_last<span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token function">#lua-match?</span> @_first <span class="token string">"^%s*```[a-zA-Z_][a-zA-Z0-9_]*%s*$"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token function">#lua-match?</span> @_last <span class="token string">"^%s*```%s*"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token function">#not-any-lua-match?</span> @injection.content <span class="token string">"^%s*```%s*"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">(</span><span class="token function">#gsub!</span> @injection.language <span class="token string">"^.*```([a-zA-Z_][a-zA-Z0-9_]*)%s*$"</span> <span class="token string">"%1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+</div><p>I recommend putting this in your <code>after/</code> directory. For me, the relevant path
+is <code>$XDG_CONFIG_HOME/nvim/after/queries/rust/injections.scm</code>. Don't forget to
+put</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token comment">; extends</span></code></pre>
+</div><p>at the top of the file!</p>
+<p>This should be enough to see highlights for code blocks, provided they have a
+language tag. Unfortunately, code blocks without a tag are not recognized by
+this query, and I'm not sure that it's possible to remedy that (see the
+<a href="#untagged-code-blocks">Untagged Code Blocks</a> section for more).</p>
+<h2 id="the-details" tabindex="-1"><a class="header-anchor" href="#the-details">The Details</a></h2>
+<p>In my opinion, tree-sitter queries are not very well-documented; sure, it's
+straightforward to capture a node and highlight it with a group (you can find
+plenty of examples of that by reading the highlight queries that come with
+Neovim), but complex queries like the one above are scarce in the Neovim
+documentation.</p>
+<p>I'll go through each part of my capture query, in three sections:</p>
+<ol>
+<li>Node matching</li>
+<li>Predicates</li>
+<li>Directives</li>
+</ol>
+<h3 id="node-matching" tabindex="-1"><a class="header-anchor" href="#node-matching">Node Matching</a></h3>
+<p>The node matching part of the query is this:</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @_first<span class="token punctuation">)</span> @injection.language
+  .
+  <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @injection.content<span class="token punctuation">)</span><span class="token punctuation">)</span>+
+  .
+  <span class="token punctuation">(</span><span class="token function">line_comment</span> <span class="token punctuation">(</span><span class="token function">doc_comment</span><span class="token punctuation">)</span> @_last<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+</div><p>What this does is match code things of the form</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">/// First (@_first) (@injection.language)</span>
+<span class="token comment">/// Stuff in the middle (@injection.content)</span>
+<span class="token comment">/// More stuff in the middle (@injection.content)</span>
+<span class="token comment">/// Last (@_last)</span></code></pre>
+</div><p>The <code>.</code> &quot;anchor&quot; node specifies the fixed-ness of the position of the sibiling
+nodes. The <code>@_first</code> capture will match the <em>text</em> of the comment (i.e. &quot; First&quot;
+in the example I gave), while <code>@injection.language</code> will capture the leading
+<code>///</code> as well as the text. The <code>+</code> at the end of the middle node query allows
+multiple nodes to be captured under the group <code>@injection.content</code>. Finally,
+<code>@_last</code> will capture the text of the last comment in the doc comment group.</p>
+<p>Right now, this query matches all doc comments. We need to make sure it only
+matches ones with code blocks in them.</p>
+<h3 id="predicates" tabindex="-1"><a class="header-anchor" href="#predicates">Predicates</a></h3>
+<p>The predicate part of my main query is:</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token function">#lua-match?</span> @_first <span class="token string">"^%s*```[a-zA-Z_][a-zA-Z0-9_]*%s*$"</span><span class="token punctuation">)</span>$
+<span class="token punctuation">(</span><span class="token function">#lua-match?</span> @_last <span class="token string">"^%s*```%s*"</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token function">#not-any-lua-match?</span> @injection.content <span class="token string">"^%s*```%s*"</span><span class="token punctuation">)</span></code></pre>
+</div><p>These are straightforward as long as you're familiar with regex. Let's take the
+first predicate:</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token function">#lua-match?</span> @_first <span class="token string">"^%s*```[a-zA-Z_][a-zA-Z0-9_]*%s*$"</span><span class="token punctuation">)</span></code></pre>
+</div><p>If <code>@_first</code> doesn't match the regex, <strong>the whole capture will fail</strong>. This is
+the behavior we want; all predicates have to be true in order for a query to be
+valid. Here are the details of the regex:</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">^   %s*         ```        [a-zA-Z_][a-zA-Z0-9_]*  %s*          $
+    whitespace  backticks  language tag            whitespace</code></pre>
+</div><p>So this predicate matches the beginning of a code block. Remember: <code>@_first</code>
+doesn't include the leading slashes of the doc comment.</p>
+<p><code>@_last</code> has a similar predicate to match the end of the code block (triple
+backticks). The <code>#not-any-lua-match?</code> predicate is a bit more complicated,
+though. Here's an example of something that happens without this predicate:</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">/// ```rust             -            -</span>
+<span class="token comment">/// println!("hello");  | capture 1  |</span>
+<span class="token comment">/// ```                 -            |</span>
+<span class="token comment">///                                  |</span>
+<span class="token comment">/// Stuff here                       | uh oh (capture 3)</span>
+<span class="token comment">///                                  |</span>
+<span class="token comment">/// ```rust             -            |</span>
+<span class="token comment">/// println!("hello");  | capture 2  |</span>
+<span class="token comment">/// ```                 -            -</span></code></pre>
+</div><p>Can you spot what's happening? The query captures the first line as <code>@_first</code>,
+and the last line as <code>@_last</code>, and puts everything in between in
+<code>@injection.content</code>. The <code>#not-any-lua-match?</code> makes sure none of the nodes in
+<code>@injection.content</code> have backticks, preventing the nested scenario
+above.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<h3 id="directives" tabindex="-1"><a class="header-anchor" href="#directives">Directives</a></h3>
+<p>Directives in tree-sitter queries alter capture metadata. They don't affect the
+query itself. There is only one directive in my query:</p>
+<div class="code-block-container"><pre class="language-scheme"><code class="language-scheme"><span class="token punctuation">(</span><span class="token function">#gsub!</span> @injection.language <span class="token string">"^.*```([a-zA-Z_][a-zA-Z0-9_]*)%s*$"</span> <span class="token string">"%1"</span><span class="token punctuation">)</span></code></pre>
+</div><p>Without this directive, <code>@injection.language</code> would be set to</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">/// ```rust</span></code></pre>
+</div><p>The <code>gsub</code> filters the leading slashes and backticks.</p>
+<h2 id="limitations" tabindex="-1"><a class="header-anchor" href="#limitations">Limitations</a></h2>
+<p>This query can't match code blocks without explicit language tags. If I removed
+this restriction, there would be no way to handle cases like this:</p>
+<div class="code-block-container"><pre class="language-rust"><code class="language-rust"><span class="token comment">/// ```</span>
+<span class="token comment">/// println!("hello");</span>
+<span class="token comment">/// ```</span>
+<span class="token comment">/// Middle</span>
+<span class="token comment">/// ```</span>
+<span class="token comment">/// println!("hello");</span>
+<span class="token comment">/// ```</span></code></pre>
+</div><p>The &quot;Middle&quot; doc comment would be matched, since there's no syntactic indication
+of start and end. This led me to wondering: how do the Markdown tree-sitter
+queries handle this? The answer is that <strong>the parser does</strong>. The Markdown
+tree-sitter parser treats code sections as a dedicated node in the tree;
+however, the Rust parser does not, forcing us to make a somewhat hacky solution.</p>
+<h2 id="wrap-up" tabindex="-1"><a class="header-anchor" href="#wrap-up">Wrap Up</a></h2>
+<p>I hope this post was useful! If there's any suggestions, comments, or
+corrections you have, feel free to
+<a href="https://github.com/dzfrias/website/issues/new">submit an issue</a> or
+<a href="mailto:mail@dzfrias.dev">send me an email</a>. It would be nice if the Rust
+tree-sitter parser recognized code blocks like the Markdown parser does. After
+all, even the standard Rust parser does this in order to run doctests. Sounds
+like a good future PR!</p>
+<p>Finally, another extension to this that might be a little easier would be to
+syntax highlight <code>#[doc]</code> attributes.</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>There's only one caveat, which I will mention later in the post. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>All predicates can be prefixed with <code>not</code> or <code>any</code> in order to change their
+behavior. Pretty neat! <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
