@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A look into an alternative runtime for Address Sanitizer that I am writing in Zig.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Writing an ASan Runtime in Zig #0 - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
+</script>
+
+<script>
+  const e='\n<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="3 7 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"/>\n</svg>\n';class n extends HTMLElement{constructor(){super()}connectedCallback(){const n=this.attachShadow({mode:"open"}),t=document.createElement("button");t.ariaLabel="Copy",t.innerHTML=e,n.appendChild(t);const o=this.getAttribute("data-target"),i=document.getElementById(o);t.addEventListener("click",(()=>{navigator.clipboard.writeText(i.textContent).then((()=>{t.innerHTML='\n<svg aria-hidden="true" focusable="false" width="80%" height="80%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">\n<path d="M1827.701 303.065 698.835 1431.801 92.299 825.266 0 917.564 698.835 1616.4 1919.869 395.234z" fill-rule="evenodd"/>\n</svg>\n',t.disabled=!0,setTimeout((()=>{t.innerHTML=e,t.disabled=!1}),500)})).catch((e=>alert("Failed to copy:",e)))}));const a=new CSSStyleSheet;a.replaceSync("\nbutton {\n  width: 33px;\n  height: 33px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 5px;\n  margin: 0;\n  border-width: 0;\n  background-color: var(--copy-button-background, transparent);\n}\n\nbutton:not(:disabled):hover {\n  cursor: pointer;\n}\n\nbutton > svg {\n  fill: var(--copy-button-color, white);\n}\n"),n.adoptedStyleSheets=[a]}}customElements.define("copy-button",n);
+</script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#the-basics-of-asan">The Basics of ASan</a><ol><li><a href="#instrumentation">Instrumentation</a></li><li><a href="#runtime">Runtime</a></li><li><a href="#shadow-memory">Shadow Memory</a><ol><li><a href="#tail-bytes">Tail Bytes</a></li></ol></li><li><a href="#redzones">Redzones</a></li></ol></li><li><a href="#zig-asan">Zig ASan</a><ol><li><a href="#allocation-headers">Allocation Headers</a></li></ol></li><li><a href="#conclusion">Conclusion</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>Writing an ASan Runtime in Zig #0</h1>
+<p>LLVM's <a href="https://clang.llvm.org/docs/AddressSanitizer.html">Address Sanitizer</a>
+(ASan) is one of the most widely used tools in production software, particularly
+software written in C or C++.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> Briefly, ASan will instrument a
+program so that all memory reads and writes are safety-checked (i.e. preventing
+buffer overflows, use-after-frees, and other tricky memory bugs). More advanced
+features can be enabled, such stack use-after-return checking, at the cost of
+performance.</p>
+<p>There are many tools that do this, such as <a href="https://drmemory.org/">Dr. Memory</a>
+and <a href="https://valgrind.org/">valgrind</a>. However, ASan remains the most widely
+used way to detect memory issues, and a large part of its dominance owes to its
+speed; ASan usually only slows down the instrumented program by a factor of
+1.8x-2x. This means that ASan <strong>won't</strong> cause running tests to go from minutes
+to hours, which is nonnegotiable for giant projects with enormous test suites
+like Chromium and Firefox.</p>
+<p>In this blog post, I will explain how ASan is so performant, and offer snippets
+of an alternative runtime I am writing in <a href="https://ziglang.org/">Zig</a>.</p>
+<h2 id="the-basics-of-asan" tabindex="-1"><a class="header-anchor" href="#the-basics-of-asan">The Basics of ASan</a></h2>
+<p>Consider the following C program:</p>
+<div class="code-block-container"><pre class="language-c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>buf <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// Uh oh! Heap overflow</span>
+  buf<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">free</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>This program has a heap buffer overflow. We can compile this program with ASan
+like so:</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">$ cc asan_test.c -o asan_test -fsanitize=address -g</code></pre>
+</div><p>When we run this program, we should get an output that looks like this:</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">==66248==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6020000000f8 at pc 0x000102f70600 bp 0x00016ce8ec10 sp 0x00016ce8ec08
+WRITE of size 1 at 0x6020000000f8 thread T0
+    #0 0x000102f705fc in main main.c:6
+    #1 0x00018b59bdfc in start+0x1b4c (dyld:arm64e+0x1fdfc)
+
+0x6020000000f8 is located 0 bytes after 8-byte region [0x6020000000f0,0x6020000000f8)
+allocated by thread T0 here:
+    #0 0x000103754e24 in malloc+0x70 (libclang_rt.asan_osx_dynamic.dylib:arm64+0x54e24)
+    #1 0x000102f705ac in main main.c:4
+    #2 0x00018b59bdfc in start+0x1b4c (dyld:arm64e+0x1fdfc)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow main.c:6 in main
+Shadow bytes around the buggy address:
+...</code></pre>
+</div><p>ASan tells us where the overflow happened, as well as the allocation that it
+most likely overflowed. To me at least, this seems pretty magical. How can ASan
+figure all of this out?</p>
+<h3 id="instrumentation" tabindex="-1"><a class="header-anchor" href="#instrumentation">Instrumentation</a></h3>
+<p>When you pass the <code>-fsanitize=address</code> flag into your compiler, it will
+<strong>instrument</strong> all of your memory accesses. In other words, it will turn all
+code that looks like this:</p>
+<div class="code-block-container"><pre class="language-c"><code class="language-c">buf<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></code></pre>
+</div><p>into</p>
+<div class="code-block-container"><pre class="language-c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">IS_POISONED_MEMORY</span><span class="token punctuation">(</span>buf <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Report an invalid store of size 1</span>
+  <span class="token function">__asan_report_store1</span><span class="token punctuation">(</span>buf <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+buf<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></code></pre>
+</div><p>It does the same when reading from memory. Simple enough, right?</p>
+<p>You might wonder who defines <code>__asan_report_store1</code>, and how the instrumented
+program is able to call it. This is a good question, as it leads to the next
+major component of ASan: the runtime.</p>
+<h3 id="runtime" tabindex="-1"><a class="header-anchor" href="#runtime">Runtime</a></h3>
+<p>The ASan runtime defines functions like <code>__asan_report_store1</code>, along with doing
+pretty much all the heavy lifting for the internals of ASan. It is a dynamic
+library that the instrumented program calls into.</p>
+<p>Here is a quick overview of the functionality that the runtime contains:</p>
+<ul>
+<li>Error reporting/printing</li>
+<li>Allocation APIs (<code>malloc</code>, <code>free</code>, etc.). The dynamic library intercepts calls
+to <code>malloc</code> so that they route to <code>__asan_malloc</code>. This is how ASan knows
+about the allocations your program is making (because it is the one actually
+providng the memory).</li>
+<li><code>__asan_init</code>. The instrumented code calls this before <code>main</code> so that the
+runtime can do anything it needs to set up.</li>
+<li>Stack frame allocation and free, if use-after-return detection is enabled</li>
+</ul>
+<p>Combined, the instrumentation and runtime work together to report any bad
+(poisoned) memory accesses that your program makes.</p>
+<p>While this explains the <em>architecture</em> of ASan, I haven't yet explained how bad
+memory is distinguished from good memory (i.e. how does <code>IS_POISONED_MEMORY</code>
+work in the example I showed in <a href="#instrumentation">Instrumentation</a>?). This
+question leads to the core mechanism that makes ASan so fast: shadow memory.</p>
+<h3 id="shadow-memory" tabindex="-1"><a class="header-anchor" href="#shadow-memory">Shadow Memory</a></h3>
+<p>At a high level, ASan divides the addressing space into two regions:<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<ol>
+<li>Application memory</li>
+<li>Shadow memory</li>
+</ol>
+<p>Typically, application memory covers 7/8ths of the total available addressing
+space, and shadow memory covers the 1/8th left. Application memory is the memory
+that the running process uses, like normal. The shadow memory is a contiguous
+segment that is reserved on initialization (during <code>__asan_init</code>). When the ASan
+runtime reserves this memory, blocks it off so that program only gets memory
+(from <code>malloc</code> and others) that lives in the application region.</p>
+<p>What goes in shadow memory? In short, every byte of shadow memory corresponds to
+8 bytes of application memory. If a byte in the shadow region is less than zero,
+it means all 8 corresponding bytes of main memory are bad. If it is equal to
+zero, that means it is &quot;okay&quot;. We are guaranteed that all application memory can
+be tracked in shadow memory because of the 1:8 ratio.</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">|---------------------||--------||-------------------|
+      Application        Shadow      Application</code></pre>
+</div><p>So, <code>IS_POISONED_MEMORY</code> from before returns true if and only if the shadow
+value corresponding to the passed address is less than zero. All addresses in
+the application memory space can be transformed into a shadow memory address
+with a simple calculation:</p>
+
+    <span id="mjx-f101c8c">
+      <style>
+      #mjx-f101c8c{
+        display:contents;
+        mjx-assistive-mml {
+          user-select: text !important;
+          clip: auto !important;
+          color: rgba(0,0,0,0);
+        }
+        
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+      }
+      </style>
+      <mjx-container class="MathJax" jax="SVG" display="true" style="position: relative;"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="45.747ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 20220 1000" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="73" d="M295 316Q295 356 268 385T190 414Q154 414 128 401Q98 382 98 349Q97 344 98 336T114 312T157 287Q175 282 201 278T245 269T277 256Q294 248 310 236T342 195T359 133Q359 71 321 31T198 -10H190Q138 -10 94 26L86 19L77 10Q71 4 65 -1L54 -11H46H42Q39 -11 33 -5V74V132Q33 153 35 157T45 162H54Q66 162 70 158T75 146T82 119T101 77Q136 26 198 26Q295 26 295 104Q295 133 277 151Q257 175 194 187T111 210Q75 227 54 256T33 318Q33 357 50 384T93 424T143 442T187 447H198Q238 447 268 432L283 424L292 431Q302 440 314 448H322H326Q329 448 335 442V310L329 304H301Q295 310 295 316Z"></path><path data-c="68" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 124T102 167T103 217T103 272T103 329Q103 366 103 407T103 482T102 542T102 586T102 603Q99 622 88 628T43 637H25V660Q25 683 27 683L37 684Q47 685 66 686T103 688Q120 689 140 690T170 693T181 694H184V367Q244 442 328 442Q451 442 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(394,0)"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(950,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1450,0)"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(2006,0)"></path><path data-c="77" d="M90 368Q84 378 76 380T40 385H18V431H24L43 430Q62 430 84 429T116 428Q206 428 221 431H229V385H215Q177 383 177 368Q177 367 221 239L265 113L339 328L333 345Q323 374 316 379Q308 384 278 385H258V431H264Q270 428 348 428Q439 428 454 431H461V385H452Q404 385 404 369Q404 366 418 324T449 234T481 143L496 100L537 219Q579 341 579 347Q579 363 564 373T530 385H522V431H529Q541 428 624 428Q692 428 698 431H703V385H697Q696 385 691 385T682 384Q635 377 619 334L559 161Q546 124 528 71Q508 12 503 1T487 -11H479Q460 -11 456 -4Q455 -3 407 133L361 267Q359 263 266 -4Q261 -11 243 -11H238Q225 -11 220 -3L90 368Z" transform="translate(2506,0)"></path><path data-c="5F" d="M0 -62V-25H499V-62H0Z" transform="translate(3228,0)"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(3728,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(4228,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(4784,0)"></path><path data-c="72" d="M36 46H50Q89 46 97 60V68Q97 77 97 91T98 122T98 161T98 203Q98 234 98 269T98 328L97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 60 434T96 436Q112 437 131 438T160 441T171 442H174V373Q213 441 271 441H277Q322 441 343 419T364 373Q364 352 351 337T313 322Q288 322 276 338T263 372Q263 381 265 388T270 400T273 405Q271 407 250 401Q234 393 226 386Q179 341 179 207V154Q179 141 179 127T179 101T180 81T180 66V61Q181 59 183 57T188 54T193 51T200 49T207 48T216 47T225 47T235 46T245 46H276V0H267Q249 3 140 3Q37 3 28 0H20V46H36Z" transform="translate(5340,0)"></path></g><g data-mml-node="mo" transform="translate(5732,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(6121,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(6693,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(7359.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mo" transform="translate(8415.6,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(8804.6,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(9376.6,0)"><g data-mml-node="mo"><path data-c="2F" d="M423 750Q432 750 438 744T444 730Q444 725 271 248T92 -240Q85 -250 75 -250Q68 -250 62 -245T56 -231Q56 -221 230 257T407 740Q411 750 423 750Z"></path></g></g><g data-mml-node="mn" transform="translate(9876.6,0)"><path data-c="38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"></path></g><g data-mml-node="mo" transform="translate(10376.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(10987.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mtext" transform="translate(11988,0)"><path data-c="73" d="M295 316Q295 356 268 385T190 414Q154 414 128 401Q98 382 98 349Q97 344 98 336T114 312T157 287Q175 282 201 278T245 269T277 256Q294 248 310 236T342 195T359 133Q359 71 321 31T198 -10H190Q138 -10 94 26L86 19L77 10Q71 4 65 -1L54 -11H46H42Q39 -11 33 -5V74V132Q33 153 35 157T45 162H54Q66 162 70 158T75 146T82 119T101 77Q136 26 198 26Q295 26 295 104Q295 133 277 151Q257 175 194 187T111 210Q75 227 54 256T33 318Q33 357 50 384T93 424T143 442T187 447H198Q238 447 268 432L283 424L292 431Q302 440 314 448H322H326Q329 448 335 442V310L329 304H301Q295 310 295 316Z"></path><path data-c="68" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 124T102 167T103 217T103 272T103 329Q103 366 103 407T103 482T102 542T102 586T102 603Q99 622 88 628T43 637H25V660Q25 683 27 683L37 684Q47 685 66 686T103 688Q120 689 140 690T170 693T181 694H184V367Q244 442 328 442Q451 442 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(394,0)"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(950,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1450,0)"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(2006,0)"></path><path data-c="77" d="M90 368Q84 378 76 380T40 385H18V431H24L43 430Q62 430 84 429T116 428Q206 428 221 431H229V385H215Q177 383 177 368Q177 367 221 239L265 113L339 328L333 345Q323 374 316 379Q308 384 278 385H258V431H264Q270 428 348 428Q439 428 454 431H461V385H452Q404 385 404 369Q404 366 418 324T449 234T481 143L496 100L537 219Q579 341 579 347Q579 363 564 373T530 385H522V431H529Q541 428 624 428Q692 428 698 431H703V385H697Q696 385 691 385T682 384Q635 377 619 334L559 161Q546 124 528 71Q508 12 503 1T487 -11H479Q460 -11 456 -4Q455 -3 407 133L361 267Q359 263 266 -4Q261 -11 243 -11H238Q225 -11 220 -3L90 368Z" transform="translate(2506,0)"></path><path data-c="5F" d="M0 -62V-25H499V-62H0Z" transform="translate(3228,0)"></path><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(3728,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(4561,0)"></path><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(5005,0)"></path><path data-c="5F" d="M0 -62V-25H499V-62H0Z" transform="translate(5838,0)"></path><path data-c="62" d="M307 -11Q234 -11 168 55L158 37Q156 34 153 28T147 17T143 10L138 1L118 0H98V298Q98 599 97 603Q94 622 83 628T38 637H20V660Q20 683 22 683L32 684Q42 685 61 686T98 688Q115 689 135 690T165 693T176 694H179V543Q179 391 180 391L183 394Q186 397 192 401T207 411T228 421T254 431T286 439T323 442Q401 442 461 379T522 216Q522 115 458 52T307 -11ZM182 98Q182 97 187 90T196 79T206 67T218 55T233 44T250 35T271 29T295 26Q330 26 363 46T412 113Q424 148 424 212Q424 287 412 323Q385 405 300 405Q270 405 239 390T188 347L182 339V98Z" transform="translate(6338,0)"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(6894,0)"></path><path data-c="73" d="M295 316Q295 356 268 385T190 414Q154 414 128 401Q98 382 98 349Q97 344 98 336T114 312T157 287Q175 282 201 278T245 269T277 256Q294 248 310 236T342 195T359 133Q359 71 321 31T198 -10H190Q138 -10 94 26L86 19L77 10Q71 4 65 -1L54 -11H46H42Q39 -11 33 -5V74V132Q33 153 35 157T45 162H54Q66 162 70 158T75 146T82 119T101 77Q136 26 198 26Q295 26 295 104Q295 133 277 151Q257 175 194 187T111 210Q75 227 54 256T33 318Q33 357 50 384T93 424T143 442T187 447H198Q238 447 268 432L283 424L292 431Q302 440 314 448H322H326Q329 448 335 442V310L329 304H301Q295 310 295 316Z" transform="translate(7394,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(7788,0)"></path></g></g></g></svg><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mtext>shadow_addr</mtext><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>x</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><mn>8</mn><mo stretchy="false">)</mo><mo>+</mo><mtext>shadow_mem_base</mtext></math></mjx-assistive-mml></mjx-container>
+    </span>
+  <p>Again, the 1:8 ratio is what makes this work. Since it's just a few arithmetic
+operations, this check is extremely fast.</p>
+<h4 id="tail-bytes" tabindex="-1"><a class="header-anchor" href="#tail-bytes">Tail Bytes</a></h4>
+<p>There is a slight problem with this model: the 1:8 ratio is not granular enough
+to support mapping blocks of memory that are not multiples of 8. For example,
+<code>malloc(16)</code> corresponds to <code>0x00 0x00</code> in shadow memory. However, <code>malloc(17)</code>
+should not correspond to <code>0x00 0x00 0x00</code>, as it represents <em>24</em> okay bytes,
+not 17. ASan solves this by defining bytes <code>0x01</code>-<code>0x07</code>. <code>0x0k</code> means that the
+first k bytes of the region are okay, and the next 8 - k are not.</p>
+<p>So, <code>malloc(17)</code> is mapped to <code>0x00 0x00 0x01</code>.</p>
+<h3 id="redzones" tabindex="-1"><a class="header-anchor" href="#redzones">Redzones</a></h3>
+<p><strong>Redzones</strong> are regions of poisoned memory that are installed to detect
+overflows. For example, we've covered how the runtime intercepts <code>malloc(8)</code> to
+call <code>__asan_malloc(8)</code>. <code>__asan_malloc(8)</code> actually allocates 40 bytes of
+memory, and installs 16 bytes of padding bytes on both sides of the user's
+allocation region (8 bytes) that are poisoned immediately upon
+allocation.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup> The shadow memory would looks like this:</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">... 0xfa 0xfa 0x00 0xfa 0xfa ...
+    --------malloc(8)-------</code></pre>
+</div><p>So, if the program tried to access out of the bounds of the allocation, the bad
+access would likely hit a redzone and thus cause an error report.</p>
+<p>ASan also installs redzones around all stack variables. Consider this program:</p>
+<div class="code-block-container"><pre class="language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token operator">*</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>a <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">68</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>ASan can report this as a stack buffer overflow because it puts poisoned
+redzones around the address corresponding to every stack variable. Something to
+note is that the <strong>instrumentation does this</strong>, not the runtime.</p>
+<h2 id="zig-asan" tabindex="-1"><a class="header-anchor" href="#zig-asan">Zig ASan</a></h2>
+<p>I am currently writing an alternative runtime for ASan using Zig. As a reminder,
+the runtime is responsible for:</p>
+<ol>
+<li>Reserving shadow memory</li>
+<li>Intercepting memory allocation functions such as <code>malloc</code></li>
+<li>Defining error reporting functions</li>
+<li>Implementing symbols such as <code>__asan_init</code></li>
+<li>...and much more that I haven't covered in this post</li>
+</ol>
+<p>The runtime is essentially a dynamic library that exposes a fast memory
+allocator that maintains shadow memory and prints fancy error reports. I haven't
+made the source code public yet, but most likely will within the next couple of
+months.</p>
+<p>In the rest of this post, I will describe my solution to one of the many
+sub-problems that pertains to writing an ASan-style allocator.</p>
+<h3 id="allocation-headers" tabindex="-1"><a class="header-anchor" href="#allocation-headers">Allocation Headers</a></h3>
+<p>We've already seen how ASan uses <a href="#redzones">redzones</a> to pad allocations with
+poisoned memory. But, when a redzone is accessed, how does ASan trace it back to
+the original allocation in the error report? How does it print a stack trace of
+where the original allocation took place?</p>
+<p>The answer is with allocation metadata. Many allocators attach metadata to all
+allocations that describe various things about the allocation that are useful
+for debugging.</p>
+<p>This metadata can be located pretty much anywhere. A naive allocator, for
+example, could put this metadata in a giant hash map. This doesn't scale well in
+multi-threaded programs; some sort of synchronization would be required for
+every single allocation request to prevent data races.</p>
+<p>Instead, Zig ASan stores allocation metadata as a header in every allocation. A
+convenient place to put this metadata is the left redzone:</p>
+<div class="code-block-container"><pre class="language-text"><code class="language-text">XXXXXXXXX|HHHHHHHHHHHHHHHH|00000000000|XXXXXXXXXXXXXXXXXXXX
+Left rz   Header/left rz   User data   Right rz</code></pre>
+</div><p>Zig ASan's header size is 16 bytes. This is how it is defined:</p>
+<div class="code-block-container"><pre class="language-zig"><code class="language-zig"><span class="token keyword">const</span> <span class="token class-name">AllocHeader</span> <span class="token operator">=</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    <span class="token comment doc-comment">/// State of the allocation</span>
+    state<span class="token punctuation">:</span> std<span class="token punctuation">.</span>atomic<span class="token punctuation">.</span><span class="token function">Value</span><span class="token punctuation">(</span>State<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">.</span>alive<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    packed_data<span class="token punctuation">:</span> <span class="token keyword">packed</span> <span class="token keyword">struct</span><span class="token punctuation">(</span><span class="token builtin-type keyword">u8</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Requested alignment from user for allocation</span>
+        user_alignment<span class="token punctuation">:</span> <span class="token class-name">mem<span class="token punctuation">.</span>Alignment</span><span class="token punctuation">,</span>
+        <span class="token comment">// Extra bits to get this type to u8.</span>
+        _<span class="token punctuation">:</span> <span class="token class-name">u2</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token comment">// We can't use a u48 for this because we need alignments to be exact</span>
+    user_size_high<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">u16</span></span><span class="token punctuation">,</span>
+    user_size_low<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">u32</span></span><span class="token punctuation">,</span>
+    <span class="token comment">// Pointer to stack trace of allocation. We allocate a TraceMetadata upon</span>
+    <span class="token comment">// every allocation.</span>
+    trace<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span><span class="token keyword">const</span> TraceMetadata</span><span class="token punctuation">,</span>
+
+    <span class="token keyword">const</span> <span class="token class-name">State</span> <span class="token operator">=</span> <span class="token keyword">enum</span><span class="token punctuation">(</span><span class="token builtin-type keyword">u8</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        alive <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        freed <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> <span class="token class-name">TraceMetadata</span> <span class="token operator">=</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+        stack_trace<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span>StackTrace</span><span class="token punctuation">,</span>
+        thread_id<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Thread<span class="token punctuation">.</span>Id</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>Suppose the user wants to free an allocation with <code>free(ptr)</code>. In Zig, this will
+look like</p>
+<div class="code-block-container"><pre class="language-zig"><code class="language-zig"><span class="token comment">// Called when the runtime intercepts `free`</span>
+<span class="token keyword">fn</span> <span class="token function">__asan_free</span><span class="token punctuation">(</span>ptr<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">?</span><span class="token operator">*</span>anyopaque</span><span class="token punctuation">)</span> <span class="token class-name"><span class="token builtin-type keyword">void</span></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> non_null <span class="token operator">=</span> ptr <span class="token keyword">orelse</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> bytes<span class="token punctuation">:</span> <span class="token class-name"><span class="token punctuation">[</span><span class="token operator">*</span><span class="token punctuation">]</span><span class="token builtin-type keyword">u8</span></span> <span class="token operator">=</span> <span class="token builtin">@ptrCast</span><span class="token punctuation">(</span>non_null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Get the header by subtracting 16 bytes from user's pointer</span>
+    <span class="token comment">// NOTE: this requires that `ptr` is 16-aligned. We can guarantee this</span>
+    <span class="token comment">//       by making the minimum alignment of every allocation 16</span>
+    <span class="token keyword">const</span> header<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>AllocHeader</span> <span class="token operator">=</span> <span class="token builtin">@ptrCast</span><span class="token punctuation">(</span><span class="token builtin">@alignCast</span><span class="token punctuation">(</span>non_null <span class="token operator">-</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Set the state to quarantined or early return if it's already being</span>
+    <span class="token comment">// quarantined. This needs to be done atomically so that we don't race</span>
+    <span class="token comment">// in the case of a double free. We use the acquire memory ordering to</span>
+    <span class="token comment">// make sure the poisoning comes after this operation.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>header<span class="token punctuation">.</span>state<span class="token punctuation">.</span><span class="token function">cmpxchgStrong</span><span class="token punctuation">(</span><span class="token punctuation">.</span>alive<span class="token punctuation">,</span> <span class="token punctuation">.</span>freed<span class="token punctuation">,</span> <span class="token punctuation">.</span>acquire<span class="token punctuation">,</span> <span class="token punctuation">.</span>monotonic<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">|</span>state<span class="token operator">|</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token punctuation">.</span>freed <span class="token operator">=></span> <span class="token punctuation">{</span>
+                <span class="token comment">// Write stack trace of offending allocation</span>
+                <span class="token keyword">const</span> stderr <span class="token operator">=</span> std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">lockStderr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token punctuation">.</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">terminal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">defer</span> std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">unlockStderr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">writeStackTrace</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>header<span class="token punctuation">.</span>trace<span class="token punctuation">.</span>stack_trace<span class="token punctuation">,</span> stderr<span class="token punctuation">)</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+                <span class="token builtin">@panic</span><span class="token punctuation">(</span><span class="token string">"double free!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">.</span>alive <span class="token operator">=></span> <span class="token keyword">unreachable</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">const</span> size_low<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token builtin">@intCast</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span>user_size_low<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> size_high<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token builtin">@intCast</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span>user_size_high<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Assemble the u48 size from the low and high fields</span>
+    <span class="token keyword">const</span> size <span class="token operator">=</span> size_low <span class="token operator">|</span> <span class="token punctuation">(</span>size_high <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Set the user's allocation to poisoned in shadow memory</span>
+    <span class="token function">setPoisoned</span><span class="token punctuation">(</span>bytes<span class="token punctuation">[</span><span class="token number">0</span><span class="token operator">..</span>size<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>Hopefully this shows a complete example of how allocation headers can be used to
+provide good debug info to the user.</p>
+<p>There is one thing missing from what I've told you about <code>AllocHeader</code>. Consider
+the situation where I want to do something to the <em>full</em> allocation (redzones
+included) after the user passes a pointer, not just the user's portion of the
+allocation. Try to figure out how we might be able to recover the full
+allocation from just the user pointer, without adding any fields to
+<code>AllocHeader</code>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
+<h2 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h2>
+<p>I hope this post gave a good introduction to how ASan works, and made the
+implementation a little less magical. This post should also help to demystify
+ASan error reports; they have a lot of densely packed information, so it can be
+hard to know what to look for. It's helpful to be able to fluently read the
+shadow memory report the ASan provides gives.</p>
+<p>Lastly, I hope my work on Zig ASan was interesting. I've made a lot progress on
+the library and hope to be releasing it soon! If you have any questions,
+comments, or found an issue, send me an email at
+<a href="mailto:mail@dzfrias.dev">mail@dzfrias.dev</a>.</p>
+<p>Thanks for reading my post!</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>It can actually be used in any LLVM language, such as Rust, Go, and Zig.
+This is less common in practice, though, because those langauges already
+have helpers for memory safety. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>If you are unfamiliar, &quot;addressing space&quot; refers to the range that memory
+can be addressed at by your process. The operating system gives each process
+many terabytes of space to work with, and then maps these terabytes into
+physical memory on your computer. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>The actual size of the allocation is determined by the runtime and should be
+regarded as an implementation-specific detail. Larger redzones, for example,
+could catch more overflows, but they are more wasteful. Thus, the runtime
+can choose an appropriate redzone size depending on its needs. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>Hint: think about how we can use alignment math instead of adding extra
+bytes of information somewhere. <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
