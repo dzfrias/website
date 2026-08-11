@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A deep dive into how ASan&#39;s memory quarantine works.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Writing an ASan Runtime in Zig #1 - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",(()=>n.showModal())),n.addEventListener("click",(e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()}))}const t=new Map;!function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++){e(o.children[t])}}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort(((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y));let o=!1,s=null;document.addEventListener("scroll",(()=>{o||(window.requestAnimationFrame((()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort(((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)}))[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1})),o=!0)}));for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",(()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"}))}const l=document.querySelectorAll('a[id^="fnref"]'),i=document.getElementsByClassName("footnote-item"),r=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=i[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",(()=>{o=document.createElement("aside"),r.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"})),t.addEventListener("mouseleave",(()=>{o.style.opacity="0%",o.addEventListener("transitionend",(()=>o.remove()))}))}function c(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of i)e.ariaCurrent=null;return}for(const e of i)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}c(),window.onhashchange=c,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
+</script>
+
+<script>
+  const e='\n<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="3 7 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"/>\n</svg>\n';class n extends HTMLElement{constructor(){super()}connectedCallback(){const n=this.attachShadow({mode:"open"}),t=document.createElement("button");t.ariaLabel="Copy",t.innerHTML=e,n.appendChild(t);const o=this.getAttribute("data-target"),i=document.getElementById(o);t.addEventListener("click",(()=>{navigator.clipboard.writeText(i.textContent).then((()=>{t.innerHTML='\n<svg aria-hidden="true" focusable="false" width="80%" height="80%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">\n<path d="M1827.701 303.065 698.835 1431.801 92.299 825.266 0 917.564 698.835 1616.4 1919.869 395.234z" fill-rule="evenodd"/>\n</svg>\n',t.disabled=!0,setTimeout((()=>{t.innerHTML=e,t.disabled=!1}),500)})).catch((e=>alert("Failed to copy:",e)))}));const a=new CSSStyleSheet;a.replaceSync("\nbutton {\n  width: 33px;\n  height: 33px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 5px;\n  margin: 0;\n  border-width: 0;\n  background-color: var(--copy-button-background, transparent);\n}\n\nbutton:not(:disabled):hover {\n  cursor: pointer;\n}\n\nbutton > svg {\n  fill: var(--copy-button-color, white);\n}\n"),n.adoptedStyleSheets=[a]}}customElements.define("copy-button",n);
+</script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#why-quarantine%3F">Why Quarantine?</a></li><li><a href="#the-idea">The Idea</a></li><li><a href="#synchronization">Synchronization</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#conclusion">Conclusion</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="/projects/">Projects</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<h1>Writing an ASan Runtime in Zig #1</h1>
+<p>In a <a href="/blog/asan-zig-0">previous post</a>, I wrote a high-level overview of how
+LLVM's <a href="https://clang.llvm.org/docs/AddressSanitizer.html">Address Sanitizer</a>
+works, as well as providing a small snippet of a custom ASan runtime I am
+writing in Zig. That post particularly focused on the core algorithm, which
+explains how ASan can track complex memory violations with relatively little
+overhead.</p>
+<p>In this post, I will do a deep dive into an important component of the runtime:
+the <strong>memory quarantine</strong>.</p>
+<h2 id="why-quarantine%3F" tabindex="-1"><a class="header-anchor" href="#why-quarantine%3F">Why Quarantine?</a></h2>
+<p>In the first post of this series, I gave a brief implementation of how the
+<code>__asan_free</code> function works. In pseudocode:</p>
+<div class="code-block-container"><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">free</span><span class="token punctuation">(</span>ptr<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    header <span class="token operator">=</span> getHeader<span class="token punctuation">(</span>ptr<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> header<span class="token punctuation">.</span>state <span class="token operator">==</span> FREED<span class="token punctuation">:</span>
+        abort<span class="token punctuation">(</span><span class="token string">"Double free!"</span><span class="token punctuation">)</span>
+    header<span class="token punctuation">.</span>state <span class="token operator">=</span> FREED
+    setPoisoned<span class="token punctuation">(</span>getAllocBytes<span class="token punctuation">(</span>header<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+</div><p>You can read the actual implementation
+<a href="/blog/asan-zig-0#allocation-headers">here</a>. You might notice a key part is
+missing from this implmentation of <code>free</code>: actually releasing memory back to the
+OS! In other words, with this implementation, no memory is ever re-used across
+the instrumented program's lifetime. There is a simple reason for this, though:
+if we actually released memory, we <em>wouldn't</em> be able to detect
+use-after-frees!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup></p>
+<p>But there is an obvious problem with keeping memory around forever. For enormous
+pieces of software that ASan instruments like Chromium, it is unsustainable to
+never re-use memory. To try to get the best of both worlds, ASan has the notion
+of a memory quarantine.</p>
+<h2 id="the-idea" tabindex="-1"><a class="header-anchor" href="#the-idea">The Idea</a></h2>
+<p>The idea of the quarantine is this: all freed allocations are held in a giant
+queue. The queue is bounded so that the sum of the sizes of all allocations
+living in the queue stays below a certain size. Once new memory is freed (via
+<code>__asan_free</code>), old memory is popped out of the queue to stay below the bound.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/ObvBueGF0s-2488.webp 2488w"><img loading="lazy" decoding="async" src="/img/ObvBueGF0s-2488.jpeg" alt="Global allocation queue" width="2488" height="585"></picture></button><dialog><picture><source type="image/webp" srcset="/img/ObvBueGF0s-2488.webp 2488w"><img loading="lazy" decoding="async" src="/img/ObvBueGF0s-2488.jpeg" alt="Global allocation queue" width="2488" height="585"></picture></dialog></div><p></p>
+<p>In the picture, the 5kB and 15kB allocations are being flushed to make room for
+the new 30kB allocation. Allocations that are flushed from the queue are
+released to the operating system.</p>
+<p>This model ensures that memory stays around long enough so that use-after-frees
+are usually detected.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> The size of the quarantine is usually around 256
+megabytes, but ASan allows it to be set arbitrarily using the
+<code>quarantine_size_mb</code> flag.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
+<h2 id="synchronization" tabindex="-1"><a class="header-anchor" href="#synchronization">Synchronization</a></h2>
+<p>There is a big performance problem with the idea I just introduced. Every time
+an allocation is freed using <code>__asan_free</code>, the runtime has to add the
+allocation to a big queue. To prevent data races in a multi-threaded program,
+this means that the queue needs to be locked and unlocked <em>on every free</em>.</p>
+<p>Since it is very possible that many threads are constantly allocating and
+freeing at the same time, the global quarantine is a very contentious resource.
+Thus, to competition between threads, we need to figure out a way to minimize
+the amount of locking.</p>
+<p>One clever approach to solving this problem is introducing <strong>local
+quarantines</strong>. Every thread can have its own individual quarantine for when it
+frees allocations; all freed allocations can enter this fast buffer in a
+lock-free manner. Once the local quarantine becomes larger than a certain size,
+the thread locks the global quarantine and flushes the entire local quarantine
+into the queue.</p>
+<p>This approach makes reduces the amount of locking while still preserving the
+original behavior of the quarantine idea.</p>
+<div class="expand-img"><button aria-haspopup="dialog" aria-label="Expand image"><picture><source type="image/webp" srcset="/img/GUhbNjDSC--2807.webp 2807w"><img loading="lazy" decoding="async" src="/img/GUhbNjDSC--2807.jpeg" alt="Global allocation queue with local quarantines" width="2807" height="1029"></picture></button><dialog><picture><source type="image/webp" srcset="/img/GUhbNjDSC--2807.webp 2807w"><img loading="lazy" decoding="async" src="/img/GUhbNjDSC--2807.jpeg" alt="Global allocation queue with local quarantines" width="2807" height="1029"></picture></dialog></div><p></p>
+<h2 id="implementation" tabindex="-1"><a class="header-anchor" href="#implementation">Implementation</a></h2>
+<p>In this section, I'll share some simplified snippets of how the quarantine
+system works in Zig ASan. First, we define the global quarantine:</p>
+<div class="code-block-container"><pre class="language-zig"><code class="language-zig"><span class="token comment doc-comment">/// Global quarantine for allocations. Thread-safe but not lock free. Does not actually free any</span>
+<span class="token comment doc-comment">/// memory.</span>
+<span class="token keyword">const</span> <span class="token class-name">Quarantine</span> <span class="token operator">=</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    size<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    queue<span class="token punctuation">:</span> std<span class="token punctuation">.</span><span class="token function">Deque</span><span class="token punctuation">(</span>Batch<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">.</span>empty<span class="token punctuation">,</span>
+    mutex<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Io<span class="token punctuation">.</span>Mutex</span> <span class="token operator">=</span> <span class="token punctuation">.</span>init<span class="token punctuation">,</span>
+    evict_limit<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span><span class="token punctuation">,</span>
+
+    <span class="token keyword">const</span> <span class="token class-name">Batch</span> <span class="token operator">=</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+        allocs<span class="token punctuation">:</span> <span class="token class-name"><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">const</span> <span class="token operator">*</span>AllocHeader</span><span class="token punctuation">,</span>
+        size<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">init</span><span class="token punctuation">(</span>evict_limit<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span><span class="token punctuation">)</span> <span class="token class-name">Quarantine</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">.</span><span class="token punctuation">{</span> <span class="token punctuation">.</span>evict_limit <span class="token operator">=</span> evict_limit <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">deinit</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>Quarantine</span><span class="token punctuation">,</span> gpa<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator</span><span class="token punctuation">)</span> <span class="token class-name"><span class="token builtin-type keyword">void</span></span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>self<span class="token punctuation">.</span>mutex<span class="token punctuation">.</span><span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// A thread is holding this mutex... we should just quit to avoid undefined behavior.</span>
+            <span class="token comment">// The memory will leak</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        self<span class="token punctuation">.</span>size <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>queue<span class="token punctuation">.</span><span class="token function">deinit</span><span class="token punctuation">(</span>gpa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>mutex <span class="token operator">=</span> <span class="token punctuation">.</span>init<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment doc-comment">/// Flush all remaining allocations. Returns all batches that must be released back to the</span>
+    <span class="token comment doc-comment">/// OS as a result of this operation. Caller owns all memory.</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">flush</span><span class="token punctuation">(</span>self<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>Quarantine</span><span class="token punctuation">,</span> io<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Io</span><span class="token punctuation">,</span> gpa<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator</span><span class="token punctuation">)</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator<span class="token punctuation">.</span>Error<span class="token operator">!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">const</span> Batch</span> <span class="token punctuation">{</span>
+        self<span class="token punctuation">.</span>mutex<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span>io<span class="token punctuation">)</span> <span class="token keyword">catch</span> <span class="token builtin">@panic</span><span class="token punctuation">(</span><span class="token string">"mutex lock should not be cancelled"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">defer</span> self<span class="token punctuation">.</span>mutex<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span>io<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> freed<span class="token punctuation">:</span> std<span class="token punctuation">.</span><span class="token function">ArrayList</span><span class="token punctuation">(</span>Batch<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">.</span>empty<span class="token punctuation">;</span>
+        <span class="token keyword">errdefer</span> freed<span class="token punctuation">.</span><span class="token function">deinit</span><span class="token punctuation">(</span>gpa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>queue<span class="token punctuation">.</span><span class="token function">popFront</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">|</span>batch<span class="token operator">|</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span> freed<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>gpa<span class="token punctuation">,</span> batch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            self<span class="token punctuation">.</span>size <span class="token operator">-=</span> batch<span class="token punctuation">.</span>size<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>size <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">try</span> freed<span class="token punctuation">.</span><span class="token function">toOwnedSlice</span><span class="token punctuation">(</span>gpa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment doc-comment">/// Receive a batch into the quarantine. Returns all batches that must be released back to the</span>
+    <span class="token comment doc-comment">/// OS as a result of this operation. Caller owns all memory.</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">batchReceive</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>Quarantine</span><span class="token punctuation">,</span>
+        io<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Io</span><span class="token punctuation">,</span>
+        gpa<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator</span><span class="token punctuation">,</span>
+        batch<span class="token punctuation">:</span> <span class="token class-name">Batch</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator<span class="token punctuation">.</span>Error<span class="token operator">!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">const</span> Batch</span> <span class="token punctuation">{</span>
+        self<span class="token punctuation">.</span>mutex<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span>io<span class="token punctuation">)</span> <span class="token keyword">catch</span> <span class="token builtin">@panic</span><span class="token punctuation">(</span><span class="token string">"mutex lock should not be cancelled"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">defer</span> self<span class="token punctuation">.</span>mutex<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span>io<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> self<span class="token punctuation">.</span>queue<span class="token punctuation">.</span><span class="token function">pushBack</span><span class="token punctuation">(</span>gpa<span class="token punctuation">,</span> batch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>size <span class="token operator">+=</span> batch<span class="token punctuation">.</span>size<span class="token punctuation">;</span>
+        <span class="token keyword">var</span> freed<span class="token punctuation">:</span> std<span class="token punctuation">.</span><span class="token function">ArrayList</span><span class="token punctuation">(</span>Batch<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">.</span>empty<span class="token punctuation">;</span>
+        <span class="token keyword">errdefer</span> freed<span class="token punctuation">.</span><span class="token function">deinit</span><span class="token punctuation">(</span>gpa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>size <span class="token operator">></span> self<span class="token punctuation">.</span>evict_limit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">const</span> front <span class="token operator">=</span> self<span class="token punctuation">.</span>queue<span class="token punctuation">.</span><span class="token function">popFront</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">orelse</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+            self<span class="token punctuation">.</span>size <span class="token operator">-=</span> front<span class="token punctuation">.</span>size<span class="token punctuation">;</span>
+            <span class="token keyword">try</span> freed<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>gpa<span class="token punctuation">,</span> front<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">try</span> freed<span class="token punctuation">.</span><span class="token function">toOwnedSlice</span><span class="token punctuation">(</span>gpa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+</div><p>Notice that we lock every time we call <code>batchReceive</code>. Our per-thread
+quarantines should submit batches to the global quarantine. I went over the
+definition of <code>AllocHeader</code> <a href="/blog/asan-zig-0#allocation-headers">here</a>. Next,
+here is the definition of the per-thread quarantines:</p>
+<div class="code-block-container"><pre class="language-zig"><code class="language-zig"><span class="token comment doc-comment">/// Local quarantine for allocations. Not thread-safe. Does not actually free any memory.</span>
+<span class="token keyword">const</span> <span class="token class-name">FastQuarantine</span> <span class="token operator">=</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    size<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    allocs<span class="token punctuation">:</span> std<span class="token punctuation">.</span><span class="token function">ArrayList</span><span class="token punctuation">(</span><span class="token operator">*</span>AllocHeader<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">.</span>empty<span class="token punctuation">,</span>
+
+    <span class="token keyword">pub</span> <span class="token keyword">const</span> empty<span class="token punctuation">:</span> <span class="token class-name">FastQuarantine</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment doc-comment">/// Minimum size of the thread local quarantine before flushing to the global quarantine</span>
+    <span class="token keyword">const</span> flush_limit <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">20</span><span class="token punctuation">;</span> <span class="token comment">// 1MB</span>
+
+    <span class="token comment doc-comment">/// Add an allocation to the fast quarantine. Adds to global quarantine and flushes if</span>
+    <span class="token comment doc-comment">/// flush_limit is reached. Returns any batches that need to be freed. Caller owns all</span>
+    <span class="token comment doc-comment">/// returned memory. Does not actually free anything.</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">addAlloc</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>FastQuarantine</span><span class="token punctuation">,</span>
+        io<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Io</span><span class="token punctuation">,</span>
+        gpa<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator</span><span class="token punctuation">,</span>
+        global<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>Quarantine</span><span class="token punctuation">,</span>
+        header<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>AllocHeader</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator<span class="token punctuation">.</span>Error<span class="token operator">!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">const</span> Quarantine<span class="token punctuation">.</span>Batch</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> self<span class="token punctuation">.</span>allocs<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>gpa<span class="token punctuation">,</span> header<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>size <span class="token operator">+=</span> header<span class="token punctuation">.</span><span class="token function">fullAllocSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>size <span class="token operator">></span> flush_limit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> self<span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span>io<span class="token punctuation">,</span> gpa<span class="token punctuation">,</span> global<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token operator">&amp;</span><span class="token punctuation">.</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment doc-comment">/// Flush all memory into the global quarantine as a batch. Returns any batches that must</span>
+    <span class="token comment doc-comment">/// be released back to the OS as a result of this operation.</span>
+    <span class="token keyword">pub</span> <span class="token keyword">fn</span> <span class="token function">flush</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>FastQuarantine</span><span class="token punctuation">,</span>
+        io<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>Io</span><span class="token punctuation">,</span>
+        gpa<span class="token punctuation">:</span> <span class="token class-name">std<span class="token punctuation">.</span>std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator</span><span class="token punctuation">,</span>
+        global<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>Quarantine</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token class-name">std<span class="token punctuation">.</span>mem<span class="token punctuation">.</span>Allocator<span class="token punctuation">.</span>Error<span class="token operator">!</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">const</span> Quarantine<span class="token punctuation">.</span>Batch</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> allocs <span class="token operator">=</span> <span class="token keyword">try</span> gpa<span class="token punctuation">.</span><span class="token function">dupe</span><span class="token punctuation">(</span><span class="token operator">*</span>AllocHeader<span class="token punctuation">,</span> self<span class="token punctuation">.</span>allocs<span class="token punctuation">.</span>items<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">errdefer</span> gpa<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>allocs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> freed <span class="token operator">=</span> <span class="token keyword">try</span> global<span class="token punctuation">.</span><span class="token function">batchReceive</span><span class="token punctuation">(</span>io<span class="token punctuation">,</span> gpa<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">{</span>
+            <span class="token punctuation">.</span>allocs <span class="token operator">=</span> allocs<span class="token punctuation">,</span>
+            <span class="token punctuation">.</span>size <span class="token operator">=</span> self<span class="token punctuation">.</span>size<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>allocs<span class="token punctuation">.</span><span class="token function">clearRetainingCapacity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        self<span class="token punctuation">.</span>size <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> freed<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">threadlocal</span> <span class="token keyword">var</span> local_quarantine<span class="token punctuation">:</span> <span class="token class-name">FastQuarantine</span> <span class="token operator">=</span> <span class="token punctuation">.</span>empty<span class="token punctuation">;</span></code></pre>
+</div><p>Now I will provide the full Zig implementation of <code>__asan_free</code>, using this new
+quarantine system:</p>
+<div class="code-block-container"><pre class="language-zig"><code class="language-zig"><span class="token keyword">fn</span> <span class="token function">__asan_free</span><span class="token punctuation">(</span>ptr<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">?</span><span class="token operator">*</span>anyopaque</span><span class="token punctuation">)</span> <span class="token class-name"><span class="token builtin-type keyword">void</span></span> <span class="token punctuation">{</span>
+    <span class="token comment">// Same as before:</span>
+    <span class="token keyword">const</span> non_null <span class="token operator">=</span> ptr <span class="token keyword">orelse</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> bytes<span class="token punctuation">:</span> <span class="token class-name"><span class="token punctuation">[</span><span class="token operator">*</span><span class="token punctuation">]</span><span class="token builtin-type keyword">u8</span></span> <span class="token operator">=</span> <span class="token builtin">@ptrCast</span><span class="token punctuation">(</span>non_null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> header<span class="token punctuation">:</span> <span class="token class-name"><span class="token operator">*</span>AllocHeader</span> <span class="token operator">=</span> <span class="token builtin">@ptrCast</span><span class="token punctuation">(</span><span class="token builtin">@alignCast</span><span class="token punctuation">(</span>non_null <span class="token operator">-</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>header<span class="token punctuation">.</span>state<span class="token punctuation">.</span><span class="token function">cmpxchgStrong</span><span class="token punctuation">(</span><span class="token punctuation">.</span>alive<span class="token punctuation">,</span> <span class="token punctuation">.</span>freed<span class="token punctuation">,</span> <span class="token punctuation">.</span>acquire<span class="token punctuation">,</span> <span class="token punctuation">.</span>monotonic<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">|</span>state<span class="token operator">|</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token punctuation">.</span>freed <span class="token operator">=></span> <span class="token punctuation">{</span>
+                <span class="token keyword">const</span> stderr <span class="token operator">=</span> std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">lockStderr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token punctuation">.</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">terminal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">defer</span> std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">unlockStderr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                std<span class="token punctuation">.</span>debug<span class="token punctuation">.</span><span class="token function">writeStackTrace</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>header<span class="token punctuation">.</span>trace<span class="token punctuation">.</span>stack_trace<span class="token punctuation">,</span> stderr<span class="token punctuation">)</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+                <span class="token builtin">@panic</span><span class="token punctuation">(</span><span class="token string">"double free!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">.</span>alive <span class="token operator">=></span> <span class="token keyword">unreachable</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">const</span> size_low<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token builtin">@intCast</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span>user_size_low<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> size_high<span class="token punctuation">:</span> <span class="token class-name"><span class="token builtin-type keyword">usize</span></span> <span class="token operator">=</span> <span class="token builtin">@intCast</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span>user_size_high<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> size <span class="token operator">=</span> size_low <span class="token operator">|</span> <span class="token punctuation">(</span>size_high <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setPoisoned</span><span class="token punctuation">(</span>bytes<span class="token punctuation">[</span><span class="token number">0</span><span class="token operator">..</span>size<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// New!</span>
+    <span class="token keyword">const</span> needs_free <span class="token operator">=</span> local_quarantine<span class="token punctuation">.</span><span class="token function">addAlloc</span><span class="token punctuation">(</span>io<span class="token punctuation">,</span> backing_allocator<span class="token punctuation">,</span> <span class="token operator">&amp;</span>global_quarantine<span class="token punctuation">,</span> header<span class="token punctuation">)</span> <span class="token keyword">catch</span> <span class="token label">blk</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Worse case, just free the allocation</span>
+        backing_allocator<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span><span class="token function">allocation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span> <span class="token punctuation">:</span><span class="token label">blk</span> <span class="token operator">&amp;</span><span class="token punctuation">.</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">// Every batch here has been evicted by the global quarantine</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>needs_free<span class="token punctuation">)</span> <span class="token operator">|</span>batch<span class="token operator">|</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Actually release all allocations in the batch</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>batch<span class="token punctuation">.</span>allocs<span class="token punctuation">)</span> <span class="token operator">|</span>h<span class="token operator">|</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Stop tracking the allocation in shadow memory</span>
+            <span class="token function">setUnpoisoned</span><span class="token punctuation">(</span>alloc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            backing_allocator<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>h<span class="token punctuation">.</span><span class="token function">allocation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        backing_allocator<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>batch<span class="token punctuation">.</span>allocs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    backing_allocator<span class="token punctuation">.</span><span class="token function">free</span><span class="token punctuation">(</span>needs_free<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</div><p>Here I am assuming <code>io</code>, <code>backing_allocator</code>, and <code>global_quarantine</code> are global
+variables. The <code>allocation</code> method returns the full allocation of the
+<code>AllocHeader</code> as described in the last post.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup></p>
+<p>Lastly, you may be wondering what happens when a thread exits. In order to not
+leak memory, the <code>FastQuarantine.flush</code> should be called! This can be done using
+per-thread destructors. The POSIX standard defines per-thread destructors via
+the <code>pthread_key</code> API, and Windows might have an equivalent (I don't really
+know).</p>
+<h2 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h2>
+<p>I hope you enjoyed this post! While it is only a small component of how ASan
+works, the memory quarantine is an interesting concept that studying in-depth
+can be rewarding.</p>
+<p>As always, if you have any questions, comments, or found an issue, send me an
+email at <a href="mailto:mail@dzfrias.dev">mail@dzfrias.dev</a>.</p>
+<p>I hope to finish Zig Asan in a few months once I iron out all the nuances of the
+runtime. There are a lot of small but important behaviors to consider when
+instrumenting complex programs!</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>You might be tempted to think that it is okay to release the memory <em>and</em>
+continue tracking it using shadow memory. This is not safe, though. Once we
+release memory, we should consider acccessing it as undefined behavior. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>This model is not perfect. It fails to detect applications using memory a
+very, very long time after it has been freed, but it catches most cases.
+This is an okay trade-off for performance. <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>ASan has a lot of useful flags like this. You can find a big list of them in
+the
+<a href="https://github.com/google/sanitizers/wiki/AddressSanitizerFlags">Address Sanitizer Wiki</a>.
+It is an outdated resource, but it is still the best list I could find. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>In the last post, I didn't fully give you the definition of <code>allocation</code>. I
+left it as an exercise! <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
