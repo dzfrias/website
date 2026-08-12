@@ -228,10 +228,9 @@ pre {
 }
 
 code:not([class^="language"]) {
-  background: #2b2b2b;
-  font-size: calc(11px + 0.390625vw);
+  font-size: calc(10px + 0.390625vw);
   font-family: variables.$code-font;
-  padding: 0.1rem 0.3rem;
+  margin: 0.1rem 0.15rem;
 }
 
 #main-left {
