@@ -1,7 +1,7 @@
 ---
 title: On Using LLMs For This Blog
 description: Why I do not use LLMs for this blog.
-date: 2026-08-12
+date: 2026-08-08
 ---
 
 I've been tempted at times to use an LLM to tighten up the writing of my posts,

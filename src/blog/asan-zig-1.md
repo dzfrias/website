@@ -1,7 +1,7 @@
 ---
 title: "Writing an ASan Runtime in Zig #1"
 description: A deep dive into how ASan's memory quarantine works.
-date: 2026-08-11
+date: 2026-08-01
 ---
 
 In a [previous post](/blog/asan-zig-0), I wrote a high-level overview of how
