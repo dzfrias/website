@@ -235,11 +235,11 @@ code:not([class^="language"]) {
 }
 
 #main-left {
+  flex: 0 2 min(15rem, 20vw);
+
   @media screen and (max-width: $left-bp) {
     flex: 0.65;
   }
-
-  flex: 0 2 min(15rem, 20vw);
 }
 
 #main-right {
