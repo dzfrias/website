@@ -22,6 +22,10 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="article-header">
+  <h1 style="margin-bottom: 0px">{{ title }}</h1>
+  {% set date = date.toISOString().split("T")[0] %}
+  <time datetime="{{ date }}">{{ date }}</time>
+</div>
 {{ super() }}
 {% endblock %}

@@ -264,6 +264,10 @@ h1 {
   color: variables.$fg-bright;
 }
 
+.article-header {
+  margin-bottom: $spacing;
+}
+
 @for $i from 2 through 6 {
   h#{$i} {
     color: variables.$fg-bright;
@@ -356,6 +360,10 @@ mjx-container {
       margin-bottom: unset;
     }
   }
+}
+
+time {
+  color: variables.$fg-fade;
 }
 
 .profile-container {
