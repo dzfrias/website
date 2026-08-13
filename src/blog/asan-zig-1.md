@@ -248,7 +248,7 @@ fn __asan_free(ptr: ?*anyopaque) void {
         // Actually release all allocations in the batch
         for (batch.allocs) |h| {
             // Stop tracking the allocation in shadow memory
-            setUnpoisoned(alloc);
+            setUnpoisoned(h.allocation());
             backing_allocator.free(h.allocation());
         }
         backing_allocator.free(batch.allocs);
