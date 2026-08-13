@@ -37,7 +37,9 @@ function linkAnchors(element) {
   }
 }
 
-linkAnchors(document.getElementsByClassName("toc")[0].firstElementChild);
+if (document.getElementsByClassName("toc").length > 0) {
+  linkAnchors(document.getElementsByClassName("toc")[0].firstElementChild);
+}
 
 const headerAnchors = Array.from(
   document.getElementsByClassName("header-anchor"),
