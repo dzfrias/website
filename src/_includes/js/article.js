@@ -50,6 +50,9 @@ headerAnchors.sort((a, b) => {
 let ticking = false;
 let current = null;
 document.addEventListener("scroll", () => {
+  if (headerAnchors.length === 0) {
+    return;
+  }
   if (!ticking) {
     window.requestAnimationFrame(() => {
       if (current) {
