@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="My first report on my work on the Servo project!">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Forays into Servo #0 - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",()=>n.showModal()),n.addEventListener("click",e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()})}const t=new Map;document.getElementsByClassName("toc").length>0&&function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++)e(o.children[t])}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y);let o=!1,s=null;document.addEventListener("scroll",()=>{0!==n.length&&(o||(window.requestAnimationFrame(()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)})[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1}),o=!0))});for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"})}const l=document.querySelectorAll('a[id^="fnref"]'),c=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=c[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"}),t.addEventListener("mouseleave",()=>{o.style.opacity="0%",o.addEventListener("transitionend",()=>o.remove())})}function r(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of c)e.ariaCurrent=null;return}for(const e of c)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}r(),window.onhashchange=r,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
+</script>
+
+<script>
+  const e='\n<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="3 7 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"/>\n</svg>\n';class n extends HTMLElement{constructor(){super()}connectedCallback(){const n=this.attachShadow({mode:"open"}),t=document.createElement("button");t.ariaLabel="Copy",t.innerHTML=e,n.appendChild(t);const o=this.getAttribute("data-target"),i=document.getElementById(o);t.addEventListener("click",()=>{navigator.clipboard.writeText(i.textContent).then(()=>{t.innerHTML='\n<svg aria-hidden="true" focusable="false" width="80%" height="80%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">\n<path d="M1827.701 303.065 698.835 1431.801 92.299 825.266 0 917.564 698.835 1616.4 1919.869 395.234z" fill-rule="evenodd"/>\n</svg>\n',t.disabled=!0,setTimeout(()=>{t.innerHTML=e,t.disabled=!1},500)}).catch(e=>alert("Failed to copy:",e))});const a=new CSSStyleSheet;a.replaceSync("\nbutton {\n  width: 33px;\n  height: 33px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 5px;\n  margin: 0;\n  border-width: 0;\n  background-color: var(--copy-button-background, transparent);\n}\n\nbutton:not(:disabled):hover {\n  cursor: pointer;\n}\n\nbutton > svg {\n  fill: var(--copy-button-color, white);\n}\n"),n.adoptedStyleSheets=[a]}}customElements.define("copy-button",n);
+</script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#first-issue">First Issue</a></li><li><a href="#text-editing">Text Editing</a></li><li><a href="#servo's-community">Servo's Community</a></li><li><a href="#conclusion">Conclusion</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<div class="article-header">
+  <h1 style="margin-bottom: 0px">Forays into Servo #0</h1>
+  
+  <time datetime="2026-10-09">2026-10-09</time>
+</div>
+<p>My first experience with browser engines was <a href="https://ladybird.org">Ladybird</a>,
+which I contributed quite a few PRs (around 80) to in the summer of 2024. Coming
+around to fall of this year, I felt the drive to get back into web browser
+hacking. The only issue was that Ladybird is
+<a href="https://ladybird.org/posts/changing-how-we-develop-ladybird/">no longer accepting non-team contributions</a>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup></p>
+<p>Although I was disappointed at the news, in retrospect, I'm happy that I looked
+for other projects to work on. Namely, <a href="https://servo.org">Servo</a>! As a bonus,
+Servo has an amazing open source community that I will talk about throughout the
+post.</p>
+<p>This post serves as my first progress report on my work, keeping the spirit of
+my <a href="/blog/ladybird-wasm-0">original Ladybird posts</a>!</p>
+<h2 id="first-issue" tabindex="-1"><a class="header-anchor" href="#first-issue">First Issue</a></h2>
+<p>Unlike with how my work in Ladybird started, I <strong>did not</strong> begin work on Servo
+with a clear goal in mind. Fortunately, the Servo maintainers frequently update
+a list of
+<a href="https://github.com/servo/servo/issues?q=is%3Aissue+state%3Aopen+label%3AE-candidate-for-mentoring">good first issues</a>
+and triage pretty much every issue that is opened.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup></p>
+<p>I ended up finding something that I thought would be relatively easy to tackle:
+giving focus to text control elements when the <code>.select()</code> method is called
+(<a href="https://github.com/servo/servo/issues/47753">#47753</a>). For example:</p>
+<div class="code-block-container"><pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Z<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Testing<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Y<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Click here<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+  <span class="token constant">Y</span><span class="token punctuation">.</span><span class="token function-variable function">onclick</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token constant">Z</span><span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
+</div><p>Clicking the button <em>should</em> select all text in the <code>&lt;textarea&gt;</code>, along with
+giving it focus. The <a href="https://github.com/servo/servo/pull/48475">PR</a> I wrote to
+implement this behavior was pretty simple.</p>
+<p>However, I ran into failing tests as soon as submitted my PR. Like many
+browsers, Servo uses the
+<a href="https://github.com/web-platform-tests/wpt">WPT test suite</a> to test compliance
+with Web standards. The failing WPT test looked something like this:</p>
+<div class="code-block-container"><pre class="language-html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>textarea</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Z<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Testing<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+  <span class="token constant">Z</span><span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"keydown"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token constant">Z</span><span class="token punctuation">.</span>style<span class="token punctuation">.</span>display <span class="token operator">=</span> <span class="token string">"none"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token constant">Z</span><span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">sendKey</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assert</span><span class="token punctuation">(</span><span class="token constant">Z</span><span class="token punctuation">.</span>value <span class="token operator">==</span> <span class="token string">"Testing"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
+</div><p>Essentially, this test tries to ensure that setting a <code>&lt;textarea&gt;</code> display to
+<code>none</code> makes it unwritable, even when it is hidden during a <code>keydown</code> event
+listener.</p>
+<p>This test was passing before, so why is it failing with my change? The problem
+is that <code>Z.select()</code> is now focusing the element, whereas before it wasn't. So
+before, <code>sendKey(&quot;a&quot;)</code> wasn't actually sending anything to the <code>&lt;textarea&gt;</code>,
+which means that the test wasn't actually testing anything.</p>
+<p>So my first PR to Servo uncovered a different issue, one that turned out to be
+slightly more complicated.</p>
+<h2 id="text-editing" tabindex="-1"><a class="header-anchor" href="#text-editing">Text Editing</a></h2>
+<p>This new discovery led me to start exploring how text controls work in Servo. I
+eventually opened another PR to fix the bug I had found:
+<a href="https://github.com/servo/servo/pull/48165">#48165</a>.</p>
+<p>Getting both my original and induced PR was a bit of an arduous process, as I
+had to rebase my changes onto a large-ish refactor for text controls. But the
+benefit was that I got a solid understanding of how text editing in Servo
+works!<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
+<p>This led me to a number of text-related contributions:</p>
+<ol>
+<li>No longer allowing copy/cut in <code>&lt;input type=&quot;password&quot;&gt;</code>
+(<a href="https://github.com/servo/servo/pull/48404">#48404</a>)</li>
+<li>Implementing the <code>beforeinput</code> event
+(<a href="https://github.com/servo/servo/pull/48519">#48519</a>)</li>
+<li>Move handling composition (<a href="https://en.wikipedia.org/wiki/Input_method">IME</a>
+events) into <code>EditingAction</code>
+(<a href="https://github.com/servo/servo/pull/48690">#48690</a>)</li>
+<li>Implementing CMD-delete for macOS
+(<a href="https://github.com/servo/servo/pull/48781">#48781</a>)</li>
+<li>Writing tools to unit test composition events
+(<a href="https://github.com/servo/servo/pull/48825">#48825</a>)</li>
+</ol>
+<p>These PRs were a lot of fun to write. Particular highlights for me were PRs
+numbered 3 and 5. Composition events and IME handling in general in Servo is far
+from complete. There are all sorts of fun problems to solve here. For example:
+Servo is designed to be
+<a href="https://book.servo.org/embedding/overview.html">emebeddable</a>. What is an
+appropriate interface so that an embedder of Servo can communicate that IME
+events are happening? IMEs are inherently very platform-specific, so this is a
+difficult abstraction to make in practice.</p>
+<p>My focus now, for the time being, will be to <strong>improve Servo's IME handling</strong>.
+Although it's difficult for me to test alone, since IME behavior varies wildly
+from OS to OS, there are certainly many improvements that I can make. My next
+post in this series will likely be on these improvements.</p>
+<h2 id="servo's-community" tabindex="-1"><a class="header-anchor" href="#servo's-community">Servo's Community</a></h2>
+<p>Servo has one of the most approachable open source communities that I've worked
+in. There are immediately obvious things, such as the issue triaging that I
+mentioned earlier. But beyond the surface, Servo's maintainers have more robust
+ways for new contributors to get comfortable with the codebase, owing to
+<a href="https://servo.zulipchat.com">the Zulip</a>.</p>
+<p>Servo's Zulip is very active and I found it to be a goldmine for understanding
+Servo. Even in conversations that I didn't contribute to (which is most), just
+reading various people's projects and issues was immensely helpful.</p>
+<p>In addition, maintainer <a href="https://github.com/mrobinson">Martin Robinson</a> holds
+weekly office hours! I've attended one office hours session so far, and got to
+ask some valuable questions.</p>
+<p>I can't stress enough how smooth it felt to go from small bug fixes to larger,
+slightly more consequential PRs. For this reason, I believe that Servo is a
+great example of how productive and inclusive open source can be.</p>
+<h2 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h2>
+<p>Working on Servo has been a joy so far. I hope to continue with these updates as
+I work on the codebase! In particular, I am working on designing an appropriate
+abstraction for embedder to <code>WebView</code> communication about IME events.</p>
+<p>If you enjoyed this post, or have any feedback, please send me an email at
+<a href="mailto:mail@dzfrias.dev">mail@dzfrias.dev</a>.</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>This announcement actually disappointed me quite a bit. I will probably
+write a post in the near future about it. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>I have personally never worked on a project where every issue is triaged!
+Although it clearly takes a lot of effort (in particular, I've noticed that
+the maintainer <a href="https://github.com/jdm">jdm</a> spends a lot of time doing
+this), the payoff is that it is actually <em>very</em> accessible to get started on
+writing code for Servo! <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>It's a bit ironic that, unintentionally, I've landed back into a set of
+problems related to text... although in a new context
+<a href="/blog/xxutf">than before</a>. <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>

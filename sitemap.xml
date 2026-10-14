@@ -398,8 +398,17 @@
     </url>
     
     <url>
+        <loc>https://dzfrias.dev/blog/servo-0/</loc>
+        <lastmod>2026-10-09T00:00:00.000Z</lastmod>
+        
+            <priority>0.7</priority>
+            <changefreq>monthly</changefreq>
+        
+    </url>
+    
+    <url>
         <loc>https://dzfrias.dev/404.html</loc>
-        <lastmod>2026-09-11T22:37:01.612Z</lastmod>
+        <lastmod>2026-10-14T22:55:50.919Z</lastmod>
         
             <priority>0.4</priority>
             <changefreq>monthly</changefreq>
@@ -408,7 +417,7 @@
     
     <url>
         <loc>https://dzfrias.dev/blog/</loc>
-        <lastmod>2026-09-11T22:37:01.614Z</lastmod>
+        <lastmod>2026-10-14T22:55:50.920Z</lastmod>
         
             <priority>0.4</priority>
             <changefreq>weekly</changefreq>
@@ -417,7 +426,7 @@
     
     <url>
         <loc>https://dzfrias.dev/</loc>
-        <lastmod>2026-09-11T22:37:01.660Z</lastmod>
+        <lastmod>2026-10-14T22:55:50.966Z</lastmod>
         
             <priority>0.9</priority>
             <changefreq>monthly</changefreq>
@@ -426,7 +435,7 @@
     
     <url>
         <loc>https://dzfrias.dev/projects/</loc>
-        <lastmod>2026-09-11T22:37:01.660Z</lastmod>
+        <lastmod>2026-10-14T22:55:50.966Z</lastmod>
         
             <priority>0.5</priority>
             <changefreq>monthly</changefreq>
