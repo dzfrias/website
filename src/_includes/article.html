@@ -26,6 +26,22 @@
   <h1 style="margin-bottom: 0px">{{ title }}</h1>
   {% set date = date.toISOString().split("T")[0] %}
   <time datetime="{{ date }}">{{ date }}</time>
+  {%- if tags.length > 1 -%}
+    <div>
+      <ol class="series-container">
+        {%- for tag in tags -%}
+          {%- if tag != "posts" -%}
+            {%- for post in collections[tag] -%}
+              <li class="series-container-item" {% if page.url == post.url %} aria-current="page"{% endif %}><a href="{{post.url}}">{{ loop.index0 }}</a></li>
+              {%- if loop.index0 + 1 < collections[tag].length -%}
+                &mdash;
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  {%- endif -%}
 </div>
 {{ super() }}
 {% endblock %}

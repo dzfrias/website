@@ -4,6 +4,7 @@ description:
   A look into an alternative runtime for Address Sanitizer that I am writing in
   Zig.
 date: 2026-07-20
+tags: asan
 ---
 
 LLVM's [Address Sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)

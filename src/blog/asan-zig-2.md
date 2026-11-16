@@ -2,6 +2,7 @@
 title: "Writing an ASan Runtime in Zig #2"
 description: An exploration into how ASan's stack detection works.
 date: 2026-08-27
+tags: asan
 ---
 
 In the [last post](/blog/asan-zig-1) of this series, I did a deep dive into how

@@ -574,3 +574,32 @@ hr {
     background: variables.$fg-fade;
   }
 }
+
+.series-container {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  margin-top: 0.4rem;
+
+  li {
+    display: inline;
+
+    &[aria-current="page"] a {
+      background: #2f2f2f;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    border: 2px solid variables.$accent;
+    text-decoration: none;
+    padding: 0.2rem 0.8rem;
+    box-shadow: 2px 2px variables.$fg;
+
+    &:hover {
+      background: unset;
+      background: #2f2f2f;
+      padding: 0.2rem 0.8rem;
+    }
+  }
+}
