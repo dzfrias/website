@@ -1,12 +1,22 @@
 {% extends "base.html" %}
 
+{% block head %}
+<style>
+:root {
+  --main-size: 30rem;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="split">
   <div>
     {{ content | safe }}
   </div>
-  <div class="profile-container">
-    {% include "svg/logo.svg" %}
-  </div>
+</div>
+{% endblock %}
+{% block right %}
+<div class="profile-container">
+  <img style="margin-top: 20vh" alt="me" src="/img/me.jpg"></img>
 </div>
 {% endblock %}
