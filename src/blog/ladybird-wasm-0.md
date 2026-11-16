@@ -4,6 +4,7 @@ description:
   The first of (ideally) many updates about the Ladybird WebAssembly
   implementation.
 date: 2024-06-02
+tags: ladybird
 ---
 
 By the end of the summer, I want to make the Ladybird browser's WebAssembly

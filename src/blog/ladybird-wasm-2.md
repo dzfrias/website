@@ -2,6 +2,7 @@
 title: "Ladybird WebAssembly Update #2"
 description: My third update on the Ladybird WebAssembly implementation.
 date: 2024-07-10
+tags: ladybird
 ---
 
 Nearly a month has passed since my

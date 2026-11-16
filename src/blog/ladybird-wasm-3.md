@@ -2,6 +2,7 @@
 title: "Ladybird WebAssembly Update #3"
 description: My fourth update on the Ladybird WebAssembly implementation.
 date: 2024-08-01
+tags: ladybird
 ---
 
 It's been a great few weeks since
@@ -134,6 +135,7 @@ work is to come!
     are statically defined!
 
 [^symlink]: The `gcc` command on macOS is actually just a symlink to `clang`...
+
 [^romberg]:
     My [integral calculator website](https://dzfrias.github.io/romberg/) does
     work, though!
