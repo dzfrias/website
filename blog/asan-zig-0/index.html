@@ -77,8 +77,9 @@
 <div class="article-header">
   <h1 style="margin-bottom: 0px">Writing an ASan Runtime in Zig #0</h1>
   
-  <time datetime="2026-07-20">2026-07-20</time>
-</div>
+  <time datetime="2026-07-20">2026-07-20</time><div>
+      <ol class="series-container"><li class="series-container-item" aria-current="page"><a href="/blog/asan-zig-0/">0</a></li>&mdash;<li class="series-container-item"><a href="/blog/asan-zig-1/">1</a></li>&mdash;<li class="series-container-item"><a href="/blog/asan-zig-2/">2</a></li></ol>
+    </div></div>
 <p>LLVM's <a href="https://clang.llvm.org/docs/AddressSanitizer.html">Address Sanitizer</a>
 (ASan) is one of the most widely used tools in production software, particularly
 software written in C or C++.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> Briefly, ASan will instrument a
@@ -187,9 +188,9 @@ value corresponding to the passed address is less than zero. All addresses in
 the application memory space can be transformed into a shadow memory address
 with a simple calculation:</p>
 
-    <span id="mjx-80010dd">
+    <span id="mjx-a2f3fb88">
       <style>
-      #mjx-80010dd{
+      #mjx-a2f3fb88{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
