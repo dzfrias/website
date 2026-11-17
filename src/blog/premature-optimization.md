@@ -102,11 +102,11 @@ you're wrapping all your state with locks and making all your pointers with
 atomically reference counting. This scenario is easy to get in, especially as a
 concurrency beginner.
 
-But paralellism is not as easy to justify, modulo
+But parallelism is not as easy to justify, modulo
 [embarrassingly parallel cases](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
 I once watched a talk by a [TigerBeetle](https://tigerbeetle.com) core member
 about parallelism. He spent a good first chunk of the talk convincing me to
-_not_ reach for parallism unless I really know what I'm doing. The talk is
+_not_ reach for parallelism unless I really know what I'm doing. The talk is
 [here](https://www.youtube.com/watch?v=x1N9JPPPC18). So don't fall for `-F full`
 early on, because it's hard to get yourself out of!
 
