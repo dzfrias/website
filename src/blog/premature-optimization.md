@@ -135,8 +135,8 @@ comments, please email me a [mail@dzfrias.dev](mailto:mail@dzfrias.dev)!
 [^intern]:
     For example, we could intern keys. Or we could use something like Rust's
     `Cow` to try to keep borrowed references when possible, and bail to
-    `Cow::Owned` if we encounter an edge case (such as if we need to unpaired
-    surrogates with replacement characters).
+    `Cow::Owned` if we encounter an edge case (such as if we need substitute to
+    unpaired surrogates with replacement characters).
 
 [^json]:
     JSON might not be the most illustrative example for this point because it
