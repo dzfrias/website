@@ -91,9 +91,9 @@ rather that they are frequently <strong>misinterpreted</strong>, in my opinion.<
 okay to optimize your code <em>without</em> thorough analysis.</p>
 <h2 id="defensively-allocate" tabindex="-1"><a class="header-anchor" href="#defensively-allocate">Defensively Allocate</a></h2>
 <p>A simple fact always holds: allocating in less places 
-    <span id="mjx-92ca436">
+    <span id="mjx-3fbe6e1">
       <style>
-      #mjx-92ca436{
+      #mjx-3fbe6e1{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -350,8 +350,8 @@ little bit concerning in how it hides the underlying nature. <a role="doc-backli
 </li>
 <li id="fn2" class="footnote-item"><p>For example, we could intern keys. Or we could use something like Rust's
 <code>Cow</code> to try to keep borrowed references when possible, and bail to
-<code>Cow::Owned</code> if we encounter an edge case (such as if we need to unpaired
-surrogates with replacement characters). <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+<code>Cow::Owned</code> if we encounter an edge case (such as if we need substitute to
+unpaired surrogates with replacement characters). <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn3" class="footnote-item"><p>JSON might not be the most illustrative example for this point because it
 has a simple grammar. But it isn't difficult to imagine making the same
