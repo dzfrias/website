@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="My opinion on the classic warnings against premature optimization.">
+    <meta name="author" content="Diego Frias">
+    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <title>Premature Optimization is Bad, But... - dzfrias</title>
+    
+
+<script type="module">
+  const e=document.getElementsByClassName("expand-img");for(let t of e){const e=t.children[0],n=t.children[1];e.addEventListener("click",()=>n.showModal()),n.addEventListener("click",e=>{const t=e.target.getBoundingClientRect();t.top<=e.clientY&&e.clientY<=t.top+t.height&&t.left<=e.clientX&&e.clientX<=t.left+t.width||n.close()})}const t=new Map;document.getElementsByClassName("toc").length>0&&function e(n){for(const o of n.children)switch(o.tagName){case"OL":e(o);break;case"LI":const n=o.firstElementChild;t.set(n.href,n);for(let t=1;t<o.children.length;t++)e(o.children[t])}}(document.getElementsByClassName("toc")[0].firstElementChild);const n=Array.from(document.getElementsByClassName("header-anchor"));n.sort((e,t)=>e.getBoundingClientRect().y-t.getBoundingClientRect().y);let o=!1,s=null;document.addEventListener("scroll",()=>{0!==n.length&&(o||(window.requestAnimationFrame(()=>{if(s&&(s.ariaCurrent="false"),window.scrollY<=0)return s=null,void(o=!1);const e=Array.from(n).sort((e,t)=>{const n=e.getBoundingClientRect().top,o=t.getBoundingClientRect().top;return Math.abs(n)-Math.abs(o)})[0];t.get(e.href).ariaCurrent="location",s=t.get(e.href),o=!1}),o=!0))});for(const e of document.getElementsByClassName("progress-bar")){const t=e.firstElementChild;document.addEventListener("scroll",()=>{const e=window.scrollY/(document.body.offsetHeight-window.innerHeight);t.style.width=100*e+"%"})}const l=document.querySelectorAll('a[id^="fnref"]'),c=document.getElementsByClassName("footnote-item"),i=document.getElementById("main-right");for(let e=0;e<l.length;e++){const t=l[e],n=c[e].children[0].cloneNode(!0);let o;t.addEventListener("mouseover",()=>{o=document.createElement("aside"),i.appendChild(o),o.classList.add("footnote-preview"),o.appendChild(n),o.style.position="absolute",o.style.top=t.getBoundingClientRect().top+window.scrollY+"px",o.style.opacity="100%"}),t.addEventListener("mouseleave",()=>{o.style.opacity="0%",o.addEventListener("transitionend",()=>o.remove())})}function r(){const e=location.hash.slice(1);if(!e.startsWith("fn")||e.startsWith("fnref")){for(const e of c)e.ariaCurrent=null;return}for(const e of c)e.ariaCurrent="false";document.getElementById(e).ariaCurrent="true"}r(),window.onhashchange=r,function(){const e=document.getElementsByClassName("code-block-container");var t=0;for(const n of e){const e=n.getElementsByTagName("code")[0];e.id=`code-block-${t}`;const o=document.createElement("copy-button");o.setAttribute("data-target",e.id),n.appendChild(o),t++}}();
+</script>
+
+<script>
+  const e='\n<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="3 7 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"/>\n</svg>\n';class n extends HTMLElement{constructor(){super()}connectedCallback(){const n=this.attachShadow({mode:"open"}),t=document.createElement("button");t.ariaLabel="Copy",t.innerHTML=e,n.appendChild(t);const o=this.getAttribute("data-target"),i=document.getElementById(o);t.addEventListener("click",()=>{navigator.clipboard.writeText(i.textContent).then(()=>{t.innerHTML='\n<svg aria-hidden="true" focusable="false" width="80%" height="80%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">\n<path d="M1827.701 303.065 698.835 1431.801 92.299 825.266 0 917.564 698.835 1616.4 1919.869 395.234z" fill-rule="evenodd"/>\n</svg>\n',t.disabled=!0,setTimeout(()=>{t.innerHTML=e,t.disabled=!1},500)}).catch(e=>alert("Failed to copy:",e))});const a=new CSSStyleSheet;a.replaceSync("\nbutton {\n  width: 33px;\n  height: 33px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding: 5px;\n  margin: 0;\n  border-width: 0;\n  background-color: var(--copy-button-background, transparent);\n}\n\nbutton:not(:disabled):hover {\n  cursor: pointer;\n}\n\nbutton > svg {\n  fill: var(--copy-button-color, white);\n}\n"),n.adoptedStyleSheets=[a]}}customElements.define("copy-button",n);
+</script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0f0f0f">
+    <link rel="preload" href="/fonts/font.woff2" as="font" type="font/woff2" crossorigin="">
+    <meta name="theme-color" content="#0f0f0f">
+  </head>
+  <body>
+    
+<div aria-hidden="true" class="progress-bar"><div class="progress-bar-inner"></div></div>
+
+    <div id="main-left">
+      
+<aside class="toc-container">
+  <nav class="toc">
+        <ol><li><a href="#defensively-allocate">Defensively Allocate</a></li><li><a href="#defensively-virtualize">Defensively Virtualize</a></li><li><a href="#defensively-parallelize">Defensively Parallelize</a></li><li><a href="#conclusion">Conclusion</a></li></ol>
+      </nav>
+</aside>
+
+    </div>
+    <div id="main-content">
+      <header>
+        <nav>
+          <a href="/" aria-label="Home">
+            <div class="header-logo">
+              <svg class="profile" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<rect width="200" height="200" fill="#7B7B7B"></rect>
+<path d="M-50 -50L245 245L-50 240.719V-50Z" fill="#040404"></path>
+<path d="M98.45 34.8C106.25 34.2 110.1 33.9 110 33.9C110.9 33.9 111.5 34.25 111.8 34.95C111.9 35.35 108.3 50.25 101 79.65L89.6 125.25C89.4 127.55 89.4 129.4 89.6 130.8C89.8 131.3 90.1 131.7 90.5 132C90.8 132.3 91.25 132.45 91.85 132.45C92.55 132.45 93.1 132.35 93.5 132.15C95.4 130.75 97.35 126.2 99.35 118.5C99.85 116.6 100.25 115.55 100.55 115.35C100.75 115.15 101.95 115.05 104.15 115.05C106.35 115.05 107.6 115.15 107.9 115.35C108.1 115.55 108.2 115.95 108.2 116.55C108.2 117.15 107.95 118.35 107.45 120.15C103.75 132.75 98.5 139.25 91.7 139.65C86.6 139.95 82.5 138.2 79.4 134.4C78.9 133.8 78.45 133.15 78.05 132.45C77.85 131.85 77.7 131.55 77.6 131.55L76.55 132.45C73.05 135.55 69.6 137.6 66.2 138.6C59.7 140.8 53.85 139.8 48.65 135.6C48.05 135.1 47.5 134.55 47 133.95C45.5 132.45 44.25 130.65 43.25 128.55C40.75 123.45 39.95 117.4 40.85 110.4C42.45 99 47.3 89.4 55.4 81.6C60.6 76.6 66.25 73.45 72.35 72.15C73.25 71.95 74.65 71.85 76.55 71.85C79.05 71.85 81.2 72.25 83 73.05C84.4 73.75 85.7 74.7 86.9 75.9C87.7 76.7 88.1 77 88.1 76.8C88.2 76.7 89.45 71.9 91.85 62.4C94.15 53.1 95.35 47.9 95.45 46.8C95.45 45.9 95.35 45.35 95.15 45.15C94.45 44.45 92.3 44.05 88.7 43.95C86.3 43.95 84.9 43.6 84.5 42.9L84.35 42.45L85.1 39.45C85.5 37.55 85.9 36.4 86.3 36C86.6 35.7 86.9 35.55 87.2 35.55L98.45 34.8ZM77.15 78.9C73.05 78.2 69.1 80.15 65.3 84.75C64.3 86.05 63.4 87.45 62.6 88.95C61.1 91.85 59.3 97.55 57.2 106.05C55.9 110.85 54.95 115.05 54.35 118.65C53.95 122.05 53.95 124.65 54.35 126.45C55.35 129.95 57.3 131.95 60.2 132.45C61.9 132.75 63.95 132.4 66.35 131.4C69.95 129.4 73.35 126.05 76.55 121.35L77.3 120.3L81.05 105.3L84.8 90.3L84.5 89.25C83.6 83.55 81.4 80.15 77.9 79.05C77.7 78.95 77.45 78.9 77.15 78.9ZM154.811 32.4C155.311 32.3 156.311 32.25 157.811 32.25C160.111 32.35 162.211 32.9 164.111 33.9C168.011 35.9 169.961 39.1 169.961 43.5C169.961 45.3 169.561 47 168.761 48.6C168.361 49.6 167.761 50.45 166.961 51.15C165.961 52.15 165.111 52.8 164.411 53.1C161.611 54.4 158.961 54.45 156.461 53.25C153.961 51.95 153.061 49.65 153.761 46.35C153.861 45.95 153.961 45.55 154.061 45.15C154.761 42.85 156.011 41.15 157.811 40.05C158.311 39.75 157.961 39.5 156.761 39.3C156.061 39.3 155.561 39.4 155.261 39.6C154.461 40.2 153.911 40.9 153.611 41.7C153.211 42.5 152.161 47.1 150.461 55.5C148.161 66.5 147.011 72.4 147.011 73.2C147.011 73.3 149.711 73.35 155.111 73.35H163.211L163.811 73.8C164.211 74.3 164.161 75.65 163.661 77.85C163.161 80.05 162.711 81.25 162.311 81.45C162.011 81.65 159.111 81.75 153.611 81.75C148.111 81.75 145.361 81.85 145.361 82.05L141.461 101.85L136.961 125.1C134.261 138.1 131.661 147.4 129.161 153C125.961 160.4 121.861 165.25 116.861 167.55C115.461 168.25 113.961 168.65 112.361 168.75C107.961 168.95 104.461 167.6 101.861 164.7C101.661 164.6 101.511 164.45 101.411 164.25C100.011 162.25 99.3113 160.05 99.3113 157.65C99.3113 155.75 99.7113 154 100.511 152.4C100.911 151.4 101.511 150.55 102.311 149.85C103.311 148.85 104.161 148.2 104.861 147.9C107.661 146.6 110.311 146.55 112.811 147.75C115.311 149.05 116.211 151.35 115.511 154.65C115.411 155.05 115.311 155.45 115.211 155.85C114.511 158.15 113.261 159.85 111.461 160.95C110.861 161.35 111.211 161.55 112.511 161.55C113.311 161.55 113.911 161.4 114.311 161.1C115.611 160.1 116.611 157.5 117.311 153.3C118.311 147 119.811 139.9 121.811 132L124.811 118.5C129.511 93.4 131.861 81.2 131.861 81.9C131.861 81.8 129.561 81.75 124.961 81.75C120.061 81.75 117.411 81.4 117.011 80.7C116.811 80.4 116.961 79.25 117.461 77.25C117.961 75.25 118.361 74.1 118.661 73.8L119.111 73.35H126.311H133.511V73.05L135.011 65.7C137.011 55.3 138.961 48.05 140.861 43.95C143.961 37.65 148.611 33.8 154.811 32.4Z" fill="white"></path>
+</g>
+<defs>
+<clipPath id="clip0_1_2">
+<rect width="200" height="200" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+            </div>
+          </a>
+          <ul>
+            
+            <li>
+              <a href="/blog/">Blog</a>
+            </li>
+            
+            <li>
+              <a href="https://github.com/dzfrias">GitHub</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </header>
+      <main tabindex="-1">
+        
+<div class="article-header">
+  <h1 style="margin-bottom: 0px">Premature Optimization is Bad, But...</h1>
+  
+  <time datetime="2026-11-02">2026-11-02</time></div>
+<p>...inherently slow code is worse. In this post, I will state and explain my
+opinion on the classic saying that &quot;premature optimization is the root of all
+evil.&quot; In short, I think there is more nuance to this saying than what was
+portrayed to me when I started thinking about how to make my programs faster.
+The same goes for &quot;make it work, make it good, make it fast.&quot;</p>
+<p>In general, I am against these sayings. There are certainly kernels of wisdom in
+them, but in the world of programming, I see them applied <strong>dogmatically</strong> as
+approaches to writing software. So it's not that the sayings are wrong, but
+rather that they are frequently <strong>misinterpreted</strong>, in my opinion.</p>
+<p>So, in the following sections, I will explain some instances where I think it's
+okay to optimize your code <em>without</em> thorough analysis.</p>
+<h2 id="defensively-allocate" tabindex="-1"><a class="header-anchor" href="#defensively-allocate">Defensively Allocate</a></h2>
+<p>A simple fact always holds: allocating in less places 
+    <span id="mjx-92ca436">
+      <style>
+      #mjx-92ca436{
+        display:contents;
+        mjx-assistive-mml {
+          user-select: text !important;
+          clip: auto !important;
+          color: rgba(0,0,0,0);
+        }
+        
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+      }
+      </style>
+      <mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg style="vertical-align: -0.054ex;" xmlns="http://www.w3.org/2000/svg" width="4.964ex" height="1.242ex" role="img" focusable="false" viewBox="0 -525 2194 549" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mstyle"><g data-mml-node="mspace"></g></g><g data-mml-node="mo" transform="translate(278,0)"><path data-c="27F9" d="M1218 514Q1218 525 1234 525Q1239 525 1242 525T1247 525T1251 524T1253 523T1255 520T1257 517T1260 512Q1297 438 1358 381T1469 300T1565 263Q1582 258 1582 250T1573 239T1536 228T1478 204Q1334 134 1260 -12Q1256 -21 1253 -22T1238 -24Q1218 -24 1218 -17Q1218 -13 1223 0Q1258 69 1309 123L1319 133H70Q56 140 56 153Q56 168 72 173H1363L1373 181Q1412 211 1490 250Q1489 251 1472 259T1427 283T1373 319L1363 327H710L707 328L390 327H72Q56 332 56 347Q56 360 70 367H1319L1309 377Q1276 412 1247 458T1218 514Z"></path></g><g data-mml-node="mstyle" transform="translate(1916,0)"><g data-mml-node="mspace"></g></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle scriptlevel="0"><mspace width="0.278em"></mspace></mstyle><mo stretchy="false">⟹</mo><mstyle scriptlevel="0"><mspace width="0.278em"></mspace></mstyle></math></mjx-assistive-mml></mjx-container>
+    </span>
+   less total
+memory usage. Additionally, small allocations within a program tend to stack up.</p>
+<p>This leads to a natural conclusion for how to avoid memory usage buildup: be
+mindful, at <em>all</em> times of when you are allocating memory. This is easier said
+than done; it is a blessing and a curse that modern systems programming
+languages make it so easy to allocate.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn1" id="fnref1">1</a></sup> Sometimes I find myself asking:
+why am I going through the trouble to pass pointers around and think about
+memory lifetimes when I can just allocate a copy? But if you find yourself
+asking the same thing, I would urge you to spend the extra minutes thinking
+about the problem instead of reaching for copying your <code>std::vector</code> or
+<code>Vec&lt;T&gt;</code>.</p>
+<p>For example, consider a simple parser for the JSON format. We want to store keys
+and values. There are two main options we have for representing keys in our
+parsed structure:</p>
+<ol>
+<li>A pointer to the original string</li>
+<li>A copy of the original string</li>
+</ol>
+<p>Of course, there are other options that might be useful depending on our parsing
+strategy.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn2" id="fnref2">2</a></sup> But, if we only consider these options, we should at least
+spend some time thinking about if it is worth it to keep the original JSON
+string in memory or if we should free it and copy out only what we need.</p>
+<p>The problem with deferring our thinking is that it will be hard to reverse our
+initial choice. It deserves to be thought through before a ton of lines of code
+are written, instead of labeling such thinking as &quot;premature optimization&quot; and
+blazing forward.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn3" id="fnref3">3</a></sup></p>
+<h2 id="defensively-virtualize" tabindex="-1"><a class="header-anchor" href="#defensively-virtualize">Defensively Virtualize</a></h2>
+<p>Virtualization can be very useful, and especially with the prominence of
+<a href="https://en.wikipedia.org/wiki/Design_Patterns#Patterns_by_type">OOP</a>, it is
+prolific. However, I believe that there are better options nearly all the time.
+The main issue is that virtualization add a lot of overhead, and I think this
+overhead is generally understated in programming pedagogy.</p>
+<p>Performance-wise, virtualization can have the following affects:</p>
+<ol>
+<li>Adding a vtable lookup and pointer dereference before calling a function. For
+some reason this is what is most talked about when teaching virtualization,
+in my experience.</li>
+<li>Blocking compiler optimizations. Inlining is one of the most powerful tools
+your compiler has.</li>
+<li>Pressuring your I-cache with unpredictable jumps.</li>
+</ol>
+<p>Consider, on the other hand,
+<a href="https://en.wikipedia.org/wiki/Static_dispatch">static dispatch</a>.<sup class="footnote-ref"><a role="doc-noteref" aria-label="go to footnote" href="#fn4" id="fnref4">4</a></sup>
+Static dispatch carries none of these downsides. But there are two cases where
+you might want virtualization:</p>
+<ol>
+<li>You truly don't know what function you need until runtime</li>
+<li>Binary size</li>
+</ol>
+<p>Case 1 is the most likely to be relevant. Binary size is certainly important,
+but it is not something that you should base your decisions on before
+<a href="https://github.com/google/bloaty">measuring</a>. So, in total, I think that the
+benefits of virtualization relative to the benefits of static dispatch are
+small. Additionally, undoing a virtualized structure in code is not an easy
+thing.</p>
+<p>The conclusion is to think deeply about the problem before using virtualization.
+Static dispatch is your friend.</p>
+<h2 id="defensively-parallelize" tabindex="-1"><a class="header-anchor" href="#defensively-parallelize">Defensively Parallelize</a></h2>
+<p>The title of this section might seem nonsensical; parallelization is often added
+on explicitly <em>for</em> the sake of performance. This should be the case, but I've
+recently been noticing a trend in systems programming that suggests otherwise.</p>
+<p>Modern systems languages have made it easy to add concurrency to our programs,
+such as in Rust's <a href="https://tokio.rs">Tokio</a>. All we have to do is paste in
+<code>cargo add tokio -F full</code> and just run with it using Tokio's many abstractions
+and rich set of APIs.</p>
+<p>But the <code>-F full</code> flag introduces a more serious consideration to the program:
+parallelism. All of the sudden, you need thread safety with <code>Send + Sync</code> and
+you're wrapping all your state with locks and making all your pointers with
+atomically reference counting. This scenario is easy to get in, especially as a
+concurrency beginner.</p>
+<p>But paralellism is not as easy to justify, modulo
+<a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel">embarrassingly parallel cases</a>.
+I once watched a talk by a <a href="https://tigerbeetle.com">TigerBeetle</a> core member
+about parallelism. He spent a good first chunk of the talk convincing me to
+<em>not</em> reach for parallism unless I really know what I'm doing. The talk is
+<a href="https://www.youtube.com/watch?v=x1N9JPPPC18">here</a>. So don't fall for <code>-F full</code>
+early on, because it's hard to get yourself out of!</p>
+<p>If you want concurrency in Rust, I recommend
+<a href="https://github.com/smol-rs/smol">smol-rs</a> and its
+<a href="https://docs.rs/smol/latest/smol/struct.LocalExecutor.html"><code>LocalExecutor</code></a>.</p>
+<h2 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h2>
+<p>In this post, I went over some examples in which neglecting to think about your
+performance early on can seriously affect your program in the long run. The
+common thread between all of these examples is that they are all high cost
+decisions that, due to the nature of modern systems programming, are easy to
+make without a second thought.</p>
+<p>I thus hope this post helped make you more mindful of performance decisions that
+you might have carelessly made before. If you have any feedback, questions, or
+comments, please email me a <a href="mailto:mail@dzfrias.dev">mail@dzfrias.dev</a>!</p>
+<hr>
+<section class="footnotes" role="doc-endnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Smart pointers and RAII are the standout examples. C++'s <code>std::unique_ptr</code>
+and Rust's <code>Box</code> are undoubtedly a good things, but managing a complex
+structure like <code>std::vector&lt;std::unique_ptr&lt;T[]&gt;&gt;</code> so trivially is at least
+little bit concerning in how it hides the underlying nature. <a role="doc-backlink" aria-label="back to text" href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>For example, we could intern keys. Or we could use something like Rust's
+<code>Cow</code> to try to keep borrowed references when possible, and bail to
+<code>Cow::Owned</code> if we encounter an edge case (such as if we need to unpaired
+surrogates with replacement characters). <a role="doc-backlink" aria-label="back to text" href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>JSON might not be the most illustrative example for this point because it
+has a simple grammar. But it isn't difficult to imagine making the same
+choice for a more complex grammar (e.g. a C-like programming language). <a role="doc-backlink" aria-label="back to text" href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>Also known as traits in Rust and templates in C++ <a role="doc-backlink" aria-label="back to text" href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol></section>
+
+      </main>
+    </div>
+    <div id="main-right">
+      
+      
+    </div>
+  </body>
+</html>
