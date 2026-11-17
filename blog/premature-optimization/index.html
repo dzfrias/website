@@ -91,9 +91,9 @@ rather that they are frequently <strong>misinterpreted</strong>, in my opinion.<
 okay to optimize your code <em>without</em> thorough analysis.</p>
 <h2 id="defensively-allocate" tabindex="-1"><a class="header-anchor" href="#defensively-allocate">Defensively Allocate</a></h2>
 <p>A simple fact always holds: allocating in less places 
-    <span id="mjx-3fbe6e1">
+    <span id="mjx-0b95bc98">
       <style>
-      #mjx-3fbe6e1{
+      #mjx-0b95bc98{
         display:contents;
         mjx-assistive-mml {
           user-select: text !important;
@@ -321,11 +321,11 @@ parallelism. All of the sudden, you need thread safety with <code>Send + Sync</c
 you're wrapping all your state with locks and making all your pointers with
 atomically reference counting. This scenario is easy to get in, especially as a
 concurrency beginner.</p>
-<p>But paralellism is not as easy to justify, modulo
+<p>But parallelism is not as easy to justify, modulo
 <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel">embarrassingly parallel cases</a>.
 I once watched a talk by a <a href="https://tigerbeetle.com">TigerBeetle</a> core member
 about parallelism. He spent a good first chunk of the talk convincing me to
-<em>not</em> reach for parallism unless I really know what I'm doing. The talk is
+<em>not</em> reach for parallelism unless I really know what I'm doing. The talk is
 <a href="https://www.youtube.com/watch?v=x1N9JPPPC18">here</a>. So don't fall for <code>-F full</code>
 early on, because it's hard to get yourself out of!</p>
 <p>If you want concurrency in Rust, I recommend
